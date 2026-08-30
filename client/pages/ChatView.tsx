@@ -34,6 +34,7 @@ export default function ChatView({ language }: ChatViewProps) {
   const [activeConsultantIdx, setActiveConsultantIdx] = useState(0);
   const [message, setMessage] = useState("");
   const [qrOpen, setQrOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [qrAccess, setQrAccess] = useState<QrAccess | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -309,6 +310,42 @@ function MessageBubble({ msg, consultant }: { msg: MessageInfo; consultant: Cons
 }
 
 function QrModal({ access, language, onClose }: { access: QrAccess; language: Language; onClose: () => void }) {
+  const [copied, setCopied] = useState(false);
+  const qrUrl = \\/emergency/\\;
+
+  const handleCopy = () => {
+    navigator.clipboard?.writeText(qrUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2C4C5C]/35 p-5 backdrop-blur-sm">
+      <div className="relative w-full max-w-[360px] rounded-[26px] border border-slate-200 bg-[#1E1E1E] p-6 text-center shadow-2xl">
+        <button onClick={onClose} className="absolute right-5 top-5 text-slate-500 hover:text-[#2C4C5C]"><X size={17} /></button>
+        <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2C4C5C]/10 text-[#2C4C5C]"><QrCode size={22} /></div>
+        <h3 className="mt-4 font-display text-[19px] font-semibold text-white">{t(language, "chat.temporaryAccess")}</h3>
+        <p className="mx-auto mt-2 max-w-[260px] text-[11px] leading-relaxed text-slate-400">{t(language, "chat.qrDesc")}</p>
+        <div className="mx-auto mt-5 flex h-40 w-40 items-center justify-center rounded-xl bg-white p-3 border-2 border-[#2C4C5C]">
+          <QRCodeSVG value={qrUrl} size={144} level="M" bgColor="#ffffff" fgColor="#2C4C5C" />
+        </div>
+        <div className="mt-4 flex items-center justify-center gap-2 text-[11px] text-slate-400">
+          <Clock3 size={12} /> Expires {new Date(access.expiresAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}
+        </div>
+        <button
+          onClick={handleCopy}
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2C4C5C] py-3 text-[11px] font-bold text-white shadow-sm"
+        >
+          {copied ? "Copied!" : <><Copy size={14} /> {t(language, "chat.copyLink")}</>}
+        </button>
+        <p className="mt-3 flex items-center justify-center gap-1.5 text-[9px] text-slate-500">
+          <LockKeyhole size={11} /> {t(language, "chat.noMedicalData")}
+        </p>
+      </div>
+    </div>
+  );
+}
+: { access: QrAccess; language: Language; onClose: () => void }) {
   const qrUrl = `${window.location.origin}/emergency/${access.token}`;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2C4C5C]/35 p-5 backdrop-blur-sm">
@@ -342,3 +379,4 @@ function QrModal({ access, language, onClose }: { access: QrAccess; language: La
     </div>
   );
 }
+
