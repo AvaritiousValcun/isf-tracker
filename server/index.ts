@@ -63,7 +63,7 @@ function startTrendProcessingWorker() {
   interval.unref();
 }
 
-const isDirectExecution =
+
   process.argv[1] &&
   new URL(`file://${process.argv[1]}`).pathname === new URL(import.meta.url).pathname;
 
