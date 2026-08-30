@@ -3,8 +3,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { Activity, ArrowUpRight, LockKeyhole, Mail, User as UserIcon } from "lucide-react";
 
 export default function AuthPage() {
-  const { signIn, signUp } = useAuth();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const { signIn, signUp, resetPasswordForEmail } = useAuth();
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -30,7 +30,18 @@ export default function AuthPage() {
         return;
       }
       const { error } = await signUp(email.trim(), password, fullName.trim());
-      if (error) setError(error);
+      if (error) {
+        setError(error);
+      } else {
+        setSuccessMsg("Account created! Please check your email for a confirmation link to sign in.");
+      }
+    } else if (mode === "forgot") {
+      const { error } = await resetPasswordForEmail(email.trim());
+      if (error) {
+        setError(error);
+      } else {
+        setSuccessMsg("Password reset link sent! Please check your email.");
+      }
     } else {
       const { error } = await signIn(email.trim(), password);
       if (error) setError(error);
@@ -49,7 +60,11 @@ export default function AuthPage() {
             ISF<span className="text-[#7A6600]">.</span> Tracker
           </h1>
           <p className="mt-2 text-[13px] text-[#5A6E78]">
-            {mode === "signin" ? "Welcome back. Sign in to your account." : "Create your account to get started."}
+            {mode === "signin" 
+              ? "Welcome back. Sign in to your account." 
+              : mode === "forgot"
+              ? "Enter your email to reset your password."
+              : "Create your account to get started."}
           </p>
         </div>
 
@@ -84,20 +99,22 @@ export default function AuthPage() {
                 />
               </div>
             </div>
-            <div>
-              <label className="mb-1.5 block text-[12px] font-semibold text-[#2C4C5C]">Password</label>
-              <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-3">
-                <LockKeyhole size={16} className="text-slate-400" />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  className="min-w-0 flex-1 bg-transparent text-[13px] text-[#2C4C5C] outline-none placeholder:text-slate-400"
-                />
+            {mode !== "forgot" && (
+              <div>
+                <label className="mb-1.5 block text-[12px] font-semibold text-[#2C4C5C]">Password</label>
+                <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-3">
+                  <LockKeyhole size={16} className="text-slate-400" />
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    className="min-w-0 flex-1 bg-transparent text-[13px] text-[#2C4C5C] outline-none placeholder:text-slate-400"
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {error && (
               <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[12px] font-medium text-red-700">
@@ -110,21 +127,46 @@ export default function AuthPage() {
               disabled={loading}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2C4C5C] py-3.5 text-[13px] font-bold text-white shadow-[0_8px_20px_rgba(44,76,92,0.2)] transition hover:-translate-y-0.5 disabled:opacity-60"
             >
-              {loading ? "Please wait..." : mode === "signin" ? "Sign in" : "Create account"}
+              {loading 
+                ? "Please wait..." 
+                : mode === "signin" 
+                ? "Sign in" 
+                : mode === "forgot"
+                ? "Send Reset Link"
+                : "Create account"}
               {!loading && <ArrowUpRight size={15} />}
             </button>
           </form>
 
-          <div className="mt-5 text-center">
+          <div className="mt-5 flex flex-col items-center gap-3 text-center">
+            {mode === "signin" && (
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("forgot");
+                  setError(null);
+                  setSuccessMsg(null);
+                }}
+                className="text-[12px] font-semibold text-[#2C4C5C] transition hover:text-[#5A6E78]"
+              >
+                Forgot password?
+              </button>
+            )}
+
             <button
+              type="button"
               onClick={() => {
                 setMode(mode === "signin" ? "signup" : "signin");
                 setError(null);
-    setSuccessMsg(null);
+                setSuccessMsg(null);
               }}
               className="text-[12px] font-semibold text-[#5A6E78] transition hover:text-[#2C4C5C]"
             >
-              {mode === "signin" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+              {mode === "signin" 
+                ? "Don't have an account? Sign up" 
+                : mode === "forgot"
+                ? "Back to Sign in"
+                : "Already have an account? Sign in"}
             </button>
           </div>
         </div>
@@ -136,5 +178,6 @@ export default function AuthPage() {
     </div>
   );
 }
+
 
 
