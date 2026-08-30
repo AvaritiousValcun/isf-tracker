@@ -255,7 +255,7 @@ export default function ChatView({ language }: ChatViewProps) {
                       onChange={(e) => setMessage(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                       placeholder={t(language, "chat.writeMessage")}
-                      className="min-w-0 flex-1 bg-transparent py-2 text-[11px] text-[#2C4C5C] outline-none placeholder:text-slate-600"
+                      className="min-w-0 flex-1 bg-transparent py-2 text-[11px] text-slate-200 outline-none placeholder:text-slate-600"
                     />
                     <span className="hidden text-[10px] text-slate-600 sm:block">
                       {isPremium ? t(language, "chat.unlimited") : `${FREE_MESSAGE_LIMIT - messageCount} ${t(language, "chat.messagesLeft")}`}
