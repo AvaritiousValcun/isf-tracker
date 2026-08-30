@@ -1,4 +1,6 @@
 import "./global.css";
+import "./lib/init-i18n";
+
 
 import { Toaster } from "@/components/ui/toaster";
 import { createRoot } from "react-dom/client";
@@ -83,3 +85,4 @@ const App = () => (
 createRoot(
   document.getElementById("root")!,
 ).render(<App />);
+
