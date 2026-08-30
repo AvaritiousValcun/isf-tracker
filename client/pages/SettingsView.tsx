@@ -18,6 +18,7 @@ import {
   CardDescription,
 } from "../components/ui/card";
 import { Button } from "../components/ui/button";
+import { ChangePassword } from "@/components/ChangePassword";
 import { Badge } from "../components/ui/badge";
 import {
   Select,
@@ -1056,6 +1057,7 @@ export default function SettingsView({
     </div>
   );
 }
+
 
 
 
