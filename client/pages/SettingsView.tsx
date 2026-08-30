@@ -8,7 +8,7 @@ import {
   Trash2,
   Plus,
   CheckCircle,
-  Smartphone,
+  Smartphone, LogOut,
 } from "lucide-react";
 import {
   Card,
@@ -246,7 +246,7 @@ export default function SettingsView({
   setThemeMode,
   onOpenAccessibility,
 }: SettingsViewProps) {
-  const { session, user } = useAuth();
+  const { session, user, signOut } = useAuth();
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [sub, setSub] = useState<Subscription | null>(null);
@@ -1034,6 +1034,19 @@ export default function SettingsView({
         </Card>
       )}
 
+      <Card className="shadow-sm border-destructive/20 mt-8">
+        <CardHeader>
+          <CardTitle className="text-destructive flex items-center gap-2">
+            <LogOut className="w-5 h-5" /> Account Actions
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button variant="destructive" onClick={signOut} className="w-full sm:w-auto">
+            Log Out
+          </Button>
+        </CardContent>
+      </Card>
+
       {loadingSettings && (
         <p className="text-xs text-muted-foreground text-center">
           Loading settings...
@@ -1042,3 +1055,4 @@ export default function SettingsView({
     </div>
   );
 }
+
