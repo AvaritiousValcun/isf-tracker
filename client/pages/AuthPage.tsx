@@ -9,11 +9,13 @@ export default function AuthPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccessMsg(null);
     setLoading(true);
 
     if (mode === "signup") {
@@ -118,6 +120,7 @@ export default function AuthPage() {
               onClick={() => {
                 setMode(mode === "signin" ? "signup" : "signin");
                 setError(null);
+    setSuccessMsg(null);
               }}
               className="text-[12px] font-semibold text-[#5A6E78] transition hover:text-[#2C4C5C]"
             >
@@ -133,3 +136,5 @@ export default function AuthPage() {
     </div>
   );
 }
+
+
