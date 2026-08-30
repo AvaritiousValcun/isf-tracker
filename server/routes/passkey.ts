@@ -1,8 +1,8 @@
 ﻿import { Router } from "express";
 
-import { requireAuth } from "../middleware/auth";
-import { PasskeyService } from "../services/passkeyService";
-import { supabaseAdmin } from "../lib/supabaseAdmin";
+import { requireAuth } from "../middleware/auth.js";
+import { PasskeyService } from "../services/passkeyService.js";
+import { supabaseAdmin } from "../lib/supabaseAdmin.js";
 
 const router = Router();
 

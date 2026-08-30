@@ -1,9 +1,9 @@
 
-import { supabaseAdmin } from "../lib/supabaseAdmin";
+import { supabaseAdmin } from "../lib/supabaseAdmin.js";
 import {
   createPaymentProvider,
   type PaymentProvider,
-} from "./paymentProvider";
+} from "./paymentProvider.js";
 
 const paymentProvider: PaymentProvider =
   createPaymentProvider();

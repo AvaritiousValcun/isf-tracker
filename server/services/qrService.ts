@@ -1,7 +1,7 @@
 
 import crypto from "node:crypto";
 
-import { supabaseAdmin } from "../lib/supabaseAdmin";
+import { supabaseAdmin } from "../lib/supabaseAdmin.js";
 
 const QR_EXPIRATION_HOURS = 24;
 

@@ -9,7 +9,7 @@ import {
   type AuthenticatorTransportFuture,
 } from "@simplewebauthn/server";
 
-import { supabaseAdmin } from "../lib/supabaseAdmin";
+import { supabaseAdmin } from "../lib/supabaseAdmin.js";
 
 const RP_NAME = process.env.WEBAUTHN_RP_NAME || "ISF Tracker";
 

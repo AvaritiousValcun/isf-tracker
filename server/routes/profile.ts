@@ -6,9 +6,9 @@ import {
 } from "express";
 import { z } from "zod";
 
-import { requireAuth } from "../middleware/auth";
-import { validateRequest } from "../middleware/validate";
-import { supabaseAdmin } from "../lib/supabaseAdmin";
+import { requireAuth } from "../middleware/auth.js";
+import { validateRequest } from "../middleware/validate.js";
+import { supabaseAdmin } from "../lib/supabaseAdmin.js";
 
 const router = Router();
 

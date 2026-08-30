@@ -2,9 +2,9 @@
 import { Router } from "express";
 import { z } from "zod";
 
-import { requireAuth } from "../middleware/auth";
-import { validateRequest } from "../middleware/validate";
-import { QRService } from "../services/qrService";
+import { requireAuth } from "../middleware/auth.js";
+import { validateRequest } from "../middleware/validate.js";
+import { QRService } from "../services/qrService.js";
 
 const router = Router();
 

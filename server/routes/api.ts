@@ -1,16 +1,16 @@
 import { Router } from "express";
 
-import readingsRouter from "./readings";
-import chatRouter from "./chat";
-import shareRouter from "./share";
-import predictionsRouter from "./predictions";
-import subscriptionRouter from "./subscription";
-import profileRouter from "./profile";
-import patchRouter from "./patch";
-import passkeyRouter from "./passkey";
-import seedDemoDataRouter from "./seedDemoData";
-import consentRouter from "./consent";
-import trendsRouter from "./trends";
+import readingsRouter from "./readings.js";
+import chatRouter from "./chat.js";
+import shareRouter from "./share.js";
+import predictionsRouter from "./predictions.js";
+import subscriptionRouter from "./subscription.js";
+import profileRouter from "./profile.js";
+import patchRouter from "./patch.js";
+import passkeyRouter from "./passkey.js";
+import seedDemoDataRouter from "./seedDemoData.js";
+import consentRouter from "./consent.js";
+import trendsRouter from "./trends.js";
 
 const apiRouter = Router();
 

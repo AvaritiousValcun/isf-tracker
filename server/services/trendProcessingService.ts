@@ -1,6 +1,6 @@
 
-import { supabaseAdmin } from "../lib/supabaseAdmin";
-import { TrendEngine } from "./trendEngine";
+import { supabaseAdmin } from "../lib/supabaseAdmin.js";
+import { TrendEngine } from "./trendEngine.js";
 
 interface ReadingForProcessing {
   id: string;

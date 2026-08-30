@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { createClient } from "@supabase/supabase-js";
 
-import { requireAuth } from "../middleware/auth";
-import { env } from "../lib/env";
+import { requireAuth } from "../middleware/auth.js";
+import { env } from "../lib/env.js";
 
 const router = Router();
 

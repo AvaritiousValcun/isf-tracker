@@ -3,10 +3,10 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
-import { env } from "./lib/env";
-import apiRouter from "./routes/api";
-import { errorHandler } from "./middleware/error";
-import { TrendProcessingService } from "./services/trendProcessingService";
+import { env } from "./lib/env.js";
+import apiRouter from "./routes/api.js";
+import { errorHandler } from "./middleware/error.js";
+import { TrendProcessingService } from "./services/trendProcessingService.js";
 
 export function createServer() {
   const app = express();

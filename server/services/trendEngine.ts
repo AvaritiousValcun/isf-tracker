@@ -1,5 +1,5 @@
 
-import { supabaseAdmin } from "../lib/supabaseAdmin";
+import { supabaseAdmin } from "../lib/supabaseAdmin.js";
 
 type Hormone =
   | "androgen"
