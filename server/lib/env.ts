@@ -3,6 +3,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// Fallback to VITE_ variables if backend ones are missing on Vercel
+const envSource = {
+  ...process.env,
+  SUPABASE_URL: process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL,
+  SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY,
+};
+
 const envSchema = z.object({
   SUPABASE_URL: z.string().url({
     message: "SUPABASE_URL must be a valid URL.",
@@ -35,15 +42,20 @@ const envSchema = z.object({
   WEBAUTHN_ORIGIN: z.string().optional(),
 });
 
-const parsed = envSchema.safeParse(process.env);
+const parsed = envSchema.safeParse(envSource);
 
 if (!parsed.success) {
   const details = parsed.error.issues
-    .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
+    .map((issue) => ${issue.path.join(".")}: )
     .join("\n");
 
+  console.error(
+    [ISF Tracker] Missing or invalid environment variables:\n,
+  );
+  
+  // Don't crash immediately so we can see the logs in Vercel
   throw new Error(
-    `[ISF Tracker] Missing or invalid environment variables:\n${details}`,
+    [ISF Tracker] Missing or invalid environment variables:\n,
   );
 }
 
