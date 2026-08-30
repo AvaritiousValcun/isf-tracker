@@ -1034,8 +1034,7 @@ export default function SettingsView({
         </Card>
       )}
 
-      <div className="mt-8"><ChangePassword /></div>
-        <Card className="shadow-sm border-destructive/20 mt-8">
+      <Card className="shadow-sm border-destructive/20 mt-8">
         <CardHeader>
           <CardTitle className="text-destructive flex items-center gap-2">
             <LogOut className="w-5 h-5" /> Account Actions
@@ -1056,6 +1055,4 @@ export default function SettingsView({
     </div>
   );
 }
-
-
 

@@ -46,8 +46,6 @@ interface AuthContextValue {
   signOut: () => Promise<void>;
 
   refreshProfile: () => Promise<void>;
-  resetPasswordForEmail: (email: string) => Promise<{ error: string | null }>;
-  updatePassword: (password: string) => Promise<{ error: string | null }>;
 }
 
 const AuthContext =
@@ -376,26 +374,6 @@ export function AuthProvider({
     }
   };
 
-  const resetPasswordForEmail = async (email: string) => {
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + "/?reset=true",
-      });
-      return { error: error ? error.message : null };
-    } catch (error) {
-      return { error: error instanceof Error ? error.message : "Unable to send reset link." };
-    }
-  };
-
-  const updatePassword = async (password: string) => {
-    try {
-      const { error } = await supabase.auth.updateUser({ password });
-      return { error: error ? error.message : null };
-    } catch (error) {
-      return { error: error instanceof Error ? error.message : "Unable to update password." };
-    }
-  };
-
   const refreshProfile =
     async () => {
       if (!user) {
@@ -438,6 +416,3 @@ export function useAuth() {
 
   return ctx;
 }
-
-
-
