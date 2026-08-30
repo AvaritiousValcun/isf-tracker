@@ -577,7 +577,7 @@ export interface TrendEvent {
 
   started_at: string;
 
-  resolved_at:
+  ended_at:
     | string
     | null;
 
@@ -720,4 +720,5 @@ export const API_ENDPOINTS = {
   qr:
     "/api/share/qr",
 } as const;
+
 

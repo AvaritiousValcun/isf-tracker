@@ -27,7 +27,7 @@ router.get(
               severity,
               status,
               started_at,
-              resolved_at,
+              ended_at,
               created_at
             `,
           )
