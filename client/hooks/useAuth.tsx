@@ -239,32 +239,22 @@ export function AuthProvider({
         };
       }
 
-      const {
-        error: profileError,
-      } =
-        await supabase
-          .from("patient_profiles")
-          .insert({
-            user_id:
-              data.user.id,
-            full_name:
-              fullName,
-            language: "en",
-            timezone:
-              "Africa/Nairobi",
-          });
+        if (data.session) {
+          const {
+            error: profileError,
+          } = await supabase
+            .from("patient_profiles")
+            .insert({
+              user_id: data.user.id,
+              full_name: fullName,
+              language: "en",
+              timezone: "Africa/Nairobi",
+            });
 
-      if (profileError) {
-        console.error(
-          "Patient profile creation failed:",
-          profileError,
-        );
-
-        return {
-          error:
-            profileError.message,
-        };
-      }
+          if (profileError && profileError.code !== "23505") {
+            console.error("Patient profile creation failed:", profileError);
+          }
+        }
 
       /*
        * Demo data seeding is optional.
