@@ -56,10 +56,15 @@ You are acting as a demo AI consultant for this application.`;
 
     let aiText = "I'm sorry, I am currently experiencing high demand. Please try again later.";
     try {
-      const response = await ai.models.generateContent({
-          model: 'gemini-flash-latest',
-          contents: fullPrompt,
-      });
+      const response = await Promise.race([
+        ai.models.generateContent({
+            model: 'gemini-flash-latest',
+            contents: fullPrompt,
+        }),
+        new Promise<any>((_, reject) => 
+          setTimeout(() => reject(new Error("Gemini API Timeout")), 5000)
+        )
+      ]);
       if (response.text) {
         aiText = response.text;
       }
