@@ -44,7 +44,7 @@ export default function ChatView({ language }: ChatViewProps) {
   const conversation = conversations.find((c) => c.consultant_id === consultant?.id);
   const { messages, refetch: refetchMessages } = useMessages(conversation?.id ?? null);
 
-  const canChat = consultant?.consent_status === "granted";
+  const canChat = consultant?.consent_status === "granted" && !!conversation;
 
   /*
    * Consent is now granted through the authenticated backend route
@@ -94,7 +94,16 @@ export default function ChatView({ language }: ChatViewProps) {
    * of truth.
    */
   const sendMessage = async () => {
-    if (!message.trim() || !canChat || !conversation) return;
+    if (!canChat) {
+      setError("Please grant consent to chat with this consultant.");
+      return;
+    }
+    if (!conversation) {
+      setError("Conversation not established. Please refresh or try again.");
+      return;
+    }
+    if (!message.trim()) return;
+
     if (!isPremium && messageCount >= FREE_MESSAGE_LIMIT) {
       setError("Free message limit reached. Upgrade to Premium for unlimited messaging.");
       return;
