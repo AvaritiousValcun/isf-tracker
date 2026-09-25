@@ -40,19 +40,19 @@ export async function generateConsultantReply(
 
     const chatHistory = (messages || []).reverse();
 
-    const systemPrompt = \You are \, a professional \.
+    const systemPrompt = `You are ${consultant.full_name}, a professional ${consultant.professional_type}.
 You are responding to your patient through a secure medical portal.
 Keep your response concise, empathetic, and professional. 
 Do not provide definitive medical diagnoses, but you can discuss general health, synthetic data trends, or offer supportive advice.
-You are acting as a demo AI consultant for this application.\;
+You are acting as a demo AI consultant for this application.`;
 
     let conversationText = "";
     for (const msg of chatHistory) {
       const role = msg.sender_type === "patient" ? "Patient" : "You";
-      conversationText += \\: \\n\;
+      conversationText += `${role}: ${msg.body}\n`;
     }
 
-    const fullPrompt = \\\n\nRecent Conversation:\n\\nYou:\;
+    const fullPrompt = `${systemPrompt}\n\nRecent Conversation:\n${conversationText}\nYou:`;
 
     const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
