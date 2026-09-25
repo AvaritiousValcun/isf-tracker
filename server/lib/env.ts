@@ -27,4 +27,5 @@ export const env = {
   MPESA_CALLBACK_URL: process.env.MPESA_CALLBACK_URL || "",
   MPESA_ENVIRONMENT: process.env.MPESA_ENVIRONMENT || "sandbox",
   PAYMENT_WEBHOOK_SECRET: process.env.PAYMENT_WEBHOOK_SECRET || "",
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
 };

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { requireAuth } from "../middleware/auth.js";
 import { validateRequest } from "../middleware/validate.js";
 import { supabaseAdmin } from "../lib/supabaseAdmin.js";
+import { generateConsultantReply } from "../lib/ai-consultant.js";
 
 const router = Router();
 
@@ -809,6 +810,13 @@ router.post(
       if (conversationUpdateError) {
         throw conversationUpdateError;
       }
+
+      // Background task: AI Consultant Reply
+      generateConsultantReply(
+        conversationId,
+        conversation.consultant_id,
+        patientUserId
+      ).catch(console.error);
 
       return res.status(201).json(
         createdMessage,
