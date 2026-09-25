@@ -811,8 +811,8 @@ router.post(
         throw conversationUpdateError;
       }
 
-      // Background task: AI Consultant Reply
-      generateConsultantReply(
+      // Await the AI Consultant Reply so Vercel doesn't freeze the function
+      await generateConsultantReply(
         conversationId,
         conversation.consultant_id,
         patientUserId
