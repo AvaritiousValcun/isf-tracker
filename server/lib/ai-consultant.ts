@@ -54,11 +54,18 @@ You are acting as a demo AI consultant for this application.`;
 
     const fullPrompt = `${systemPrompt}\n\nRecent Conversation:\n${conversationText}\nYou:`;
 
-    const response = await ai.models.generateContent({
-        model: 'gemini-flash-latest',
-        contents: fullPrompt,
-    });
-    const aiText = response.text || "I'm sorry, I cannot respond right now.";
+    let aiText = "I'm sorry, I am currently experiencing high demand. Please try again later.";
+    try {
+      const response = await ai.models.generateContent({
+          model: 'gemini-flash-latest',
+          contents: fullPrompt,
+      });
+      if (response.text) {
+        aiText = response.text;
+      }
+    } catch (apiError) {
+      console.error("Gemini API Error:", apiError);
+    }
 
     const { error: insertError } = await supabaseAdmin
       .from("messages")
