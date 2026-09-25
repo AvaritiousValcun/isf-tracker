@@ -55,10 +55,9 @@ You are acting as a demo AI consultant for this application.`;
     const fullPrompt = `${systemPrompt}\n\nRecent Conversation:\n${conversationText}\nYou:`;
 
     const response = await ai.models.generateContent({
-        model: 'gemini-3.7-flash',
+        model: 'gemini-flash-latest',
         contents: fullPrompt,
     });
-
     const aiText = response.text || "I'm sorry, I cannot respond right now.";
 
     const { error: insertError } = await supabaseAdmin

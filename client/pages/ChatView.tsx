@@ -119,6 +119,7 @@ export default function ChatView({ language }: ChatViewProps) {
           message: body,
         }),
       });
+      await refetchMessages();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to send message.");
       setMessage(body);
