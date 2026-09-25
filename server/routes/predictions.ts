@@ -155,7 +155,7 @@ router.post(
         .from(
           "predictive_consents",
         )
-        .insert({
+        .upsert({
           patient_user_id:
             patientId,
           status:
@@ -166,6 +166,8 @@ router.post(
             new Date().toISOString(),
           revoked_at:
             null,
+        }, {
+          onConflict: "patient_user_id,consent_version"
         })
         .select("*")
         .single();
