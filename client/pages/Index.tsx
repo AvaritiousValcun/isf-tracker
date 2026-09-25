@@ -24,7 +24,18 @@ import {
   ShieldCheck,
   X,
   LockKeyhole,
+  LogOut,
+  User as UserIcon,
 } from "lucide-react";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import HomeView from "./HomeView";
 import ChatView from "./ChatView";
@@ -143,6 +154,7 @@ function Header({
 
   onOpenAccessibility: () => void;
 }) {
+  const { signOut, profile } = useAuth();
   const titleMap: Record<
     View,
     | "nav.home"
@@ -203,19 +215,52 @@ function Header({
           <Accessibility size={18} />
         </button>
 
-        <button
-          type="button"
-          aria-label="View notifications"
-          className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#172033] transition hover:border-[#6C8494] hover:bg-[#6C8494]/[0.05]"
-        >
-          <Bell size={17} />
-
-          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#F3E308]" />
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              aria-label="View notifications"
+              className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#172033] transition hover:border-[#6C8494] hover:bg-[#6C8494]/[0.05]"
+            >
+              <Bell size={17} />
+              <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#F3E308]" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-64">
+            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <div className="px-2 py-4 text-center text-sm text-slate-500">
+              No new notifications.
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <div className="hidden h-6 w-px bg-slate-200 sm:block" />
 
-        <UserAvatar />
+        <DropdownMenu>
+          <DropdownMenuTrigger className="outline-none">
+            <UserAvatar />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">{profile?.full_name || "Patient"}</p>
+                <p className="text-xs leading-none text-muted-foreground">
+                  View Profile & Settings
+                </p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setView("settings")}>
+              <UserIcon className="mr-2 h-4 w-4" />
+              <span>Account Settings</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut()}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
