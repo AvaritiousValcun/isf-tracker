@@ -55,7 +55,7 @@ You are acting as a demo AI consultant for this application.`;
     const fullPrompt = `${systemPrompt}\n\nRecent Conversation:\n${conversationText}\nYou:`;
 
     const response = await ai.models.generateContent({
-        model: 'gemini-3.8-flash',
+        model: 'gemini-3.7-flash',
         contents: fullPrompt,
     });
 
