@@ -419,6 +419,8 @@ export function AuthProvider({
         signIn,
         signOut,
         refreshProfile,
+        resetPasswordForEmail,
+        updatePassword,
       }}
     >
       {children}
