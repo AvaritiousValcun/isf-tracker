@@ -19,7 +19,16 @@ export function resolveTheme(mode: ThemeMode, prefersDark: boolean): ResolvedThe
  * (which keys off :root[data-theme="dark"]) takes effect.
  */
 export function applyResolvedTheme(root: HTMLElement, resolved: ResolvedTheme): void {
-  root.dataset.theme = resolved;
+  if (root.dataset) {
+    root.dataset.theme = resolved;
+  }
+  if (root.classList) {
+    if (resolved === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }
 }
 
 const STORAGE_KEY = "isf-theme";

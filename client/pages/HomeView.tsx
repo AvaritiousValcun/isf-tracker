@@ -212,8 +212,8 @@ function HormoneTooltip({
   const date = new Date(label);
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white/95 p-3 shadow-lg backdrop-blur-sm">
-      <p className="mb-2 text-[11px] font-semibold text-slate-500">
+    <div className="rounded-xl border border-slate-200 dark:border-[#2F4C59] bg-white/95 dark:bg-[#1B2E37]/95 p-3 shadow-lg backdrop-blur-sm">
+      <p className="mb-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
         {new Intl.DateTimeFormat(
           language === "sw"
             ? "sw-KE"
@@ -240,7 +240,7 @@ function HormoneTooltip({
                 key={entry.dataKey}
                 className="flex items-center justify-between gap-6 text-[12px]"
               >
-                <span className="flex items-center gap-2 text-slate-600">
+                <span className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
                   <span
                     className="h-2 w-2 rounded-full"
                     style={{
@@ -252,7 +252,7 @@ function HormoneTooltip({
                   {entry.name}
                 </span>
 
-                <span className="font-semibold text-[#2C4C5C]">
+                <span className="font-semibold text-[#2C4C5C] dark:text-white">
                   {Number(
                     entry.value
                   ).toFixed(
@@ -412,13 +412,13 @@ function HormoneChart({
 
   if (chartData.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center">
+      <div className="flex h-full items-center justify-center rounded-2xl border border-slate-200 dark:border-[#2F4C59] bg-slate-50 dark:bg-[#111D23] p-6 text-center">
         <div>
-          <p className="text-sm font-medium text-slate-600">
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
             No hormone readings yet
           </p>
 
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
             Your readings will appear
             here once the patch
             records data.
@@ -785,27 +785,27 @@ export default function HomeView({
   return (
     <div className="mx-auto max-w-[1250px] px-5 pb-12 pt-6 sm:px-8 lg:px-10">
       {/* Merged 3D Telemetry & Welcome Hero Section */}
-      <div className="relative mb-10 overflow-hidden rounded-[36px] border border-white/90 bg-gradient-to-br from-white via-[#F8FAFC] to-[#EFF6F8] p-6 shadow-[0_24px_60px_rgba(44,76,92,0.08)] sm:p-10">
+      <div className="relative mb-10 overflow-hidden rounded-[36px] border border-slate-200/80 dark:border-[#243C47] bg-gradient-to-br from-white via-[#F8FAFC] to-[#EFF6F8] dark:from-[#15232A] dark:via-[#111D23] dark:to-[#0D161A] p-6 shadow-[0_24px_60px_rgba(44,76,92,0.08)] dark:shadow-[0_24px_60px_rgba(0,0,0,0.45)] sm:p-10">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(340px,430px)] lg:gap-14">
           {/* Left Column: Telemetry Badges, Greeting, Narrative & Value Grid */}
           <div className="max-w-[650px]">
             {/* Top telemetry badges */}
             <div className="mb-3 flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-[11px] font-semibold text-teal-800">
-                <Sparkles size={12} className="text-[#7A6600]" />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-200 dark:border-teal-500/30 bg-teal-50 dark:bg-teal-950/40 px-3 py-1 text-[11px] font-semibold text-teal-800 dark:text-teal-300">
+                <Sparkles size={12} className="text-[#7A6600] dark:text-[#F3E308]" />
                 Micro-needle Telemetry Active
               </span>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-[#738C98]">
                 {dateStr}
               </span>
             </div>
 
             {/* Time-based dynamic greeting without static Good morning badge */}
             <div className="mt-1">
-              <h3 className="font-display text-[22px] font-bold tracking-[-0.03em] text-[#2C4C5C] sm:text-[26px]">
+              <h3 className="font-display text-[22px] font-bold tracking-[-0.03em] text-[#2C4C5C] dark:text-[#E8F2F6] sm:text-[26px]">
                 {greeting}, {firstName}
               </h3>
-              <p className="mt-1 text-[13px] leading-relaxed text-slate-500">
+              <p className="mt-1 text-[13px] leading-relaxed text-slate-500 dark:text-[#A0B4BE]">
                 {t(language, "home.overview")} Real-time interstitial hormone sensing is active and recording baseline biomarkers.
               </p>
             </div>
@@ -820,7 +820,7 @@ export default function HomeView({
                   <StatusPill icon={<BatteryMedium size={12} />} tone="purple">
                     <span className="text-[12px] font-medium">Battery {patch.battery_percent ?? "—"}%</span>
                   </StatusPill>
-                  <span className="flex items-center gap-1.5 px-1 text-[12px] text-slate-600">
+                  <span className="flex items-center gap-1.5 px-1 text-[12px] text-slate-600 dark:text-[#A0B4BE]">
                     <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
                     {t(language, "home.updated")}
                   </span>
@@ -833,11 +833,11 @@ export default function HomeView({
             </div>
 
             {/* Main Narrative Headline */}
-            <h2 className="mt-7 max-w-[620px] font-display text-[34px] font-semibold leading-[1.06] tracking-[-0.055em] text-[#2C4C5C] sm:text-[44px] lg:text-[52px]">
+            <h2 className="mt-7 max-w-[620px] font-display text-[34px] font-semibold leading-[1.06] tracking-[-0.055em] text-[#2C4C5C] dark:text-[#E8F2F6] sm:text-[44px] lg:text-[52px]">
               {language === "en" ? "Feel more in tune with your body." : "Elewa mwili wako kwa utulivu."}
             </h2>
 
-            <p className="mt-3.5 max-w-[530px] text-[15px] leading-relaxed text-[#4F6370]">
+            <p className="mt-3.5 max-w-[530px] text-[15px] leading-relaxed text-[#4F6370] dark:text-[#A0B4BE]">
               {language === "en"
                 ? "ISF Tracker brings your hormone signals, care team and long-term insights into one calm, clear space."
                 : "ISF Tracker huleta ishara zako za homoni, timu ya afya na maarifa ya muda mrefu pamoja katika nafasi moja tulivu na wazi."}
@@ -853,7 +853,7 @@ export default function HomeView({
                     el.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="group flex items-center gap-2 rounded-full bg-[#2C4C5C] px-5 py-3 text-[12px] font-bold text-white shadow-[0_8px_20px_rgba(44,76,92,0.2)] transition hover:-translate-y-0.5"
+                className="group flex items-center gap-2 rounded-full bg-[#2C4C5C] dark:bg-[#F3E308] px-5 py-3 text-[12px] font-bold text-white dark:text-[#142229] shadow-[0_8px_20px_rgba(44,76,92,0.2)] dark:shadow-[0_8px_20px_rgba(243,227,8,0.25)] transition hover:-translate-y-0.5"
               >
                 <span>{language === "en" ? "Open dashboard" : "Fungua dashibodi"}</span>
                 <ArrowUpRight size={15} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -862,7 +862,7 @@ export default function HomeView({
               <button
                 type="button"
                 onClick={() => setView("chat")}
-                className="flex items-center gap-2 rounded-full border border-[#B8BFC1] bg-white px-5 py-3 text-[12px] font-semibold text-[#2C4C5C] transition hover:-translate-y-0.5 hover:border-[#F3E308]/40"
+                className="flex items-center gap-2 rounded-full border border-[#B8BFC1] dark:border-[#243C47] bg-white dark:bg-[#1C2F38] px-5 py-3 text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6] transition hover:-translate-y-0.5 hover:border-[#F3E308]/40"
               >
                 <span>{language === "en" ? "Explore care spaces" : "Gundua huduma za afya"}</span>
                 <ChevronRight size={14} />
@@ -887,10 +887,10 @@ export default function HomeView({
               ].map(({ icon: Icon, label }) => (
                 <div
                   key={label}
-                  className="welcome-value rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-2xs backdrop-blur-xs transition hover:border-[#2C4C5C]/25"
+                  className="welcome-value rounded-2xl border border-slate-200/80 dark:border-[#243C47] bg-white/90 dark:bg-[#1C2F38] p-3.5 shadow-2xs backdrop-blur-xs transition hover:border-[#2C4C5C]/25"
                 >
-                  <Icon size={16} className="text-[#0EA5A4]" />
-                  <p className="mt-3 text-[11px] font-semibold text-[#2C4C5C]">
+                  <Icon size={16} className="text-[#0EA5A4] dark:text-[#F3E308]" />
+                  <p className="mt-3 text-[11px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">
                     {label}
                   </p>
                 </div>
@@ -962,17 +962,17 @@ export default function HomeView({
 
       <div id="hormone-metrics" className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_280px]">
         <div className="flex min-w-0 flex-col gap-5">
-          <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_14px_45px_rgba(44,76,92,0.06)] sm:p-6">
+          <section className="min-w-0 rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-4 shadow-[0_14px_45px_rgba(44,76,92,0.06)] dark:shadow-[0_14px_45px_rgba(0,0,0,0.4)] sm:p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-[#738C98]">
                 {t(
                   language,
                   "home.snapshot"
                 )}
               </p>
 
-              <h3 className="mt-1 font-display text-[17px] font-semibold text-[#2C4C5C]">
+              <h3 className="mt-1 font-display text-[17px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">
                 {t(
                   language,
                   "home.hormoneLevels"
@@ -980,8 +980,8 @@ export default function HomeView({
               </h3>
             </div>
 
-            <div className="hidden items-center gap-2 rounded-xl border border-teal-100 bg-teal-50 px-3 py-2 text-[12px] font-medium text-teal-700 sm:flex">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-500" />
+            <div className="hidden items-center gap-2 rounded-xl border border-teal-100 dark:border-teal-500/30 bg-teal-50 dark:bg-teal-950/40 px-3 py-2 text-[12px] font-medium text-teal-700 dark:text-teal-300 sm:flex">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-500 dark:bg-teal-400" />
 
               {t(
                 language,
@@ -990,22 +990,22 @@ export default function HomeView({
             </div>
           </div>
 
-          <div className="chart-wrap mt-5 h-[350px] min-h-[300px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-teal-50/40 p-4 shadow-inner sm:h-[390px] sm:p-6">
+          <div className="chart-wrap mt-5 h-[350px] min-h-[300px] w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-[#243C47] bg-gradient-to-br from-white via-slate-50 to-teal-50/40 dark:from-[#111D23] dark:via-[#0F191E] dark:to-[#0A1216] p-4 shadow-inner sm:h-[390px] sm:p-6">
             <div className="mb-2 flex items-center justify-between">
               <div>
-                <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-slate-500">
+                <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-slate-500 dark:text-[#A0B4BE]">
                   Live hormone
                   telemetry
                 </p>
 
-                <p className="mt-1 text-[12px] text-slate-400">
+                <p className="mt-1 text-[12px] text-slate-400 dark:text-[#738C98]">
                   Hover over any
                   point to inspect
                   the reading.
                 </p>
               </div>
 
-              <span className="rounded-full border border-teal-100 bg-white px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-teal-700 shadow-sm">
+              <span className="rounded-full border border-teal-100 dark:border-teal-500/30 bg-white dark:bg-[#15232A] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-teal-700 dark:text-teal-300 shadow-sm">
                 Interactive
               </span>
             </div>
@@ -1097,16 +1097,16 @@ export default function HomeView({
               }
             />
 
-            <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50/60 p-4 sm:px-5">
+            <div className="flex items-center justify-between rounded-2xl border border-slate-200 dark:border-[#243C47] bg-slate-50/60 dark:bg-[#111D23] p-4 sm:px-5">
               <div>
-                <p className="text-[11px] font-medium text-slate-700">
+                <p className="text-[11px] font-medium text-slate-700 dark:text-[#A0B4BE]">
                   {t(
                     language,
                     "home.timeRange"
                   )}
                 </p>
 
-                <p className="mt-1 text-[11px] font-semibold text-[#2C4C5C]">
+                <p className="mt-1 text-[11px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">
                   {t(
                     language,
                     "home.normal"
@@ -1123,6 +1123,7 @@ export default function HomeView({
                     fill="none"
                     stroke="#E2E8F0"
                     strokeWidth="8"
+                    className="dark:stroke-[#243C47]"
                   />
 
                   <circle
@@ -1144,20 +1145,20 @@ export default function HomeView({
                       Math.PI *
                       40
                     }`}
-                    className="transition-all duration-700"
+                    className="transition-all duration-700 dark:stroke-[#F3E308]"
                   />
                 </svg>
 
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="font-display text-[24px] font-semibold tracking-[-0.06em] text-[#2C4C5C]">
+                  <span className="font-display text-[24px] font-semibold tracking-[-0.06em] text-[#2C4C5C] dark:text-[#E8F2F6]">
                     {timeInRange}
 
-                    <span className="text-[13px] text-teal-600">
+                    <span className="text-[13px] text-teal-600 dark:text-[#F3E308]">
                       %
                     </span>
                   </span>
 
-                  <span className="text-[10px] text-slate-500">
+                  <span className="text-[10px] text-slate-500 dark:text-[#738C98]">
                     in range
                   </span>
                 </div>
@@ -1171,12 +1172,12 @@ export default function HomeView({
 
         <div className="flex flex-col gap-5">
           {!nudgeDismissed && (
-            <div className="relative overflow-hidden rounded-[24px] border border-teal-100 bg-gradient-to-br from-teal-50/50 via-white to-violet-50/50 p-5 shadow-[0_10px_28px_rgba(86,47,84,0.08)]">
-              <div className="absolute -right-10 -top-12 h-36 w-36 rounded-full bg-teal-100/60 blur-2xl" />
+            <div className="relative overflow-hidden rounded-[24px] border border-teal-100 dark:border-[#243C47] bg-gradient-to-br from-teal-50/50 via-white to-violet-50/50 dark:from-[#15232A] dark:via-[#111D23] dark:to-[#0D161A] p-5 shadow-[0_10px_28px_rgba(86,47,84,0.08)] dark:shadow-[0_10px_28px_rgba(0,0,0,0.4)]">
+              <div className="absolute -right-10 -top-12 h-36 w-36 rounded-full bg-teal-100/60 dark:bg-teal-900/20 blur-2xl" />
 
               <div className="relative">
                 <div className="mb-8 flex items-start justify-between">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-100 text-teal-700">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-100 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300">
                     <Sparkles
                       size={16}
                     />
@@ -1188,13 +1189,13 @@ export default function HomeView({
                         true
                       )
                     }
-                    className="text-slate-500 transition hover:text-slate-800"
+                    className="text-slate-500 dark:text-slate-400 transition hover:text-slate-800 dark:hover:text-slate-200"
                   >
                     <X size={15} />
                   </button>
                 </div>
 
-                <p className="max-w-[190px] font-display text-[18px] font-medium leading-[1.25] tracking-[-0.04em] text-[#2C4C5C]">
+                <p className="max-w-[190px] font-display text-[18px] font-medium leading-[1.25] tracking-[-0.04em] text-[#2C4C5C] dark:text-[#E8F2F6]">
                   {nudgeText}
                 </p>
 
@@ -1212,7 +1213,7 @@ export default function HomeView({
                         "chat"
                       )
                     }
-                    className="mt-5 flex items-center gap-1 text-[13px] font-semibold text-teal-700"
+                    className="mt-5 flex items-center gap-1 text-[13px] font-semibold text-teal-700 dark:text-[#F3E308]"
                   >
                     {t(
                       language,
@@ -1236,20 +1237,20 @@ export default function HomeView({
            * or insights card.
            */}
           {patchReminder && (
-            <div className="rounded-[24px] border border-slate-200 bg-white p-5">
+            <div className="rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5">
               <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-300">
                   <BatteryMedium
                     size={16}
                   />
                 </div>
 
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-[#738C98]">
                     Patch reminder
                   </p>
 
-                  <p className="mt-1 text-[13px] font-medium text-[#2C4C5C]">
+                  <p className="mt-1 text-[13px] font-medium text-[#2C4C5C] dark:text-[#E8F2F6]">
                     {patchReminder.type ===
                     "overdue"
                       ? "Your patch replacement is due."
@@ -1265,7 +1266,7 @@ export default function HomeView({
 
                   {patch?.battery_percent !=
                     null && (
-                    <p className="mt-2 text-[11px] text-slate-500">
+                    <p className="mt-2 text-[11px] text-slate-500 dark:text-[#A0B4BE]">
                       Battery:{" "}
                       {
                         patch.battery_percent
@@ -1278,17 +1279,17 @@ export default function HomeView({
             </div>
           )}
 
-          <div className="rounded-[24px] border border-slate-200 bg-white p-5">
+          <div className="rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-[#738C98]">
                   {t(
                     language,
                     "home.insights"
                   )}
                 </p>
 
-                <p className="mt-1 text-[13px] font-medium text-[#2C4C5C]">
+                <p className="mt-1 text-[13px] font-medium text-[#2C4C5C] dark:text-[#E8F2F6]">
                   {activeEvent
                     ? "Requires attention"
                     : "Everything looks balanced"}
@@ -1298,8 +1299,8 @@ export default function HomeView({
               <div
                 className={`flex h-8 w-8 items-center justify-center rounded-xl ${
                   activeEvent
-                    ? "bg-amber-50 text-amber-600"
-                    : "bg-teal-50 text-teal-600"
+                    ? "bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300"
+                    : "bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-300"
                 }`}
               >
                 {activeEvent ? (
@@ -1370,7 +1371,7 @@ export default function HomeView({
                   "predictive"
                 )
               }
-              className="mt-5 flex w-full items-center justify-between rounded-xl border border-slate-200 px-3 py-2.5 text-[11px] font-semibold text-slate-600 transition hover:bg-slate-50"
+              className="mt-5 flex w-full items-center justify-between rounded-xl border border-slate-200 dark:border-[#243C47] px-3 py-2.5 text-[11px] font-semibold text-slate-600 dark:text-[#E8F2F6] transition hover:bg-slate-50 dark:hover:bg-[#111D23]"
             >
               <span>
                 View health
@@ -1404,9 +1405,9 @@ function ReadingCard({
   change: string;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+    <div className="rounded-2xl border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#111D23] p-4 shadow-sm sm:p-5">
       <div className="flex items-center justify-between">
-        <p className="flex items-center gap-2 text-[12px] font-medium text-slate-600">
+        <p className="flex items-center gap-2 text-[12px] font-medium text-slate-600 dark:text-[#A0B4BE]">
           <span
             className={`h-2 w-2 rounded-full ${
               color ===
@@ -1420,18 +1421,18 @@ function ReadingCard({
         </p>
 
         {change && (
-          <span className="text-[14px] font-semibold text-teal-600">
+          <span className="text-[14px] font-semibold text-teal-600 dark:text-teal-400">
             {change}
           </span>
         )}
       </div>
 
       <div className="mt-3 flex items-baseline gap-1.5">
-        <span className="font-display text-[24px] font-semibold tracking-[-0.05em] text-[#2C4C5C]">
+        <span className="font-display text-[24px] font-semibold tracking-[-0.05em] text-[#2C4C5C] dark:text-[#E8F2F6]">
           {value}
         </span>
 
-        <span className="text-[11px] text-slate-500">
+        <span className="text-[11px] text-slate-500 dark:text-[#738C98]">
           {unit}
         </span>
       </div>
@@ -1450,7 +1451,7 @@ function InsightRow({
 }) {
   return (
     <div className="flex items-center justify-between text-[13px]">
-      <span className="flex items-center gap-2 text-slate-600">
+      <span className="flex items-center gap-2 text-slate-600 dark:text-[#A0B4BE]">
         <span
           className={`h-1.5 w-1.5 rounded-full ${
             color ===
@@ -1466,7 +1467,7 @@ function InsightRow({
         {label}
       </span>
 
-      <span className="font-medium text-slate-800">
+      <span className="font-medium text-slate-800 dark:text-[#E8F2F6]">
         {value}
       </span>
     </div>

@@ -165,7 +165,7 @@ function Header({
   );
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white px-5 py-5 backdrop-blur-sm sm:px-8 lg:px-10">
+    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] px-5 py-5 backdrop-blur-sm sm:px-8 lg:px-10">
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -174,7 +174,7 @@ function Header({
             if (onReturnToHome) onReturnToHome();
             else setView("home");
           }}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#2C4C5C] transition hover:bg-[#2C4C5C]/[0.07]"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#1C2F38] text-[#2C4C5C] dark:text-[#E8F2F6] transition hover:bg-[#2C4C5C]/[0.07] dark:hover:bg-[#243C47]"
         >
           <House size={17} />
         </button>
@@ -184,11 +184,11 @@ function Header({
         </div>
 
         <div className="hidden lg:block">
-          <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-slate-700">
+          <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-slate-700 dark:text-[#A0B4BE]">
             Patient portal
           </p>
 
-          <h1 className="mt-1 font-display text-[20px] font-semibold tracking-[-0.03em] text-[#2C4C5C]">
+          <h1 className="mt-1 font-display text-[20px] font-semibold tracking-[-0.03em] text-[#2C4C5C] dark:text-[#E8F2F6]">
             {title}
           </h1>
         </div>
@@ -201,7 +201,7 @@ function Header({
           onClick={
             onOpenAccessibility
           }
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#172033] transition hover:border-[#6C8494] hover:bg-[#6C8494]/[0.05]"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#1C2F38] text-[#172033] dark:text-[#E8F2F6] transition hover:border-[#6C8494] hover:bg-[#6C8494]/[0.05]"
         >
           <Accessibility size={18} />
         </button>
@@ -209,14 +209,14 @@ function Header({
         <button
           type="button"
           aria-label="View notifications"
-          className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#172033] transition hover:border-[#6C8494] hover:bg-[#6C8494]/[0.05]"
+          className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#1C2F38] text-[#172033] dark:text-[#E8F2F6] transition hover:border-[#6C8494] hover:bg-[#6C8494]/[0.05]"
         >
           <Bell size={17} />
 
           <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#F3E308]" />
         </button>
 
-        <div className="hidden h-6 w-px bg-slate-200 sm:block" />
+        <div className="hidden h-6 w-px bg-slate-200 dark:bg-[#243C47] sm:block" />
 
         <UserAvatar />
       </div>
@@ -915,7 +915,7 @@ export default function Index({ onReturnToHome }: IndexProps = {}) {
 
         <section
           id="chat"
-          className="scroll-mt-20 border-t border-slate-200 bg-white"
+          className="scroll-mt-20 border-t border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0E181D]"
         >
           <ChatView
             language={
@@ -926,14 +926,14 @@ export default function Index({ onReturnToHome }: IndexProps = {}) {
 
         <section
           id="predictive"
-          className="scroll-mt-20 border-t border-slate-200 bg-white"
+          className="scroll-mt-20 border-t border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0E181D]"
         >
           <PredictiveView />
         </section>
 
         <section
           id="settings"
-          className="scroll-mt-20 border-t border-slate-200 bg-white"
+          className="scroll-mt-20 border-t border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0E181D]"
         >
           <SettingsView
             language={

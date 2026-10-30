@@ -171,33 +171,33 @@ export default function ChatView({ language }: ChatViewProps) {
         <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[12px] font-medium text-red-700">{error}</div>
       )}
 
-      <div className="grid overflow-hidden rounded-[24px] border border-slate-200 bg-white lg:grid-cols-[280px_minmax(0,1fr)]">
+      <div className="grid overflow-hidden rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] lg:grid-cols-[280px_minmax(0,1fr)]">
         {/* Consultant List */}
-        <div className="border-b border-slate-200 p-3 lg:border-b-0 lg:border-r">
-          <p className="px-3 pb-3 pt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">{t(language, "chat.consultants")}</p>
+        <div className="border-b border-slate-200 dark:border-[#243C47] p-3 lg:border-b-0 lg:border-r">
+          <p className="px-3 pb-3 pt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-[#738C98]">{t(language, "chat.consultants")}</p>
           {consultants.length === 0 ? (
-            <p className="px-3 py-4 text-[12px] text-slate-500">No consultants assigned yet.</p>
+            <p className="px-3 py-4 text-[12px] text-slate-500 dark:text-[#A0B4BE]">No consultants assigned yet.</p>
           ) : (
             consultants.map((item, index) => (
-              <button key={item.id} onClick={() => setActiveConsultantIdx(index)} className={`flex w-full items-center gap-3 rounded-xl p-3 text-left transition ${activeConsultantIdx === index ? "bg-[#2C4C5C]/[0.07]" : "hover:bg-slate-50"}`}>
+              <button key={item.id} onClick={() => setActiveConsultantIdx(index)} className={`flex w-full items-center gap-3 rounded-xl p-3 text-left transition ${activeConsultantIdx === index ? "bg-[#2C4C5C]/[0.07] dark:bg-[#F3E308]/15" : "hover:bg-slate-50 dark:hover:bg-[#1C2F38]"}`}>
                 <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[10px] font-bold" style={{ background: item.color, color: "#FFFFFF" }}>
                   {item.initials || item.full_name.slice(0, 2).toUpperCase()}
-                  {item.online && <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#F3E308]" />}
+                  {item.online && <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white dark:border-[#15232A] bg-[#F3E308]" />}
                 </div>
                 <div className="min-w-0">
-                  <p className="truncate text-[12px] font-semibold text-slate-900">{item.full_name}</p>
-                  <p className="mt-0.5 text-[10px] text-slate-500 capitalize">{item.professional_type}</p>
+                  <p className="truncate text-[12px] font-semibold text-slate-900 dark:text-[#E8F2F6]">{item.full_name}</p>
+                  <p className="mt-0.5 text-[10px] text-slate-500 dark:text-[#A0B4BE] capitalize">{item.professional_type}</p>
                 </div>
-                {activeConsultantIdx === index && <ChevronRight className="ml-auto text-[#2C4C5C]" size={14} />}
+                {activeConsultantIdx === index && <ChevronRight className="ml-auto text-[#2C4C5C] dark:text-[#F3E308]" size={14} />}
               </button>
             ))
           )}
-          <div className="mt-4 rounded-xl border border-slate-200 bg-[#B8BFC1]/[0.10] p-3">
-            <div className="flex items-center gap-2 text-slate-500">
-              <ShieldCheck size={14} className="text-[#2C4C5C]" />
+          <div className="mt-4 rounded-xl border border-slate-200 dark:border-[#243C47] bg-[#B8BFC1]/[0.10] dark:bg-[#111D23] p-3">
+            <div className="flex items-center gap-2 text-slate-500 dark:text-[#A0B4BE]">
+              <ShieldCheck size={14} className="text-[#2C4C5C] dark:text-[#F3E308]" />
               <span className="text-[12px] font-semibold">{t(language, "chat.dataChoice")}</span>
             </div>
-            <p className="mt-2 text-[10px] leading-relaxed text-slate-600">{t(language, "chat.dataChoiceDesc")}</p>
+            <p className="mt-2 text-[10px] leading-relaxed text-slate-600 dark:text-[#A0B4BE]">{t(language, "chat.dataChoiceDesc")}</p>
           </div>
         </div>
 
@@ -205,57 +205,57 @@ export default function ChatView({ language }: ChatViewProps) {
         <div className="flex min-h-[500px] flex-col">
           {consultant && (
             <>
-              <div className="flex items-center gap-3 border-b border-slate-200 px-5 py-4">
+              <div className="flex items-center gap-3 border-b border-slate-200 dark:border-[#243C47] px-5 py-4">
                 <div className="flex h-9 w-9 items-center justify-center rounded-full text-[10px] font-bold" style={{ background: consultant.color, color: "#FFFFFF" }}>
                   {consultant.initials || consultant.full_name.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-[12px] font-semibold text-[#2C4C5C]">{consultant.full_name}</p>
-                  <p className="mt-0.5 flex items-center gap-1.5 text-[10px] text-slate-500">
+                  <p className="text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">{consultant.full_name}</p>
+                  <p className="mt-0.5 flex items-center gap-1.5 text-[10px] text-slate-500 dark:text-[#A0B4BE]">
                     <span className={`h-1.5 w-1.5 rounded-full ${consultant.online ? "bg-[#F3E308]" : "bg-slate-600"}`} />
                     {consultant.online ? t(language, "chat.available") : t(language, "chat.repliesSoon")}
                   </p>
                 </div>
-                <button className="ml-auto text-slate-500"><MoreHorizontal size={18} /></button>
+                <button className="ml-auto text-slate-500 dark:text-[#A0B4BE]"><MoreHorizontal size={18} /></button>
               </div>
 
               <div className="flex-1 space-y-4 p-5">
-                <div className="mx-auto flex max-w-[340px] items-center gap-2 rounded-lg bg-[#F3E308]/[0.05] px-3 py-2 text-[13px] font-medium leading-relaxed text-[#2C4C5C]">
-                  <ShieldCheck size={14} className="shrink-0 text-[#2C4C5C]" />
+                <div className="mx-auto flex max-w-[340px] items-center gap-2 rounded-lg bg-[#F3E308]/[0.05] dark:bg-[#F3E308]/15 px-3 py-2 text-[13px] font-medium leading-relaxed text-[#2C4C5C] dark:text-[#E8F2F6]">
+                  <ShieldCheck size={14} className="shrink-0 text-[#2C4C5C] dark:text-[#F3E308]" />
                   <span className="font-semibold text-[13px]">{t(language, "chat.dataChoice")}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="h-px flex-1 bg-[#2C4C5C]/[0.06]" />
-                  <span className="text-[10px] uppercase tracking-[0.14em] text-slate-600">{t(language, "chat.today")}</span>
-                  <div className="h-px flex-1 bg-[#2C4C5C]/[0.06]" />
+                  <div className="h-px flex-1 bg-[#2C4C5C]/[0.06] dark:bg-[#243C47]" />
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-slate-600 dark:text-[#738C98]">{t(language, "chat.today")}</span>
+                  <div className="h-px flex-1 bg-[#2C4C5C]/[0.06] dark:bg-[#243C47]" />
                 </div>
                 {messages.map((msg) => (
                   <MessageBubble key={msg.id} msg={msg} consultant={consultant} />
                 ))}
                 {!canChat && (
-                  <div className="mx-auto max-w-[360px] rounded-2xl border border-slate-200 bg-[#B8BFC1]/[0.10] p-5 text-center">
-                    <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-[#6C8494]/20 text-[#7A6600]">
-                      <LockKeyhole size={16} className="text-slate-600" />
+                  <div className="mx-auto max-w-[360px] rounded-2xl border border-slate-200 dark:border-[#243C47] bg-[#B8BFC1]/[0.10] dark:bg-[#111D23] p-5 text-center">
+                    <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-[#6C8494]/20 text-[#7A6600] dark:text-[#F3E308]">
+                      <LockKeyhole size={16} className="text-slate-600 dark:text-[#A0B4BE]" />
                     </div>
-                    <p className="mt-3 text-[12px] font-semibold text-[#2C4C5C]">{t(language, "chat.consentTitle")} {consultant.full_name.split(" ").slice(1).join(" ")}</p>
-                    <p className="mt-2 text-[13px] leading-relaxed text-slate-900 font-medium">{t(language, "chat.consentDesc")}</p>
+                    <p className="mt-3 text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">{t(language, "chat.consentTitle")} {consultant.full_name.split(" ").slice(1).join(" ")}</p>
+                    <p className="mt-2 text-[13px] leading-relaxed text-slate-900 dark:text-[#A0B4BE] font-medium">{t(language, "chat.consentDesc")}</p>
                     <div className="mt-4 flex gap-2">
-                      <button className="flex-1 rounded-xl border border-slate-200 py-2 text-[11px] font-semibold text-slate-600">{t(language, "chat.notNow")}</button>
-                      <button onClick={giveConsent} className="flex-1 rounded-xl bg-[#2C4C5C] py-2 text-[11px] font-bold text-white">{t(language, "chat.giveConsent")}</button>
+                      <button className="flex-1 rounded-xl border border-slate-200 dark:border-[#243C47] py-2 text-[11px] font-semibold text-slate-600 dark:text-[#A0B4BE]">{t(language, "chat.notNow")}</button>
+                      <button onClick={giveConsent} className="flex-1 rounded-xl bg-[#2C4C5C] dark:bg-[#F3E308] py-2 text-[11px] font-bold text-white dark:text-[#142229]">{t(language, "chat.giveConsent")}</button>
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="border-t border-slate-200 p-4">
+              <div className="border-t border-slate-200 dark:border-[#243C47] p-4">
                 {canChat ? (
-                  <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-[#B8BFC1]/[0.10] px-3 py-1.5">
+                  <div className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-[#243C47] bg-[#B8BFC1]/[0.10] dark:bg-[#111D23] px-3 py-1.5">
                     <input
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                       placeholder={t(language, "chat.writeMessage")}
-                      className="min-w-0 flex-1 bg-transparent py-2 text-[11px] text-[#2C4C5C] outline-none placeholder:text-slate-600"
+                      className="min-w-0 flex-1 bg-transparent py-2 text-[11px] text-[#2C4C5C] dark:text-[#E8F2F6] outline-none placeholder:text-slate-600 dark:placeholder:text-[#738C98]"
                     />
                     <span className="hidden text-[10px] text-slate-600 sm:block">
                       {isPremium ? t(language, "chat.unlimited") : `${FREE_MESSAGE_LIMIT - messageCount} ${t(language, "chat.messagesLeft")}`}

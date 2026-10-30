@@ -457,25 +457,25 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
   const currentData = HORMONE_DATA[hormone];
 
   return (
-    <div className={`relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50 to-[#F2F7F9] shadow-sm ${compact ? "p-4" : "p-6"}`}>
+    <div className={`relative overflow-hidden rounded-3xl border border-slate-200/80 dark:border-[#243C47] bg-gradient-to-br from-white via-slate-50 to-[#F2F7F9] dark:from-[#15232A] dark:via-[#111D23] dark:to-[#0D161A] shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] ${compact ? "p-4" : "p-6"}`}>
       {/* Header & Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/70 pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/70 dark:border-[#243C47] pb-4">
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-[#2C4C5C] to-[#1E343F] text-white shadow-sm">
             <Layers size={16} />
           </div>
           <div>
-            <h3 className="font-display text-[15px] font-semibold text-[#2C4C5C]">
+            <h3 className="font-display text-[15px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">
               3D ISF Molecular Biosensing
             </h3>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-500 dark:text-[#A0B4BE]">
               Interactive interstitial analyte structure & dermal flux
             </p>
           </div>
         </div>
 
         {/* Hormone Selector Pills */}
-        <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-white p-1 shadow-xs">
+        <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#111D23] p-1 shadow-xs">
           {(["estradiol", "progesterone", "cortisol"] as HormoneType[]).map((h) => (
             <button
               key={h}
@@ -483,8 +483,8 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
               onClick={() => setHormone(h)}
               className={`rounded-xl px-2.5 py-1 text-[11px] font-semibold capitalize transition ${
                 hormone === h
-                  ? "bg-[#2C4C5C] text-white shadow-xs"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-[#2C4C5C]"
+                  ? "bg-[#2C4C5C] dark:bg-[#F3E308] text-white dark:text-[#142229] shadow-xs"
+                  : "text-slate-600 dark:text-[#A0B4BE] hover:bg-slate-100 dark:hover:bg-[#1C2F38] hover:text-[#2C4C5C] dark:hover:text-[#F3E308]"
               }`}
             >
               {h === "estradiol" ? "Estradiol (E2)" : h === "progesterone" ? "Progesterone" : "Cortisol"}
@@ -512,8 +512,8 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
         />
 
         {/* Live Interaction Hint */}
-        <div className="pointer-events-none absolute bottom-2 left-3 flex items-center gap-1.5 rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-medium text-slate-500 backdrop-blur-xs shadow-xs">
-          <Eye size={12} className="text-[#2C4C5C]" />
+        <div className="pointer-events-none absolute bottom-2 left-3 flex items-center gap-1.5 rounded-full bg-white/80 dark:bg-[#111D23]/90 px-2.5 py-1 text-[10px] font-medium text-slate-500 dark:text-[#A0B4BE] backdrop-blur-xs shadow-xs">
+          <Eye size={12} className="text-[#2C4C5C] dark:text-[#F3E308]" />
           <span>Drag in 3D to rotate</span>
         </div>
 
@@ -521,7 +521,7 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
         <button
           type="button"
           onClick={() => setIsRotating(!isRotating)}
-          className="absolute bottom-2 right-3 flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-xs transition hover:bg-slate-100"
+          className="absolute bottom-2 right-3 flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 dark:border-[#243C47] bg-white/90 dark:bg-[#111D23]/90 text-slate-600 dark:text-[#E8F2F6] shadow-xs transition hover:bg-slate-100 dark:hover:bg-[#1C2F38]"
           title={isRotating ? "Pause rotation" : "Play rotation"}
         >
           {isRotating ? <Pause size={12} /> : <Play size={12} />}
@@ -529,23 +529,23 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
       </div>
 
       {/* Chemical & Physiological Telemetry Bar */}
-      <div className="grid grid-cols-2 gap-2 rounded-2xl border border-slate-200/80 bg-white/80 p-3 text-[11px] backdrop-blur-xs sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 rounded-2xl border border-slate-200/80 dark:border-[#243C47] bg-white/80 dark:bg-[#111D23]/90 p-3 text-[11px] backdrop-blur-xs sm:grid-cols-4">
         <div>
-          <span className="block text-[10px] font-medium uppercase tracking-wider text-slate-400">Formula</span>
-          <span className="font-semibold text-[#2C4C5C]">{currentData.formula}</span>
+          <span className="block text-[10px] font-medium uppercase tracking-wider text-slate-400 dark:text-[#738C98]">Formula</span>
+          <span className="font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">{currentData.formula}</span>
         </div>
         <div>
-          <span className="block text-[10px] font-medium uppercase tracking-wider text-slate-400">Target Band</span>
-          <span className="font-semibold text-[#2C4C5C]">{currentData.targetRange}</span>
+          <span className="block text-[10px] font-medium uppercase tracking-wider text-slate-400 dark:text-[#738C98]">Target Band</span>
+          <span className="font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">{currentData.targetRange}</span>
         </div>
         <div>
-          <span className="block text-[10px] font-medium uppercase tracking-wider text-slate-400">Mass</span>
-          <span className="font-semibold text-[#2C4C5C]">{currentData.mw}</span>
+          <span className="block text-[10px] font-medium uppercase tracking-wider text-slate-400 dark:text-[#738C98]">Mass</span>
+          <span className="font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">{currentData.mw}</span>
         </div>
         <div>
-          <span className="block text-[10px] font-medium uppercase tracking-wider text-slate-400">ISF Matrix</span>
-          <span className="inline-flex items-center gap-1 font-semibold text-teal-600">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-500" /> Continuous
+          <span className="block text-[10px] font-medium uppercase tracking-wider text-slate-400 dark:text-[#738C98]">ISF Matrix</span>
+          <span className="inline-flex items-center gap-1 font-semibold text-teal-600 dark:text-teal-400">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-500 dark:bg-teal-400" /> Continuous
           </span>
         </div>
       </div>

@@ -89,7 +89,7 @@
   background: #FFFFFF;
 }
 
-header {
+.app-shell header {
   box-shadow: 0 1px 0 rgba(184, 191, 193, .8), 0 8px 24px rgba(44, 76, 92, .035);
 }
 
@@ -285,7 +285,8 @@ header {
   --shadow-float: 0 18px 44px rgba(44, 76, 92, .14);
 }
 
-:root[data-theme="dark"] {
+:root[data-theme="dark"],
+:root.dark {
   --page: #142229;
   --surface: #1B2E37;
   --surface-alt: #223B46;
@@ -347,17 +348,20 @@ body {
 .app-shell [class*="border-slate"],
 .app-shell [class*="border-[#B8BFC1]"] { border-color: var(--border-light) !important; }
 
-header {
+.app-shell header {
   border-bottom: 1px solid var(--border-light) !important;
   background: var(--surface) !important;
   color: var(--text) !important;
   box-shadow: 0 4px 18px rgba(44, 76, 92, .04) !important;
 }
-header p, header h1, header .font-display { color: var(--text) !important; }
-header button { border-color: var(--border-light) !important; background: var(--surface-alt) !important; color: var(--text) !important; }
-header button:hover { border-color: var(--yellow) !important; background: var(--surface-elevated) !important; color: var(--yellow-deep) !important; }
-header button > span { background: var(--yellow) !important; }
-header .brand-mark { background: var(--yellow) !important; color: var(--blue) !important; }
+.app-shell header p, .app-shell header h1, .app-shell header .font-display { color: var(--text) !important; }
+.app-shell header button { border-color: var(--border-light) !important; background: var(--surface-alt) !important; color: var(--text) !important; }
+.app-shell header button:hover { border-color: var(--yellow) !important; background: var(--surface-elevated) !important; color: var(--yellow-deep) !important; }
+.app-shell header button > span { background: var(--yellow) !important; }
+.app-shell header .brand-mark { background: var(--yellow) !important; color: var(--blue) !important; }
+
+.welcome-brand-art .text-white { color: #FFFFFF !important; }
+.welcome-brand-art .text-\[\#F3E308\] { color: #F3E308 !important; }
 .user-avatar { border-color: var(--surface) !important; background: linear-gradient(135deg, var(--blue), var(--muted-blue)) !important; color: #FFFFFF !important; box-shadow: 0 4px 14px rgba(44, 76, 92, .2) !important; }
 
 .dashboard-rail-panel { background: linear-gradient(155deg, #2C4C5C 0%, #2C4C5C 64%, #6C8494 100%) !important; box-shadow: 0 18px 44px rgba(44, 76, 92, .22) !important; }
@@ -438,18 +442,31 @@ header .brand-mark { background: var(--yellow) !important; color: var(--blue) !i
 .reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 
 :root[data-theme="dark"] .welcome-section .welcome-value,
+:root.dark .welcome-section .welcome-value,
 :root[data-theme="dark"] #dashboard section,
+:root.dark #dashboard section,
 :root[data-theme="dark"] #dashboard .rounded-\[24px\],
+:root.dark #dashboard .rounded-\[24px\],
 :root[data-theme="dark"] #dashboard .rounded-2xl,
+:root.dark #dashboard .rounded-2xl,
 :root[data-theme="dark"] #chat .grid,
+:root.dark #chat .grid,
 :root[data-theme="dark"] #predictive section,
-:root[data-theme="dark"] .settings-card { background: var(--surface) !important; border-color: var(--border-light) !important; }
-:root[data-theme="dark"] .welcome-section .welcome-value { background: var(--surface-alt) !important; }
-:root[data-theme="dark"] .app-shell [class*="bg-white"] { background: var(--surface) !important; }
-:root[data-theme="dark"] .app-shell .qr-pattern { background: #FFFFFF !important; }
-:root[data-theme="dark"] .dashboard-rail-badge { color: var(--blue) !important; }
-:root[data-theme="dark"] .status-teal { color: #B9C7CE !important; }
-:root[data-theme="dark"] .status-current-plan { color: #F3E308 !important; }
+:root.dark #predictive section,
+:root[data-theme="dark"] .settings-card,
+:root.dark .settings-card { background: var(--surface) !important; border-color: var(--border-light) !important; }
+:root[data-theme="dark"] .welcome-section .welcome-value,
+:root.dark .welcome-section .welcome-value { background: var(--surface-alt) !important; }
+:root[data-theme="dark"] .app-shell [class*="bg-white"],
+:root.dark .app-shell [class*="bg-white"] { background: var(--surface) !important; }
+:root[data-theme="dark"] .app-shell .qr-pattern,
+:root.dark .app-shell .qr-pattern { background: #FFFFFF !important; }
+:root[data-theme="dark"] .dashboard-rail-badge,
+:root.dark .dashboard-rail-badge { color: var(--blue) !important; }
+:root[data-theme="dark"] .status-teal,
+:root.dark .status-teal { color: #B9C7CE !important; }
+:root[data-theme="dark"] .status-current-plan,
+:root.dark .status-current-plan { color: #F3E308 !important; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }

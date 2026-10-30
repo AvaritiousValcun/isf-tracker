@@ -74,6 +74,19 @@
   justify-content: space-between;
   align-items: center;
   padding: max(20px, env(safe-area-inset-top, 0px)) clamp(20px, 4vw, 56px);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.auth-root header p,
+.auth-root header h1,
+.auth-root header .font-display {
+  color: var(--ink) !important;
+}
+
+.auth-root header button {
+  background: none !important;
 }
 
 .auth-root .brand {
@@ -106,16 +119,18 @@
 }
 
 .auth-root .ghost {
-  background: none;
-  border: 1px solid rgba(184, 191, 193, 0.28);
-  border-radius: 999px;
-  padding: 9px 18px;
+  background: none !important;
+  border: 1px solid rgba(184, 191, 193, 0.28) !important;
+  border-radius: 999px !important;
+  padding: 9px 18px !important;
+  color: var(--ink) !important;
   transition: background 0.3s, border-color 0.3s;
 }
 
 .auth-root .ghost:hover {
-  background: rgba(184, 191, 193, 0.12);
-  border-color: rgba(184, 191, 193, 0.6);
+  background: rgba(184, 191, 193, 0.12) !important;
+  border-color: rgba(184, 191, 193, 0.6) !important;
+  color: #FFFFFF !important;
 }
 
 .auth-root :focus-visible {
