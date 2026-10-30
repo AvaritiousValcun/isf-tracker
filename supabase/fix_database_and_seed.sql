@@ -84,6 +84,7 @@ ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELET
 ADD COLUMN IF NOT EXISTS purpose text DEFAULT 'consultant_access',
 ADD COLUMN IF NOT EXISTS scope text DEFAULT 'all',
 ADD COLUMN IF NOT EXISTS status text DEFAULT 'active',
+ADD COLUMN IF NOT EXISTS consent_version text DEFAULT '1.0',
 ADD COLUMN IF NOT EXISTS granted_at timestamptz DEFAULT now(),
 ADD COLUMN IF NOT EXISTS revoked_at timestamptz;
 
@@ -113,6 +114,18 @@ ALTER COLUMN patient_id DROP NOT NULL;
 ALTER TABLE public.trend_events
 ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
 ADD COLUMN IF NOT EXISTS hormone text DEFAULT 'estradiol';
+
+-- 8b. FIX TABLE: predictions
+ALTER TABLE public.predictions
+ALTER COLUMN patient_id DROP NOT NULL;
+
+ALTER TABLE public.predictions
+ADD COLUMN IF NOT EXISTS expires_at timestamptz DEFAULT (now() + interval '30 days'),
+ADD COLUMN IF NOT EXISTS feature_version text DEFAULT 'demo-1.0.0',
+ADD COLUMN IF NOT EXISTS explanation jsonb,
+ADD COLUMN IF NOT EXISTS trend text,
+ADD COLUMN IF NOT EXISTS provider_id text DEFAULT 'demo',
+ADD COLUMN IF NOT EXISTS provider_environment text DEFAULT 'demo';
 
 -- 9. ENSURE CONSULTANTS EXIST AND ARE ACTIVE
 UPDATE public.consultants

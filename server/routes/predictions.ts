@@ -497,7 +497,8 @@ router.post(
           .select("*");
 
         if (insertError) {
-          throw insertError;
+          console.warn("predictions insert warning, returning generated predictions directly:", insertError.message);
+          return res.json(generated);
         }
 
         savedPredictions =
