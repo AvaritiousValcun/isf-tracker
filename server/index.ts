@@ -39,6 +39,8 @@ export function createServer() {
 
   app.use("/api", apiLimiter);
   app.use("/api", apiRouter);
+  // Also mount at root so serverless platforms (Vercel/Netlify) match with or without /api prefix
+  app.use("/", apiRouter);
   app.use(errorHandler);
 
   return app;

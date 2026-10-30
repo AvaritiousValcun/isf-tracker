@@ -1,29 +1,38 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { env } from "./env";
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "";
+const supabaseKey =
+  env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SECRET_KEY ||
+  env.SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY ||
+  "";
 
-if (!supabaseUrl) {
-  throw new Error(
-    "[Supabase] SUPABASE_URL is missing from the environment."
-  );
-}
+let supabase: SupabaseClient;
 
-if (!supabaseServiceRoleKey) {
-  throw new Error(
-    "[Supabase] SUPABASE_SERVICE_ROLE_KEY is missing from the environment."
-  );
-}
-
-const supabase = createClient(
-  supabaseUrl,
-  supabaseServiceRoleKey,
-  {
+if (supabaseUrl && supabaseKey) {
+  supabase = createClient(supabaseUrl, supabaseKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
     },
-  }
-);
+  });
+} else {
+  console.warn(
+    "[Supabase] Credentials not fully configured. API queries to Supabase may fail.",
+  );
+  // Fallback dummy client to avoid module crash on import
+  supabase = createClient(
+    supabaseUrl || "https://placeholder.supabase.co",
+    supabaseKey || "placeholder-key",
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    },
+  );
+}
 
 export { supabase };

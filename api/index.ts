@@ -1,5 +1,23 @@
-import { createServer } from "../server";
+import { createServer } from "../server/index";
 
-const app = createServer();
+let cachedApp: any = null;
 
-export default app;
+function getApp() {
+  if (!cachedApp) {
+    cachedApp = createServer();
+  }
+  return cachedApp;
+}
+
+export default async function handler(req: any, res: any) {
+  try {
+    const app = getApp();
+    return app(req, res);
+  } catch (err: any) {
+    console.error("[Vercel API Invocation Error]", err);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: err?.message || String(err),
+    });
+  }
+}
