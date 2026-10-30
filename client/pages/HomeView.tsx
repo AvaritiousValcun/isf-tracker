@@ -21,6 +21,9 @@ import {
   BatteryMedium,
   CheckCircle2,
   ChevronRight,
+  LockKeyhole,
+  MessageCircle,
+  ShieldCheck,
   Sparkles,
   Wifi,
   X,
@@ -781,11 +784,13 @@ export default function HomeView({
 
   return (
     <div className="mx-auto max-w-[1250px] px-5 pb-12 pt-6 sm:px-8 lg:px-10">
-      {/* 3D Welcome Hero Banner */}
-      <div className="relative mb-8 overflow-hidden rounded-[32px] border border-white/80 bg-gradient-to-br from-white via-[#F8FAFC] to-[#EFF6F8] p-6 shadow-[0_20px_50px_rgba(44,76,92,0.07)] sm:p-8">
-        <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-[1fr_320px]">
-          <div>
-            <div className="mb-2 flex flex-wrap items-center gap-2">
+      {/* Merged 3D Telemetry & Welcome Hero Section */}
+      <div className="relative mb-10 overflow-hidden rounded-[36px] border border-white/90 bg-gradient-to-br from-white via-[#F8FAFC] to-[#EFF6F8] p-6 shadow-[0_24px_60px_rgba(44,76,92,0.08)] sm:p-10">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(340px,430px)] lg:gap-14">
+          {/* Left Column: Telemetry Badges, Greeting, Narrative & Value Grid */}
+          <div className="max-w-[650px]">
+            {/* Top telemetry badges */}
+            <div className="mb-3 flex flex-wrap items-center gap-2.5">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-[11px] font-semibold text-teal-800">
                 <Sparkles size={12} className="text-[#7A6600]" />
                 Micro-needle Telemetry Active
@@ -795,15 +800,18 @@ export default function HomeView({
               </span>
             </div>
 
-            <h2 className="font-display text-[28px] font-bold tracking-[-0.04em] text-[#2C4C5C] sm:text-[36px]">
-              {greeting}, {firstName}
-            </h2>
+            {/* Time-based dynamic greeting without static Good morning badge */}
+            <div className="mt-1">
+              <h3 className="font-display text-[22px] font-bold tracking-[-0.03em] text-[#2C4C5C] sm:text-[26px]">
+                {greeting}, {firstName}
+              </h3>
+              <p className="mt-1 text-[13px] leading-relaxed text-slate-500">
+                {t(language, "home.overview")} Real-time interstitial hormone sensing is active and recording baseline biomarkers.
+              </p>
+            </div>
 
-            <p className="mt-2 max-w-lg text-[13px] leading-relaxed text-slate-500">
-              {t(language, "home.overview")} Real-time interstitial hormone sensing is active and recording baseline biomarkers.
-            </p>
-
-            <div className="mt-5 flex flex-wrap items-center gap-2">
+            {/* Live Patch Status Pill */}
+            <div className="mt-3.5 flex flex-wrap items-center gap-2">
               {patch ? (
                 <>
                   <StatusPill icon={<Wifi size={12} />} tone={patch.connected ? "teal" : "coral"}>
@@ -823,16 +831,136 @@ export default function HomeView({
                 </StatusPill>
               )}
             </div>
+
+            {/* Main Narrative Headline */}
+            <h2 className="mt-7 max-w-[620px] font-display text-[34px] font-semibold leading-[1.06] tracking-[-0.055em] text-[#2C4C5C] sm:text-[44px] lg:text-[52px]">
+              {language === "en" ? "Feel more in tune with your body." : "Elewa mwili wako kwa utulivu."}
+            </h2>
+
+            <p className="mt-3.5 max-w-[530px] text-[15px] leading-relaxed text-[#4F6370]">
+              {language === "en"
+                ? "ISF Tracker brings your hormone signals, care team and long-term insights into one calm, clear space."
+                : "ISF Tracker huleta ishara zako za homoni, timu ya afya na maarifa ya muda mrefu pamoja katika nafasi moja tulivu na wazi."}
+            </p>
+
+            {/* Action Buttons */}
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById("hormone-metrics");
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                className="group flex items-center gap-2 rounded-full bg-[#2C4C5C] px-5 py-3 text-[12px] font-bold text-white shadow-[0_8px_20px_rgba(44,76,92,0.2)] transition hover:-translate-y-0.5"
+              >
+                <span>{language === "en" ? "Open dashboard" : "Fungua dashibodi"}</span>
+                <ArrowUpRight size={15} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setView("chat")}
+                className="flex items-center gap-2 rounded-full border border-[#B8BFC1] bg-white px-5 py-3 text-[12px] font-semibold text-[#2C4C5C] transition hover:-translate-y-0.5 hover:border-[#F3E308]/40"
+              >
+                <span>{language === "en" ? "Explore care spaces" : "Gundua huduma za afya"}</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
+
+            {/* 3 Core Value Cards */}
+            <div className="mt-8 grid max-w-[580px] gap-3 sm:grid-cols-3">
+              {[
+                {
+                  icon: ShieldCheck,
+                  label: language === "en" ? "Consent first" : "Ridhaa kwanza",
+                },
+                {
+                  icon: Activity,
+                  label: language === "en" ? "Clarity" : "Uwazi",
+                },
+                {
+                  icon: MessageCircle,
+                  label: language === "en" ? "Care connected" : "Huduma iliyounganishwa",
+                },
+              ].map(({ icon: Icon, label }) => (
+                <div
+                  key={label}
+                  className="welcome-value rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-2xs backdrop-blur-xs transition hover:border-[#2C4C5C]/25"
+                >
+                  <Icon size={16} className="text-[#0EA5A4]" />
+                  <p className="mt-3 text-[11px] font-semibold text-[#2C4C5C]">
+                    {label}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* 3D Floating Patch Disc on the Home Welcome Hero */}
-          <div className="flex items-center justify-center">
-            <ISFPatch3DHero variant="compact" />
+          {/* Right Column: The Dark Brand Box With the 3D Animation Inside */}
+          <div className="welcome-brand-art relative mx-auto w-full max-w-[430px]">
+            <div className="welcome-orbit absolute -inset-4 rounded-[38px] border border-[#F3E308]/15 pointer-events-none" />
+
+            <div className="relative overflow-hidden rounded-[30px] border border-[#B8BFC1]/80 bg-gradient-to-br from-[#15232A] to-[#080D10] p-6 text-white shadow-[0_28px_70px_rgba(44,76,92,0.22)] sm:p-8">
+              <div className="relative">
+                {/* Header inside the dark card */}
+                <div className="flex items-center justify-between">
+                  <div className="brand-mark brand-mark-inverse flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white">
+                    <Activity size={17} strokeWidth={2.7} />
+                  </div>
+
+                  <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">
+                    ISF Tracker
+                  </span>
+                </div>
+
+                {/* 3D Animation EMBEDDED INSIDE THIS BOX! */}
+                <div className="my-5 flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] p-2 backdrop-blur-xs">
+                  <div className="mb-1 flex w-full items-center justify-between px-2 text-[10px] font-semibold uppercase tracking-wider text-teal-300">
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse" />
+                      3D Biosensor Patch
+                    </span>
+                    <span className="text-slate-400">Interactive</span>
+                  </div>
+                  <ISFPatch3DHero variant="compact" />
+                </div>
+
+                {/* Middle Text: A better way to listen / Your care, in a clearer rhythm. */}
+                <div className="mt-4 max-w-[300px]">
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#F3E308]">
+                    {language === "en" ? "A better way to listen" : "Njia bora ya kusikiliza"}
+                  </p>
+
+                  <p className="mt-2 font-display text-[24px] font-medium leading-[1.1] tracking-[-0.04em] text-white">
+                    {language === "en" ? "Your care, in a clearer rhythm." : "Huduma yako, kwa mdundo wazi."}
+                  </p>
+                </div>
+
+                {/* Bottom Footer: Private by design / Your data stays yours */}
+                <div className="mt-6 flex items-end justify-between border-t border-white/15 pt-4">
+                  <div>
+                    <p className="text-[11px] text-slate-300 font-medium">Private by design</p>
+                    <div className="mt-1 flex items-center gap-2 text-[12px] font-medium text-white">
+                      <LockKeyhole size={13} className="text-[#F3E308]" />
+                      {language === "en" ? "Your data stays yours" : "Taarifa zako ni zako"}
+                    </div>
+                  </div>
+
+                  <div className="h-12 w-12 rounded-full border border-[#F3E308]/40 bg-[#F3E308]/[0.12] p-1.5 flex items-center justify-center">
+                    <div className="h-full w-full rounded-full border border-[#B8BFC1]/35 flex items-center justify-center text-[10px] text-[#F3E308] font-bold">
+                      ISF
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_280px]">
+      <div id="hormone-metrics" className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_280px]">
         <div className="flex min-w-0 flex-col gap-5">
           <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_14px_45px_rgba(44,76,92,0.06)] sm:p-6">
           <div className="flex items-center justify-between">

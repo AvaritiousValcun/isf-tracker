@@ -353,190 +353,7 @@ function DashboardRail({
   );
 }
 
-function WelcomeView({
-  language,
-  setView,
-}: {
-  language: Language;
-  setView: (
-    view: View,
-  ) => void;
-}) {
-  return (
-    <div className="welcome-section page-enter flex min-h-[calc(100vh-72px)] items-center px-5 py-16 sm:px-8 lg:px-10 lg:py-20">
-      <div className="mx-auto grid w-full max-w-[1250px] items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.72fr)] lg:gap-20">
-        <div className="max-w-[650px]">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#F3E308]/35 bg-white px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-[#2C4C5C]">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#F3E308]" />
 
-            {t(
-              language,
-              "home.greeting" as never,
-            )}
-          </div>
-
-          <h2 className="max-w-[620px] font-display text-[42px] font-semibold leading-[1.04] tracking-[-0.065em] text-[#2C4C5C] sm:text-[58px] lg:text-[72px]">
-            {language ===
-            "en"
-              ? "Feel more in tune with your body."
-              : "Elewa mwili wako kwa utulivu."}
-          </h2>
-
-          <p className="mt-6 max-w-[510px] text-[15px] leading-7 text-[#4F6370] sm:text-[17px]">
-            {language ===
-            "en"
-              ? "ISF Tracker brings your hormone signals, care team and long-term insights into one calm, clear space."
-              : "ISF Tracker huleta ishara zako za homoni, timu ya afya na maarifa ya muda mrefu pamoja katika nafasi moja tulivu na wazi."}
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={() =>
-                setView("home")
-              }
-              className="group flex items-center gap-2 rounded-full bg-[#2C4C5C] px-5 py-3 text-[12px] font-bold text-white shadow-[0_8px_20px_rgba(44,76,92,0.2)] transition hover:-translate-y-0.5"
-            >
-              {language ===
-              "en"
-                ? "Open dashboard"
-                : "Fungua dashibodi"}
-
-              <ArrowUpRight
-                size={15}
-                className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              />
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                setView("chat")
-              }
-              className="flex items-center gap-2 rounded-full border border-[#B8BFC1] bg-white px-5 py-3 text-[12px] font-semibold text-[#2C4C5C] transition hover:-translate-y-0.5 hover:border-[#F3E308]/40"
-            >
-              {language ===
-              "en"
-                ? "Explore care spaces"
-                : "Gundua huduma za afya"}
-
-              <ChevronRight size={14} />
-            </button>
-          </div>
-
-          <div className="mt-10 grid max-w-[580px] gap-3 sm:grid-cols-3">
-            {[
-              {
-                icon: ShieldCheck,
-                label:
-                  language ===
-                  "en"
-                    ? "Consent first"
-                    : "Ridhaa kwanza",
-              },
-              {
-                icon: Activity,
-                label:
-                  language ===
-                  "en"
-                    ? "Clarity"
-                    : "Uwazi",
-              },
-              {
-                icon: MessageCircle,
-                label:
-                  language ===
-                  "en"
-                    ? "Care connected"
-                    : "Huduma iliyounganishwa",
-              },
-            ].map(
-              ({
-                icon: Icon,
-                label,
-              }) => (
-                <div
-                  key={label}
-                  className="welcome-value rounded-2xl border border-[#B8BFC1]/70 bg-white p-4"
-                >
-                  <Icon
-                    size={17}
-                    className="text-[#F3E308]"
-                  />
-
-                  <p className="mt-5 text-[11px] font-semibold text-[#2C4C5C]">
-                    {label}
-                  </p>
-                </div>
-              ),
-            )}
-          </div>
-        </div>
-
-        <div className="welcome-brand-art relative mx-auto w-full max-w-[430px]">
-          <div className="welcome-orbit absolute -inset-5 rounded-[38px] border border-[#F3E308]/10" />
-
-          <div className="relative overflow-hidden rounded-[30px] border border-[#B8BFC1]/80 bg-gradient-to-br from-[#15232A] to-[#080D10] p-6 text-white shadow-[0_28px_70px_rgba(44,76,92,0.2)] sm:p-8">
-            <div className="relative">
-              <div className="flex items-center justify-between">
-                <div className="brand-mark brand-mark-inverse">
-                  <Activity
-                    size={17}
-                    strokeWidth={2.7}
-                  />
-                </div>
-
-                <span className="rounded-full border border-[#B8BFC1]/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">
-                  ISF Tracker
-                </span>
-              </div>
-
-              <div className="mt-20 max-w-[280px]">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#F3E308]">
-                  {language ===
-                  "en"
-                    ? "A better way to listen"
-                    : "Njia bora ya kusikiliza"}
-                </p>
-
-                <p className="mt-3 font-display text-[28px] font-medium leading-[1.08] tracking-[-0.05em]">
-                  {language ===
-                  "en"
-                    ? "Your care, in a clearer rhythm."
-                    : "Huduma yako, kwa mdundo wazi."}
-                </p>
-              </div>
-
-              <div className="mt-20 flex items-end justify-between">
-                <div>
-                  <p className="text-[12px] text-white">
-                    Private by design
-                  </p>
-
-                  <div className="mt-2 flex items-center gap-2 text-[12px] font-medium text-white">
-                    <LockKeyhole
-                      size={13}
-                      className="text-[#B8BFC1]"
-                    />
-
-                    {language ===
-                    "en"
-                      ? "Your data stays yours"
-                      : "Taarifa zako ni zako"}
-                  </div>
-                </div>
-
-                <div className="h-14 w-14 rounded-full border border-[#F3E308]/40 bg-[#F3E308]/[0.14] p-2">
-                  <div className="h-full w-full rounded-full border border-[#B8BFC1]/35" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function AssistiveTools({
   language,
@@ -968,11 +785,7 @@ export default function Index() {
               const id =
                 entry.target.id;
 
-              if (
-                id === "home" ||
-                id === "welcome" ||
-                id === "dashboard"
-              ) {
+              if (id === "home") {
                 setView("home");
               } else if (
                 id === "chat" ||
@@ -996,7 +809,6 @@ export default function Index() {
 
     const sectionIds = [
       "home",
-      "welcome",
       "chat",
       "predictive",
       "settings",
@@ -1084,20 +896,6 @@ export default function Index() {
           className="scroll-mt-20"
         >
           <HomeView
-            language={
-              language
-            }
-            setView={
-              navigateTo
-            }
-          />
-        </section>
-
-        <section
-          id="welcome"
-          className="scroll-mt-20 border-t border-slate-200/80 bg-white"
-        >
-          <WelcomeView
             language={
               language
             }
