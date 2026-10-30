@@ -1,0 +1,523 @@
+===============================================================================
+                    ISF TRACKER - COMPLETE DATABASE AUDIT
+===============================================================================
+
+Audit started : 08/29/2026 10:04:40
+Project root  : C:\Users\ZBOOK\Desktop\Projectt\project-bolt-sb1-yqjm9ive\project
+Migration dir : C:\Users\ZBOOK\Desktop\Projectt\project-bolt-sb1-yqjm9ive\project\supabase\migrations
+
+MODE: READ ONLY
+NO migrations will be pushed or modified.
+
+===============================================================================
+1. PROJECT DIRECTORY CHECK
+===============================================================================
+Project directory                  : FOUND
+Supabase migrations directory      : FOUND
+
+===============================================================================
+2. SUPABASE CLI CHECK
+===============================================================================
+Supabase CLI                       : FOUND
+Supabase version                   : 2.116.0
+
+===============================================================================
+3. GIT STATUS
+===============================================================================
+
+===============================================================================
+4. LOCAL MIGRATION FILES
+===============================================================================
+Local migration count              : 11
+
+===============================================================================
+5. REMOTE MIGRATION HISTORY
+===============================================================================
+Initialising login role...
+Connecting to remote database...
+
+  
+   Local            | Remote           | Time (UTC)            
+  ------------------|------------------|-----------------------
+   `20260827161010` | `20260827161010` | `2026-08-27 16:10:10` 
+   `20260827161039` | `20260827161039` | `2026-08-27 16:10:39` 
+   `20260827161050` | `20260827161050` | `2026-08-27 16:10:50` 
+   `20260828000001` | ` `              | `2026-08-28 00:00:01` 
+   `20260828000002` | ` `              | `2026-08-28 00:00:02` 
+   `20260828100000` | `20260828100000` | `2026-08-28 10:00:00` 
+   `20260828120000` | ` `              | `2026-08-28 12:00:00` 
+   `20260828130000` | ` `              | `2026-08-28 13:00:00` 
+   `20260828140000` | ` `              | `2026-08-28 14:00:00` 
+   `20260828150000` | ` `              | `2026-08-28 15:00:00` 
+   `20260829000000` | ` `              | `2026-08-29 00:00:00` 
+
+
+===============================================================================
+6. LOCAL VS REMOTE MIGRATION COMPARISON
+===============================================================================
+Local migrations                   : 11
+Remote migrations detected         : 4
+Pending migrations                 : 7
+
+PENDING MIGRATIONS:
+  20260828000001_canonical_schema.sql
+  20260828000002_isf_final_reconciliation.sql
+  20260828120000_passkeys.sql
+  20260828130000_fix_conversation_rls.sql
+  20260828140000_backend_repair.sql
+  20260828150000_runtime_error_repairs.sql
+  20260829000000_comprehensive_demo_data.sql
+
+===============================================================================
+7. PENDING MIGRATION BACKUP
+===============================================================================
+Backed up: 20260828000001_canonical_schema.sql
+Backed up: 20260828000002_isf_final_reconciliation.sql
+Backed up: 20260828120000_passkeys.sql
+Backed up: 20260828130000_fix_conversation_rls.sql
+Backed up: 20260828140000_backend_repair.sql
+Backed up: 20260828150000_runtime_error_repairs.sql
+Backed up: 20260829000000_comprehensive_demo_data.sql
+
+Backup directory:
+C:\Users\ZBOOK\Desktop\Projectt\project-bolt-sb1-yqjm9ive\project\supabase\audit\pending_migrations_20260829_100438
+
+===============================================================================
+8. DUPLICATE TABLE AUDIT
+===============================================================================
+
+===============================================================================
+9. DUPLICATE FUNCTION AUDIT
+===============================================================================
+
+===============================================================================
+10. CRITICAL FUNCTION AUDIT
+===============================================================================
+seed_demo_data                     : DEFINED 5 TIMES
+    20260827161050_003_demo_rpc.sql
+    20260828000001_canonical_schema.sql
+    20260828000002_isf_final_reconciliation.sql
+    20260828140000_backend_repair.sql
+    20260829000000_comprehensive_demo_data.sql
+seed_comprehensive_demo_data       : DEFINED ONCE
+generate_predictions               : DEFINED 3 TIMES
+    20260828000001_canonical_schema.sql
+    20260828000002_isf_final_reconciliation.sql
+    20260828100000_predictive_analysis.sql
+isf_set_updated_at                 : DEFINED ONCE
+set_updated_at                     : DEFINED ONCE
+handle_new_user                    : DEFINED ONCE
+current_consultant_id              : DEFINED ONCE
+prevent_audit_log_mutation         : DEFINED ONCE
+normalize_prediction_condition     : DEFINED ONCE
+cleanup_expired_passkey_challenges : DEFINED ONCE
+
+===============================================================================
+11. RLS POLICY AUDIT
+===============================================================================
+Total CREATE POLICY statements     : 135
+Duplicate policy definitions       : 5
+
+DUPLICATE POLICIES:
+
+conversations|conversations_insert_patient
+  20260828000002_isf_final_reconciliation.sql
+  20260828130000_fix_conversation_rls.sql
+
+messages|messages_insert_patient
+  20260828000002_isf_final_reconciliation.sql
+  20260828130000_fix_conversation_rls.sql
+
+passkeys|passkeys_delete_own
+  20260828120000_passkeys.sql
+  20260828150000_runtime_error_repairs.sql
+
+passkeys|passkeys_insert_own
+  20260828120000_passkeys.sql
+  20260828150000_runtime_error_repairs.sql
+
+passkeys|passkeys_select_own
+  20260828120000_passkeys.sql
+  20260828150000_runtime_error_repairs.sql
+
+===============================================================================
+12. ROW LEVEL SECURITY OPERATIONS
+===============================================================================
+RLS operations found               : 59
+  20260827161039_002_rls_policies.sql:17 -> ALTER TABLE patient_profiles ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:26 -> ALTER TABLE consultants ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:34 -> ALTER TABLE patient_consultants ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:46 -> ALTER TABLE consent_records ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:55 -> ALTER TABLE patches ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:62 -> ALTER TABLE patient_patches ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:71 -> ALTER TABLE hormone_readings ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:78 -> ALTER TABLE reference_ranges ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:83 -> ALTER TABLE trend_events ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:92 -> ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:101 -> ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:113 -> ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:132 -> ALTER TABLE predictive_consents ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:141 -> ALTER TABLE predictions ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:148 -> ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:157 -> ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:168 -> ALTER TABLE temporary_access_tokens ENABLE ROW LEVEL SECURITY;
+  20260827161039_002_rls_policies.sql:177 -> ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:893 -> ALTER TABLE public.patient_profiles ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:894 -> ALTER TABLE public.consultants ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:895 -> ALTER TABLE public.patient_consultants ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:896 -> ALTER TABLE public.consent_records ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:897 -> ALTER TABLE public.patches ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:898 -> ALTER TABLE public.patient_patches ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:899 -> ALTER TABLE public.hormone_readings ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:900 -> ALTER TABLE public.reference_ranges ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:901 -> ALTER TABLE public.trend_events ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:902 -> ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:903 -> ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:904 -> ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:905 -> ALTER TABLE public.predictive_consents ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:906 -> ALTER TABLE public.predictions ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:907 -> ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:908 -> ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:909 -> ALTER TABLE public.temporary_access_tokens ENABLE ROW LEVEL SECURITY;
+  20260828000001_canonical_schema.sql:910 -> ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:467 -> ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:468 -> ALTER TABLE public.patient_profiles ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:469 -> ALTER TABLE public.consultants ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:470 -> ALTER TABLE public.patient_consultants ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:471 -> ALTER TABLE public.consent_records ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:472 -> ALTER TABLE public.patches ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:473 -> ALTER TABLE public.patient_patches ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:474 -> ALTER TABLE public.hormone_readings ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:475 -> ALTER TABLE public.reference_ranges ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:476 -> ALTER TABLE public.trend_events ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:477 -> ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:478 -> ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:479 -> ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:480 -> ALTER TABLE public.predictive_consents ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:481 -> ALTER TABLE public.predictions ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:482 -> ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:483 -> ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:484 -> ALTER TABLE public.temporary_access_tokens ENABLE ROW LEVEL SECURITY;
+  20260828000002_isf_final_reconciliation.sql:485 -> ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+  20260828120000_passkeys.sql:43 -> ENABLE ROW LEVEL SECURITY;
+  20260828120000_passkeys.sql:114 -> ENABLE ROW LEVEL SECURITY;
+  20260828150000_runtime_error_repairs.sql:419 -> ENABLE ROW LEVEL SECURITY;
+  20260828150000_runtime_error_repairs.sql:497 -> ENABLE ROW LEVEL SECURITY;
+
+===============================================================================
+13. GRANT / REVOKE AUDIT
+===============================================================================
+GRANT / REVOKE statements          : 26
+  20260827161050_003_demo_rpc.sql:172 -> REVOKE ALL ON FUNCTION public.seed_demo_data() FROM PUBLIC;
+  20260827161050_003_demo_rpc.sql:175 -> GRANT EXECUTE ON FUNCTION public.seed_demo_data() TO authenticated;
+  20260828000001_canonical_schema.sql:1968 -> REVOKE ALL
+  20260828000001_canonical_schema.sql:1972 -> GRANT EXECUTE
+  20260828000001_canonical_schema.sql:2188 -> REVOKE ALL
+  20260828000001_canonical_schema.sql:2192 -> GRANT EXECUTE
+  20260828000001_canonical_schema.sql:2202 -> REVOKE ALL
+  20260828000001_canonical_schema.sql:2206 -> REVOKE ALL
+  20260828000002_isf_final_reconciliation.sql:1454 -> REVOKE ALL
+  20260828000002_isf_final_reconciliation.sql:1458 -> GRANT EXECUTE
+  20260828000002_isf_final_reconciliation.sql:1634 -> REVOKE ALL
+  20260828000002_isf_final_reconciliation.sql:1638 -> GRANT EXECUTE
+  20260828000002_isf_final_reconciliation.sql:1694 -> REVOKE ALL
+  20260828000002_isf_final_reconciliation.sql:1698 -> GRANT EXECUTE
+  20260828100000_predictive_analysis.sql:439 -> REVOKE ALL ON FUNCTION public.generate_predictions() FROM PUBLIC;
+  20260828100000_predictive_analysis.sql:441 -> GRANT EXECUTE ON FUNCTION public.generate_predictions() TO authenticated;
+  20260828140000_backend_repair.sql:32 -> REVOKE ALL ON FUNCTION public.current_consultant_id() FROM PUBLIC;
+  20260828140000_backend_repair.sql:33 -> GRANT EXECUTE ON FUNCTION public.current_consultant_id() TO authenticated;
+  20260828140000_backend_repair.sql:664 -> REVOKE ALL
+  20260828140000_backend_repair.sql:668 -> GRANT EXECUTE
+  20260828140000_backend_repair.sql:699 -> REVOKE ALL
+  20260828140000_backend_repair.sql:703 -> GRANT EXECUTE
+  20260829000000_comprehensive_demo_data.sql:2596 -> REVOKE ALL
+  20260829000000_comprehensive_demo_data.sql:2601 -> REVOKE ALL
+  20260829000000_comprehensive_demo_data.sql:2606 -> GRANT EXECUTE
+  20260829000000_comprehensive_demo_data.sql:2611 -> GRANT EXECUTE
+
+===============================================================================
+14. PROFILE SCHEMA AUDIT
+===============================================================================
+profiles table definitions         : 1
+patient_profiles definitions       : 2
+
+WARNING: public.profiles detected.
+  20260828000002_isf_final_reconciliation.sql
+
+Established ISF Tracker identity table: patient_profiles
+This requires deliberate architectural review.
+
+===============================================================================
+15. PASSKEY TABLE AUDIT
+===============================================================================
+passkeys                           : DEFINED 2 TIMES
+  20260828120000_passkeys.sql
+  20260828150000_runtime_error_repairs.sql
+passkey_challenges                 : DEFINED 2 TIMES
+  20260828120000_passkeys.sql
+  20260828150000_runtime_error_repairs.sql
+
+===============================================================================
+16. PREDICTION CONDITION AUDIT
+===============================================================================
+  20260827161010_001_core_tables.sql -> pcos
+  20260828000001_canonical_schema.sql -> pcos
+  20260828000002_isf_final_reconciliation.sql -> pcos
+  20260828100000_predictive_analysis.sql -> pcos
+  20260828150000_runtime_error_repairs.sql -> pmos_pcos
+  20260828150000_runtime_error_repairs.sql -> pcos
+  20260829000000_comprehensive_demo_data.sql -> pcos
+
+Prediction condition terminology requires review.
+
+===============================================================================
+17. ALL TABLE DEFINITIONS
+===============================================================================
+  audit_logs                          20260827161010_001_core_tables.sql
+  audit_logs                          20260828000001_canonical_schema.sql
+  consent_records                     20260827161010_001_core_tables.sql
+  consent_records                     20260828000001_canonical_schema.sql
+  consultants                         20260827161010_001_core_tables.sql
+  consultants                         20260828000001_canonical_schema.sql
+  conversations                       20260827161010_001_core_tables.sql
+  conversations                       20260828000001_canonical_schema.sql
+  hormone_readings                    20260827161010_001_core_tables.sql
+  hormone_readings                    20260828000001_canonical_schema.sql
+  messages                            20260827161010_001_core_tables.sql
+  messages                            20260828000001_canonical_schema.sql
+  notifications                       20260827161010_001_core_tables.sql
+  notifications                       20260828000001_canonical_schema.sql
+  passkey_challenges                  20260828120000_passkeys.sql
+  passkey_challenges                  20260828150000_runtime_error_repairs.sql
+  passkeys                            20260828120000_passkeys.sql
+  passkeys                            20260828150000_runtime_error_repairs.sql
+  patches                             20260827161010_001_core_tables.sql
+  patches                             20260828000001_canonical_schema.sql
+  patient_consultants                 20260827161010_001_core_tables.sql
+  patient_consultants                 20260828000001_canonical_schema.sql
+  patient_patches                     20260827161010_001_core_tables.sql
+  patient_patches                     20260828000001_canonical_schema.sql
+  patient_profiles                    20260827161010_001_core_tables.sql
+  patient_profiles                    20260828000001_canonical_schema.sql
+  payments                            20260827161010_001_core_tables.sql
+  payments                            20260828000001_canonical_schema.sql
+  predictions                         20260827161010_001_core_tables.sql
+  predictions                         20260828000001_canonical_schema.sql
+  predictive_consents                 20260827161010_001_core_tables.sql
+  predictive_consents                 20260828000001_canonical_schema.sql
+  profiles                            20260828000002_isf_final_reconciliation.sql
+  reference_ranges                    20260827161010_001_core_tables.sql
+  reference_ranges                    20260828000001_canonical_schema.sql
+  subscriptions                       20260827161010_001_core_tables.sql
+  subscriptions                       20260828000001_canonical_schema.sql
+  temporary_access_tokens             20260827161010_001_core_tables.sql
+  temporary_access_tokens             20260828000001_canonical_schema.sql
+  trend_events                        20260827161010_001_core_tables.sql
+  trend_events                        20260828000001_canonical_schema.sql
+
+===============================================================================
+18. ALL FUNCTION DEFINITIONS
+===============================================================================
+  cleanup_expired_passkey_challenges       20260828120000_passkeys.sql
+  current_consultant_id                    20260828140000_backend_repair.sql
+  generate_predictions                     20260828000001_canonical_schema.sql
+  generate_predictions                     20260828000002_isf_final_reconciliation.sql
+  generate_predictions                     20260828100000_predictive_analysis.sql
+  handle_new_user                          20260828000002_isf_final_reconciliation.sql
+  isf_set_updated_at                       20260828000001_canonical_schema.sql
+  normalize_prediction_condition           20260828150000_runtime_error_repairs.sql
+  prevent_audit_log_mutation               20260828000002_isf_final_reconciliation.sql
+  seed_comprehensive_demo_data             20260829000000_comprehensive_demo_data.sql
+  seed_demo_data                           20260827161050_003_demo_rpc.sql
+  seed_demo_data                           20260828000001_canonical_schema.sql
+  seed_demo_data                           20260828000002_isf_final_reconciliation.sql
+  seed_demo_data                           20260828140000_backend_repair.sql
+  seed_demo_data                           20260829000000_comprehensive_demo_data.sql
+  set_updated_at                           20260828000002_isf_final_reconciliation.sql
+
+===============================================================================
+19. ALL POLICY DEFINITIONS
+===============================================================================
+  audit_logs_select_own          ON audit_logs                     20260828000002_isf_final_reconciliation.sql
+  insert_own_audit_logs          ON audit_logs                     20260827161039_002_rls_policies.sql
+  isf_audit_select               ON audit_logs                     20260828000001_canonical_schema.sql
+  select_own_audit_logs          ON audit_logs                     20260827161039_002_rls_policies.sql
+  consent_records_insert_own     ON consent_records                20260828000002_isf_final_reconciliation.sql
+  consent_records_select_own     ON consent_records                20260828000002_isf_final_reconciliation.sql
+  insert_own_consents            ON consent_records                20260827161039_002_rls_policies.sql
+  isf_consent_insert             ON consent_records                20260828000001_canonical_schema.sql
+  isf_consent_select             ON consent_records                20260828000001_canonical_schema.sql
+  select_own_consents            ON consent_records                20260827161039_002_rls_policies.sql
+  update_own_consents            ON consent_records                20260827161039_002_rls_policies.sql
+  consultants_select_allowed     ON consultants                    20260828000002_isf_final_reconciliation.sql
+  isf_consultants_select         ON consultants                    20260828000001_canonical_schema.sql
+  isf_consultants_select_v2      ON consultants                    20260828140000_backend_repair.sql
+  select_consultants             ON consultants                    20260827161039_002_rls_policies.sql
+  conversations_delete_patient   ON conversations                  20260828130000_fix_conversation_rls.sql
+  conversations_insert_patient   ON conversations                  20260828000002_isf_final_reconciliation.sql
+  conversations_insert_patient   ON conversations                  20260828130000_fix_conversation_rls.sql
+  conversations_select_allowed   ON conversations                  20260828000002_isf_final_reconciliation.sql
+  conversations_select_patient   ON conversations                  20260828130000_fix_conversation_rls.sql
+  conversations_update_patient   ON conversations                  20260828130000_fix_conversation_rls.sql
+  insert_own_conversations       ON conversations                  20260827161039_002_rls_policies.sql
+  isf_conversations_insert       ON conversations                  20260828000001_canonical_schema.sql
+  isf_conversations_insert_v2    ON conversations                  20260828140000_backend_repair.sql
+  isf_conversations_select       ON conversations                  20260828000001_canonical_schema.sql
+  isf_conversations_select_v2    ON conversations                  20260828140000_backend_repair.sql
+  isf_conversations_update_v2    ON conversations                  20260828140000_backend_repair.sql
+  select_own_conversations       ON conversations                  20260827161039_002_rls_policies.sql
+  update_own_conversations       ON conversations                  20260827161039_002_rls_policies.sql
+  hormone_readings_insert_own    ON hormone_readings               20260828000002_isf_final_reconciliation.sql
+  hormone_readings_select_own    ON hormone_readings               20260828000002_isf_final_reconciliation.sql
+  insert_own_readings            ON hormone_readings               20260827161039_002_rls_policies.sql
+  isf_readings_insert            ON hormone_readings               20260828000001_canonical_schema.sql
+  isf_readings_select            ON hormone_readings               20260828000001_canonical_schema.sql
+  select_own_readings            ON hormone_readings               20260827161039_002_rls_policies.sql
+  insert_own_messages            ON messages                       20260827161039_002_rls_policies.sql
+  isf_messages_insert            ON messages                       20260828000001_canonical_schema.sql
+  isf_messages_insert_v2         ON messages                       20260828140000_backend_repair.sql
+  isf_messages_select            ON messages                       20260828000001_canonical_schema.sql
+  isf_messages_select_v2         ON messages                       20260828140000_backend_repair.sql
+  isf_messages_update_v2         ON messages                       20260828140000_backend_repair.sql
+  messages_delete_patient        ON messages                       20260828130000_fix_conversation_rls.sql
+  messages_insert_patient        ON messages                       20260828000002_isf_final_reconciliation.sql
+  messages_insert_patient        ON messages                       20260828130000_fix_conversation_rls.sql
+  messages_select_allowed        ON messages                       20260828000002_isf_final_reconciliation.sql
+  messages_select_patient        ON messages                       20260828130000_fix_conversation_rls.sql
+  messages_update_patient        ON messages                       20260828130000_fix_conversation_rls.sql
+  select_own_messages            ON messages                       20260827161039_002_rls_policies.sql
+  update_own_messages            ON messages                       20260827161039_002_rls_policies.sql
+  insert_own_notifications       ON notifications                  20260827161039_002_rls_policies.sql
+  isf_notifications_select       ON notifications                  20260828000001_canonical_schema.sql
+  isf_notifications_update       ON notifications                  20260828000001_canonical_schema.sql
+  notifications_select_own       ON notifications                  20260828000002_isf_final_reconciliation.sql
+  select_own_notifications       ON notifications                  20260827161039_002_rls_policies.sql
+  update_own_notifications       ON notifications                  20260827161039_002_rls_policies.sql
+  passkeys_delete_own            ON passkeys                       20260828120000_passkeys.sql
+  passkeys_delete_own            ON passkeys                       20260828150000_runtime_error_repairs.sql
+  passkeys_insert_own            ON passkeys                       20260828120000_passkeys.sql
+  passkeys_insert_own            ON passkeys                       20260828150000_runtime_error_repairs.sql
+  passkeys_select_own            ON passkeys                       20260828120000_passkeys.sql
+  passkeys_select_own            ON passkeys                       20260828150000_runtime_error_repairs.sql
+  isf_patches_select             ON patches                        20260828000001_canonical_schema.sql
+  patches_select_own             ON patches                        20260828000002_isf_final_reconciliation.sql
+  select_own_patches             ON patches                        20260827161039_002_rls_policies.sql
+  insert_own_relationships       ON patient_consultants            20260827161039_002_rls_policies.sql
+  isf_patient_consultants_insert ON patient_consultants            20260828000001_canonical_schema.sql
+  isf_patient_consultants_insert_v2 ON patient_consultants            20260828140000_backend_repair.sql
+  isf_patient_consultants_select ON patient_consultants            20260828000001_canonical_schema.sql
+  isf_patient_consultants_select_v2 ON patient_consultants            20260828140000_backend_repair.sql
+  isf_patient_consultants_update ON patient_consultants            20260828000001_canonical_schema.sql
+  isf_patient_consultants_update_v2 ON patient_consultants            20260828140000_backend_repair.sql
+  patient_consultants_insert_own ON patient_consultants            20260828000002_isf_final_reconciliation.sql
+  patient_consultants_select_allowed ON patient_consultants            20260828000002_isf_final_reconciliation.sql
+  patient_consultants_update_own ON patient_consultants            20260828000002_isf_final_reconciliation.sql
+  select_own_relationships       ON patient_consultants            20260827161039_002_rls_policies.sql
+  update_own_relationships       ON patient_consultants            20260827161039_002_rls_policies.sql
+  insert_own_patient_patches     ON patient_patches                20260827161039_002_rls_policies.sql
+  isf_patient_patches_insert     ON patient_patches                20260828000001_canonical_schema.sql
+  isf_patient_patches_select     ON patient_patches                20260828000001_canonical_schema.sql
+  isf_patient_patches_update     ON patient_patches                20260828000001_canonical_schema.sql
+  patient_patches_insert_own     ON patient_patches                20260828000002_isf_final_reconciliation.sql
+  patient_patches_select_own     ON patient_patches                20260828000002_isf_final_reconciliation.sql
+  patient_patches_update_own     ON patient_patches                20260828000002_isf_final_reconciliation.sql
+  select_own_patient_patches     ON patient_patches                20260827161039_002_rls_policies.sql
+  update_own_patient_patches     ON patient_patches                20260827161039_002_rls_policies.sql
+  insert_own_profile             ON patient_profiles               20260827161039_002_rls_policies.sql
+  isf_patient_profiles_insert    ON patient_profiles               20260828000001_canonical_schema.sql
+  isf_patient_profiles_select    ON patient_profiles               20260828000001_canonical_schema.sql
+  isf_patient_profiles_update    ON patient_profiles               20260828000001_canonical_schema.sql
+  patient_profiles_insert_own    ON patient_profiles               20260828000002_isf_final_reconciliation.sql
+  patient_profiles_select_own    ON patient_profiles               20260828000002_isf_final_reconciliation.sql
+  patient_profiles_update_own    ON patient_profiles               20260828000002_isf_final_reconciliation.sql
+  select_own_profile             ON patient_profiles               20260827161039_002_rls_policies.sql
+  update_own_profile             ON patient_profiles               20260827161039_002_rls_policies.sql
+  insert_own_payments            ON payments                       20260827161039_002_rls_policies.sql
+  isf_payments_select            ON payments                       20260828000001_canonical_schema.sql
+  payments_select_own            ON payments                       20260828000002_isf_final_reconciliation.sql
+  select_own_payments            ON payments                       20260827161039_002_rls_policies.sql
+  insert_own_predictions         ON predictions                    20260827161039_002_rls_policies.sql
+  isf_predictions_select         ON predictions                    20260828000001_canonical_schema.sql
+  predictions_select_own         ON predictions                    20260828000002_isf_final_reconciliation.sql
+  select_own_predictions         ON predictions                    20260827161039_002_rls_policies.sql
+  insert_own_predictive_consents ON predictive_consents            20260827161039_002_rls_policies.sql
+  isf_predictive_consent_insert  ON predictive_consents            20260828000001_canonical_schema.sql
+  isf_predictive_consent_select  ON predictive_consents            20260828000001_canonical_schema.sql
+  predictive_consents_insert_own ON predictive_consents            20260828000002_isf_final_reconciliation.sql
+  predictive_consents_select_own ON predictive_consents            20260828000002_isf_final_reconciliation.sql
+  select_own_predictive_consents ON predictive_consents            20260827161039_002_rls_policies.sql
+  update_own_predictive_consents ON predictive_consents            20260827161039_002_rls_policies.sql
+  profiles_select_own            ON profiles                       20260828000002_isf_final_reconciliation.sql
+  profiles_update_own            ON profiles                       20260828000002_isf_final_reconciliation.sql
+  isf_reference_ranges_select    ON reference_ranges               20260828000001_canonical_schema.sql
+  reference_ranges_select_authenticated ON reference_ranges               20260828000002_isf_final_reconciliation.sql
+  select_reference_ranges        ON reference_ranges               20260827161039_002_rls_policies.sql
+  insert_own_subscription        ON subscriptions                  20260827161039_002_rls_policies.sql
+  isf_subscription_select        ON subscriptions                  20260828000001_canonical_schema.sql
+  select_own_subscription        ON subscriptions                  20260827161039_002_rls_policies.sql
+  subscriptions_select_own       ON subscriptions                  20260828000002_isf_final_reconciliation.sql
+  update_own_subscription        ON subscriptions                  20260827161039_002_rls_policies.sql
+  insert_own_temp_access         ON temporary_access_tokens        20260827161039_002_rls_policies.sql
+  isf_temp_tokens_insert         ON temporary_access_tokens        20260828000001_canonical_schema.sql
+  isf_temp_tokens_select         ON temporary_access_tokens        20260828000001_canonical_schema.sql
+  isf_temp_tokens_update         ON temporary_access_tokens        20260828000001_canonical_schema.sql
+  select_own_temp_access         ON temporary_access_tokens        20260827161039_002_rls_policies.sql
+  temp_access_insert_own         ON temporary_access_tokens        20260828000002_isf_final_reconciliation.sql
+  temp_access_select_own         ON temporary_access_tokens        20260828000002_isf_final_reconciliation.sql
+  update_own_temp_access         ON temporary_access_tokens        20260827161039_002_rls_policies.sql
+  insert_own_trend_events        ON trend_events                   20260827161039_002_rls_policies.sql
+  isf_trends_insert              ON trend_events                   20260828000001_canonical_schema.sql
+  isf_trends_select              ON trend_events                   20260828000001_canonical_schema.sql
+  isf_trends_update              ON trend_events                   20260828000001_canonical_schema.sql
+  select_own_trend_events        ON trend_events                   20260827161039_002_rls_policies.sql
+  trend_events_insert_own        ON trend_events                   20260828000002_isf_final_reconciliation.sql
+  trend_events_select_own        ON trend_events                   20260828000002_isf_final_reconciliation.sql
+  update_own_trend_events        ON trend_events                   20260827161039_002_rls_policies.sql
+
+===============================================================================
+20. SUSPICIOUS / HIGH-RISK SQL PATTERNS
+===============================================================================
+
+===============================================================================
+21. MIGRATION SIZE AUDIT
+===============================================================================
+  20260827161010_001_core_tables.sql                 Lines: 284    Size: 11.66 KB
+  20260827161039_002_rls_policies.sql                Lines: 181    Size: 11.71 KB
+  20260827161050_003_demo_rpc.sql                    Lines: 175    Size: 4.01 KB
+  20260828000001_canonical_schema.sql                Lines: 2213   Size: 51.85 KB
+  20260828000002_isf_final_reconciliation.sql        Lines: 1706   Size: 44.42 KB
+  20260828100000_predictive_analysis.sql             Lines: 441    Size: 10.59 KB
+  20260828120000_passkeys.sql                        Lines: 135    Size: 3.34 KB
+  20260828130000_fix_conversation_rls.sql            Lines: 157    Size: 3.49 KB
+  20260828140000_backend_repair.sql                  Lines: 714    Size: 16.85 KB
+  20260828150000_runtime_error_repairs.sql           Lines: 506    Size: 10.49 KB
+  20260829000000_comprehensive_demo_data.sql         Lines: 2623   Size: 56.12 KB
+
+===============================================================================
+22. MIGRATION ORDER AUDIT
+===============================================================================
+Migration filenames are chronologically ordered.
+
+===============================================================================
+23. FINAL AUDIT ASSESSMENT
+===============================================================================
+Audit risk score                   : 16
+
+===============================================================================
+24. RECOMMENDED NEXT ACTION
+===============================================================================
+RECOMMENDATION:
+
+1. DO NOT run supabase db push yet.
+2. Keep the pending migration backup created by this audit.
+3. Reconcile the pending migrations against the canonical schema.
+4. Preserve legitimate features such as passkeys/predictive analysis.
+5. Remove duplicate/redundant schema creation.
+6. Resolve profiles vs patient_profiles architecture.
+7. Create a clean migration sequence.
+8. Validate the resulting migrations locally.
+9. Push only after the migration plan is verified.
+
+===============================================================================
+25. SAVING AUDIT REPORT
+===============================================================================
