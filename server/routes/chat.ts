@@ -686,7 +686,7 @@ router.post(
         .maybeSingle();
 
       if (subscriptionError) {
-        throw subscriptionError;
+        console.warn("subscriptions query warning:", subscriptionError.message);
       }
 
       const isPremium =

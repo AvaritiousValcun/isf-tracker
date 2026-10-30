@@ -62,7 +62,8 @@ ADD COLUMN IF NOT EXISTS started_at timestamptz DEFAULT now();
 ALTER TABLE public.subscriptions
 ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
 ADD COLUMN IF NOT EXISTS plan text DEFAULT 'free',
-ADD COLUMN IF NOT EXISTS status text DEFAULT 'active';
+ADD COLUMN IF NOT EXISTS status text DEFAULT 'active',
+ADD COLUMN IF NOT EXISTS renewal_at timestamptz DEFAULT (now() + interval '30 days');
 
 -- 8. FIX TABLE: trend_events
 ALTER TABLE public.trend_events
