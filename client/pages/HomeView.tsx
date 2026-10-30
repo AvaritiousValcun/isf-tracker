@@ -37,6 +37,7 @@ import {
   ReferenceArea,
 } from "recharts";
 import Hormone3DVisualizer from "@/components/Hormone3DVisualizer";
+import ISFPatch3DHero from "@/components/ISFPatch3DHero";
 
 interface HomeViewProps {
   language: Language;
@@ -780,89 +781,55 @@ export default function HomeView({
 
   return (
     <div className="pb-8">
-      <div className="mb-6 flex flex-col gap-1">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-          {dateStr}
+      {/* 3D Welcome Hero Banner */}
+      <div className="relative mb-8 overflow-hidden rounded-[32px] border border-white/80 bg-gradient-to-br from-white via-[#F8FAFC] to-[#EFF6F8] p-6 shadow-[0_20px_50px_rgba(44,76,92,0.07)] sm:p-8">
+        <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-[1fr_320px]">
+          <div>
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-[11px] font-semibold text-teal-800">
+                <Sparkles size={12} className="text-[#7A6600]" />
+                Micro-needle Telemetry Active
+              </span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                {dateStr}
+              </span>
+            </div>
+
+            <h2 className="font-display text-[28px] font-bold tracking-[-0.04em] text-[#2C4C5C] sm:text-[36px]">
+              {greeting}, {firstName}
+            </h2>
+
+            <p className="mt-2 max-w-lg text-[13px] leading-relaxed text-slate-500">
+              {t(language, "home.overview")} Real-time interstitial hormone sensing is active and recording baseline biomarkers.
+            </p>
+
+            <div className="mt-5 flex flex-wrap items-center gap-2">
+              {patch ? (
+                <>
+                  <StatusPill icon={<Wifi size={12} />} tone={patch.connected ? "teal" : "coral"}>
+                    <span className="text-[12px]">{patch.connected ? t(language, "home.connected") : t(language, "home.disconnected")}</span>
+                  </StatusPill>
+                  <StatusPill icon={<BatteryMedium size={12} />} tone="purple">
+                    <span className="text-[12px] font-medium">Battery {patch.battery_percent ?? "—"}%</span>
+                  </StatusPill>
+                  <span className="flex items-center gap-1.5 px-1 text-[12px] text-slate-600">
+                    <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
+                    {t(language, "home.updated")}
+                  </span>
+                </>
+              ) : (
+                <StatusPill icon={<Wifi size={12} />} tone="coral">
+                  <span className="text-[12px]">{t(language, "home.disconnected")}</span>
+                </StatusPill>
+              )}
+            </div>
+          </div>
+
+          {/* 3D Floating Patch Disc on the Home Welcome Hero */}
+          <div className="flex items-center justify-center">
+            <ISFPatch3DHero variant="compact" />
+          </div>
         </div>
-
-        <h2 className="font-display text-[27px] font-semibold tracking-[-0.055em] text-[#2C4C5C] sm:text-[32px]">
-          {greeting}, {firstName}
-        </h2>
-
-        <p className="mt-2 text-[13px] text-slate-500">
-          {t(
-            language,
-            "home.overview"
-          )}
-        </p>
-      </div>
-
-      <div className="mb-6 flex flex-wrap gap-2">
-        {patch ? (
-          <>
-            <StatusPill
-              icon={
-                <Wifi size={12} />
-              }
-              tone={
-                patch.connected
-                  ? "teal"
-                  : "coral"
-              }
-            >
-              <span className="text-[12px]">
-                {patch.connected
-                  ? t(
-                      language,
-                      "home.connected"
-                    )
-                  : t(
-                      language,
-                      "home.disconnected"
-                    )}
-              </span>
-            </StatusPill>
-
-            <StatusPill
-              icon={
-                <BatteryMedium
-                  size={12}
-                />
-              }
-              tone="purple"
-            >
-              <span className="text-[12px] font-medium">
-                Battery{" "}
-                {patch.battery_percent ??
-                  "—"}
-                %
-              </span>
-            </StatusPill>
-
-            <span className="flex items-center gap-1.5 px-1 text-[12px] text-slate-700">
-              <span className="h-1 w-1 rounded-full bg-slate-600" />
-
-              {t(
-                language,
-                "home.updated"
-              )}
-            </span>
-          </>
-        ) : (
-          <StatusPill
-            icon={
-              <Wifi size={12} />
-            }
-            tone="coral"
-          >
-            <span className="text-[12px]">
-              {t(
-                language,
-                "home.disconnected"
-              )}
-            </span>
-          </StatusPill>
-        )}
       </div>
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_280px]">
