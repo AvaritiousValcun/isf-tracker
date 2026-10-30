@@ -239,9 +239,31 @@ export function AuthProvider({
         };
       }
 
-      const {
-        error: profileError,
-      } =
+      // If sign-up did not return an active session immediately,
+      // perform automatic sign-in so any new user is automatically accepted and logged in:
+      let activeSession = data.session;
+      if (!activeSession) {
+        try {
+          const { data: signInData, error: signInError } =
+            await supabase.auth.signInWithPassword({
+              email,
+              password,
+            });
+
+          if (!signInError && signInData.session) {
+            activeSession = signInData.session;
+            setSession(signInData.session);
+            setUser(signInData.user);
+          }
+        } catch (autoLoginErr) {
+          console.warn("Auto sign-in fallback note:", autoLoginErr);
+        }
+      } else {
+        setSession(activeSession);
+        setUser(data.user);
+      }
+
+      try {
         await supabase
           .from("patient_profiles")
           .upsert(
@@ -256,8 +278,7 @@ export function AuthProvider({
             },
             { onConflict: "user_id" }
           );
-
-      if (profileError && profileError.code !== "23505") {
+      } catch (profileError) {
         console.warn(
           "Patient profile upsert note:",
           profileError,
