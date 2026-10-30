@@ -845,7 +845,7 @@ export default function Index() {
 
     const sectionId =
       nextView === "home"
-        ? "dashboard"
+        ? "home"
         : nextView;
 
     window.setTimeout(
@@ -970,6 +970,7 @@ export default function Index() {
 
               if (
                 id === "home" ||
+                id === "welcome" ||
                 id === "dashboard"
               ) {
                 setView("home");
@@ -995,7 +996,7 @@ export default function Index() {
 
     const sectionIds = [
       "home",
-      "dashboard",
+      "welcome",
       "chat",
       "predictive",
       "settings",
@@ -1082,7 +1083,7 @@ export default function Index() {
           id="home"
           className="scroll-mt-20"
         >
-          <WelcomeView
+          <HomeView
             language={
               language
             }
@@ -1093,10 +1094,10 @@ export default function Index() {
         </section>
 
         <section
-          id="dashboard"
-          className="scroll-mt-20"
+          id="welcome"
+          className="scroll-mt-20 border-t border-slate-200/80 bg-white"
         >
-          <HomeView
+          <WelcomeView
             language={
               language
             }

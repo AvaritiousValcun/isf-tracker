@@ -780,7 +780,7 @@ export default function HomeView({
     )[0] ?? "there";
 
   return (
-    <div className="pb-8">
+    <div className="mx-auto max-w-[1250px] px-5 pb-12 pt-6 sm:px-8 lg:px-10">
       {/* 3D Welcome Hero Banner */}
       <div className="relative mb-8 overflow-hidden rounded-[32px] border border-white/80 bg-gradient-to-br from-white via-[#F8FAFC] to-[#EFF6F8] p-6 shadow-[0_20px_50px_rgba(44,76,92,0.07)] sm:p-8">
         <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-[1fr_320px]">
