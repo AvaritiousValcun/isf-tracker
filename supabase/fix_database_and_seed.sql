@@ -8,6 +8,23 @@ ALTER TABLE public.consultants
 DROP CONSTRAINT IF EXISTS consultants_professional_type_check,
 DROP CONSTRAINT IF EXISTS consultants_professional_type_check_v2;
 
+ALTER TABLE public.hormone_readings
+DROP CONSTRAINT IF EXISTS hormone_readings_reading_quality_check,
+DROP CONSTRAINT IF EXISTS hormone_readings_quality_status_check;
+
+ALTER TABLE public.patient_patches
+DROP CONSTRAINT IF EXISTS patient_patches_status_check;
+
+ALTER TABLE public.predictive_consents
+DROP CONSTRAINT IF EXISTS predictive_consents_status_check;
+
+ALTER TABLE public.consent_records
+DROP CONSTRAINT IF EXISTS consent_records_status_check;
+
+ALTER TABLE public.subscriptions
+DROP CONSTRAINT IF EXISTS subscriptions_status_check,
+DROP CONSTRAINT IF EXISTS subscriptions_tier_check;
+
 -- 1. FIX TABLE: patches
 ALTER TABLE public.patches
 ADD COLUMN IF NOT EXISTS model text NOT NULL DEFAULT 'ISF-MN-001',
@@ -49,8 +66,8 @@ ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELET
 ADD COLUMN IF NOT EXISTS androgen_value numeric,
 ADD COLUMN IF NOT EXISTS progesterone_value numeric,
 ADD COLUMN IF NOT EXISTS battery_percent integer DEFAULT 88,
-ADD COLUMN IF NOT EXISTS reading_quality text DEFAULT 'valid',
-ADD COLUMN IF NOT EXISTS quality_status text DEFAULT 'valid',
+ADD COLUMN IF NOT EXISTS reading_quality text DEFAULT 'good',
+ADD COLUMN IF NOT EXISTS quality_status text DEFAULT 'good',
 ADD COLUMN IF NOT EXISTS estrogen_pg_ml numeric,
 ADD COLUMN IF NOT EXISTS progesterone_ng_ml numeric,
 ADD COLUMN IF NOT EXISTS cortisol_ug_dl numeric,
@@ -259,8 +276,8 @@ BEGIN
             round(v_progesterone * 0.65, 1),
             round(v_cortisol, 1),
             GREATEST(20, 88 - (i * 2)),
-            'valid',
-            'valid'
+            'good',
+            'good'
         );
     END LOOP;
 
