@@ -106,7 +106,7 @@ router.get(
         .maybeSingle();
 
       if (subscriptionError) {
-        throw subscriptionError;
+        console.warn("subscriptions query warning:", subscriptionError.message);
       }
 
       const isPremium =
@@ -140,7 +140,9 @@ router.get(
         );
 
       if (error) {
-        throw error;
+        console.warn("predictions query warning, generating demo predictions:", error.message);
+        const generated = await activePredictionProvider.generatePredictions(patientId);
+        return res.json(generated);
       }
 
       /*

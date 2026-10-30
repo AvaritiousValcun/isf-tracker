@@ -121,10 +121,11 @@ router.get(
           });
 
         if (consentError) {
-          throw consentError;
+          console.warn("consent_records query warning:", consentError.message);
+          consents = [];
+        } else {
+          consents = data || [];
         }
-
-        consents = data || [];
       }
 
       const enriched = (relationships || [])

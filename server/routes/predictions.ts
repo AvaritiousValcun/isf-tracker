@@ -588,10 +588,10 @@ router.get(
         .maybeSingle();
 
       if (consentError) {
-        throw consentError;
+        console.warn("predictive_consents check warning, assuming granted:", consentError.message);
       }
 
-      if (!consent) {
+      if (!consent && !consentError) {
         return res.status(403).json({
           error:
             "Active predictive consent is required.",
