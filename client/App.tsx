@@ -1,5 +1,6 @@
 import "./global.css";
 
+import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { createRoot } from "react-dom/client";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -12,6 +13,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  useNavigate,
 } from "react-router-dom";
 import {
   AuthProvider,
@@ -27,12 +29,13 @@ const queryClient = new QueryClient();
 
 function AppRoutes() {
   const { user, loading } = useAuth();
+  const [showDashboard, setShowDashboard] = useState(false);
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#B8BFC1]">
-        <div className="text-[14px] font-medium text-[#2C4C5C]">
-          Loading...
+      <div className="flex min-h-screen items-center justify-center bg-[#0e181d]">
+        <div className="text-[14px] font-medium text-[#B8BFC1]">
+          Loading ISF Tracker...
         </div>
       </div>
     );
@@ -43,8 +46,17 @@ function AppRoutes() {
       <Route
         path="/"
         element={
-          user ? <Index /> : <AuthPage />
+          user && showDashboard ? (
+            <Index onReturnToHome={() => setShowDashboard(false)} />
+          ) : (
+            <AuthPage onOpenDashboard={() => setShowDashboard(true)} />
+          )
         }
+      />
+
+      <Route
+        path="/dashboard"
+        element={<Index onReturnToHome={() => setShowDashboard(false)} />}
       />
 
       <Route

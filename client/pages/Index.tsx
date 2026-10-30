@@ -132,6 +132,7 @@ function Header({
   language,
   setView,
   onOpenAccessibility,
+  onReturnToHome,
 }: {
   view: View;
 
@@ -142,6 +143,7 @@ function Header({
   ) => void;
 
   onOpenAccessibility: () => void;
+  onReturnToHome?: () => void;
 }) {
   const titleMap: Record<
     View,
@@ -167,10 +169,11 @@ function Header({
       <div className="flex items-center gap-3">
         <button
           type="button"
-          aria-label="Return to dashboard"
-          onClick={() =>
-            setView("home")
-          }
+          aria-label="Return to overview"
+          onClick={() => {
+            if (onReturnToHome) onReturnToHome();
+            else setView("home");
+          }}
           className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#2C4C5C] transition hover:bg-[#2C4C5C]/[0.07]"
         >
           <House size={17} />
@@ -601,7 +604,11 @@ function AssistiveTools({
   );
 }
 
-export default function Index() {
+interface IndexProps {
+  onReturnToHome?: () => void;
+}
+
+export default function Index({ onReturnToHome }: IndexProps = {}) {
   const { profile } =
     useAuth();
 
@@ -889,6 +896,7 @@ export default function Index() {
               true,
             )
           }
+          onReturnToHome={onReturnToHome}
         />
 
         <section
