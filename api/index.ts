@@ -1,18 +1,23 @@
+import { createServer } from "../server/index";
+
 let cachedApp: any = null;
 
-export default async function handler(req: any, res: any) {
+function getApp() {
+  if (!cachedApp) {
+    cachedApp = createServer();
+  }
+  return cachedApp;
+}
+
+export default function handler(req: any, res: any) {
   try {
-    if (!cachedApp) {
-      const { createServer } = await import("../server/index");
-      cachedApp = createServer();
-    }
-    return cachedApp(req, res);
+    const app = getApp();
+    return app(req, res);
   } catch (err: any) {
-    console.error("[Vercel Serverless Invocation Error]:", err);
+    console.error("[Vercel API Invocation Error]", err);
     return res.status(500).json({
-      error: "Serverless function initialization error",
+      error: "Internal Server Error",
       message: err?.message || String(err),
-      stack: err?.stack,
     });
   }
 }
