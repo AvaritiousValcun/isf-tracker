@@ -1334,6 +1334,12 @@ router2.post(
     try {
       const patientUserId = req.user.id;
       const consultantId = req.params.consultantId;
+      let patientProfileId = null;
+      try {
+        const { data: profile } = await supabaseAdmin.from("patient_profiles").select("id").eq("user_id", patientUserId).maybeSingle();
+        patientProfileId = profile?.id || null;
+      } catch {
+      }
       const {
         data: relationship,
         error
@@ -1418,14 +1424,8 @@ router2.post(
       let conversation = existingConversation;
       const isNewConversation = !existingConversation;
       if (!conversation) {
-        let patientProfileId2 = null;
-        try {
-          const { data: profile } = await supabaseAdmin.from("patient_profiles").select("id").eq("user_id", patientUserId).maybeSingle();
-          patientProfileId2 = profile?.id || null;
-        } catch {
-        }
         const insertPayload = {
-          patient_id: patientProfileId2,
+          patient_id: patientProfileId,
           patient_user_id: patientUserId,
           consultant_id: consultantId,
           status: "active"
@@ -1452,7 +1452,7 @@ router2.post(
             if (!racedConversation) {
               conversation = {
                 id: `conv-${patientUserId.slice(0, 8)}-${consultantId.slice(0, 8)}`,
-                patient_id: patientProfileId2,
+                patient_id: patientProfileId,
                 patient_user_id: patientUserId,
                 consultant_id: consultantId,
                 status: "active",
@@ -1466,7 +1466,7 @@ router2.post(
             console.warn("createConversationError fallback:", createConversationError.message);
             conversation = {
               id: `conv-${patientUserId.slice(0, 8)}-${consultantId.slice(0, 8)}`,
-              patient_id: patientProfileId2,
+              patient_id: patientProfileId,
               patient_user_id: patientUserId,
               consultant_id: consultantId,
               status: "active",

@@ -331,6 +331,18 @@ router.post(
       const consultantId =
         req.params.consultantId;
 
+      let patientProfileId = null;
+      try {
+        const { data: profile } = await supabaseAdmin
+          .from("patient_profiles")
+          .select("id")
+          .eq("user_id", patientUserId)
+          .maybeSingle();
+        patientProfileId = profile?.id || null;
+      } catch {
+        // ignore profile lookup
+      }
+
       const {
         data: relationship,
         error,
@@ -468,17 +480,7 @@ router.post(
         !existingConversation;
 
       if (!conversation) {
-        let patientProfileId = null;
-        try {
-          const { data: profile } = await supabaseAdmin
-            .from("patient_profiles")
-            .select("id")
-            .eq("user_id", patientUserId)
-            .maybeSingle();
-          patientProfileId = profile?.id || null;
-        } catch {
-          // ignore profile lookup
-        }
+        // patientProfileId was resolved above
 
         const insertPayload = {
           patient_id: patientProfileId,
