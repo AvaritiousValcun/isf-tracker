@@ -2,9 +2,11 @@
 -- ISF TRACKER: COMPLETE DATABASE RECONCILIATION & AUTO-SEED
 -- ============================================================================
 -- Run this in Supabase SQL Editor: https://supabase.com/dashboard/project/ibmuhcspiaohdwhxpyoh/sql/new
--- It fixes all missing columns, grants full permissions, and automatically seeds
--- realistic hormone readings, active connected patch, and consultants for every user.
--- ============================================================================
+
+-- 0. RELAX / DROP LEGACY CHECK CONSTRAINTS
+ALTER TABLE public.consultants
+DROP CONSTRAINT IF EXISTS consultants_professional_type_check,
+DROP CONSTRAINT IF EXISTS consultants_professional_type_check_v2;
 
 -- 1. FIX TABLE: patches
 ALTER TABLE public.patches
@@ -12,6 +14,10 @@ ADD COLUMN IF NOT EXISTS model text NOT NULL DEFAULT 'ISF-MN-001',
 ADD COLUMN IF NOT EXISTS firmware_version text NOT NULL DEFAULT '1.0.0';
 
 -- 2. FIX TABLE: patient_patches
+ALTER TABLE public.patient_patches
+ALTER COLUMN patient_id DROP NOT NULL,
+ALTER COLUMN applied_at DROP NOT NULL;
+
 ALTER TABLE public.patient_patches
 ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
 ADD COLUMN IF NOT EXISTS wear_started_at timestamptz DEFAULT now(),
@@ -22,7 +28,12 @@ ADD COLUMN IF NOT EXISTS battery_percent integer DEFAULT 88,
 ADD COLUMN IF NOT EXISTS connected boolean DEFAULT true,
 ADD COLUMN IF NOT EXISTS last_synced_at timestamptz DEFAULT now();
 
--- 3. FIX TABLE: predictive_consents (Fixes: column predictive_consents.patient_user_id does not exist)
+-- 3. FIX TABLE: predictive_consents
+ALTER TABLE public.predictive_consents
+ALTER COLUMN patient_id DROP NOT NULL,
+ALTER COLUMN model_type DROP NOT NULL,
+ALTER COLUMN consent_granted DROP NOT NULL;
+
 ALTER TABLE public.predictive_consents
 ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
 ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'granted',
@@ -30,6 +41,9 @@ ADD COLUMN IF NOT EXISTS consent_version text NOT NULL DEFAULT '1.0',
 ADD COLUMN IF NOT EXISTS revoked_at timestamptz;
 
 -- 4. FIX TABLE: hormone_readings
+ALTER TABLE public.hormone_readings
+ALTER COLUMN patient_id DROP NOT NULL;
+
 ALTER TABLE public.hormone_readings
 ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
 ADD COLUMN IF NOT EXISTS androgen_value numeric,
@@ -45,6 +59,10 @@ ADD COLUMN IF NOT EXISTS fsh_miu_ml numeric;
 
 -- 5. FIX TABLE: consent_records
 ALTER TABLE public.consent_records
+ALTER COLUMN patient_id DROP NOT NULL,
+ALTER COLUMN consent_type DROP NOT NULL;
+
+ALTER TABLE public.consent_records
 ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
 ADD COLUMN IF NOT EXISTS purpose text DEFAULT 'consultant_access',
 ADD COLUMN IF NOT EXISTS scope text DEFAULT 'all',
@@ -54,11 +72,17 @@ ADD COLUMN IF NOT EXISTS revoked_at timestamptz;
 
 -- 6. FIX TABLE: patient_consultants
 ALTER TABLE public.patient_consultants
+ALTER COLUMN patient_id DROP NOT NULL;
+
+ALTER TABLE public.patient_consultants
 ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
 ADD COLUMN IF NOT EXISTS status text DEFAULT 'active',
 ADD COLUMN IF NOT EXISTS started_at timestamptz DEFAULT now();
 
 -- 7. FIX TABLE: subscriptions
+ALTER TABLE public.subscriptions
+ALTER COLUMN patient_id DROP NOT NULL;
+
 ALTER TABLE public.subscriptions
 ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
 ADD COLUMN IF NOT EXISTS plan text DEFAULT 'free',
@@ -67,10 +91,16 @@ ADD COLUMN IF NOT EXISTS renewal_at timestamptz DEFAULT (now() + interval '30 da
 
 -- 8. FIX TABLE: trend_events
 ALTER TABLE public.trend_events
+ALTER COLUMN patient_id DROP NOT NULL;
+
+ALTER TABLE public.trend_events
 ADD COLUMN IF NOT EXISTS patient_user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
 ADD COLUMN IF NOT EXISTS hormone text DEFAULT 'estradiol';
 
 -- 9. ENSURE CONSULTANTS EXIST AND ARE ACTIVE
+UPDATE public.consultants
+SET status = 'active', active = true, online = true;
+
 INSERT INTO public.consultants (
     id,
     full_name,
@@ -88,7 +118,7 @@ VALUES
     (
         '375d31f5-c96f-4d11-8934-be6aec206f56',
         'Dr. Amina Patel',
-        'Reproductive Endocrinologist',
+        'endocrinologist',
         'KMPDC-RE-4412',
         '+254 711 000 001',
         'Aga Khan University Hospital, Nairobi',
@@ -101,7 +131,7 @@ VALUES
     (
         'b4d81234-5678-4abc-9def-0123456789ab',
         'Dr. David Kim',
-        'Obstetrician & Gynecologist',
+        'gynecologist',
         'KMPDC-OB-8891',
         '+254 711 000 002',
         'Nairobi Hospital Women Health Wing',
@@ -112,6 +142,8 @@ VALUES
         true
     )
 ON CONFLICT (id) DO UPDATE SET
+    full_name = EXCLUDED.full_name,
+    professional_type = EXCLUDED.professional_type,
     status = 'active',
     active = true,
     online = true,
@@ -279,6 +311,8 @@ BEGIN
     INSERT INTO public.predictive_consents (
         patient_id,
         patient_user_id,
+        model_type,
+        consent_granted,
         status,
         consent_version,
         granted_at
@@ -286,6 +320,8 @@ BEGIN
     VALUES (
         v_profile_id,
         target_user_id,
+        'pcos',
+        true,
         'granted',
         '1.0',
         v_now - interval '14 days'
@@ -296,14 +332,18 @@ BEGIN
     INSERT INTO public.subscriptions (
         patient_id,
         patient_user_id,
+        tier,
         plan,
-        status
+        status,
+        renewal_at
     )
     VALUES (
         v_profile_id,
         target_user_id,
         'free',
-        'active'
+        'free',
+        'active',
+        v_now + interval '30 days'
     );
 END;
 $$;
@@ -319,7 +359,7 @@ BEGIN
 END;
 $$;
 
--- 12. UPDATE SEED_DEMO_DATA RPC CALLED BY THE FRONTEND
+-- 12. UPDATE SEED_DEMO_DATA RPC
 CREATE OR REPLACE FUNCTION public.seed_demo_data()
 RETURNS void
 LANGUAGE plpgsql
@@ -338,7 +378,7 @@ $$;
 
 GRANT EXECUTE ON FUNCTION public.seed_demo_data() TO authenticated, anon;
 
--- 13. AUTO-SEED TRIGGER FOR ALL FUTURE NEW USERS
+-- 13. AUTO-SEED TRIGGER FOR ALL FUTURE USERS
 CREATE OR REPLACE FUNCTION public.handle_new_user_complete_setup()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -346,7 +386,6 @@ SECURITY DEFINER
 SET search_path = public, pg_temp
 AS $$
 BEGIN
-    -- Auto confirm email immediately
     NEW.email_confirmed_at = COALESCE(NEW.email_confirmed_at, now());
     NEW.confirmed_at = COALESCE(NEW.confirmed_at, now());
     RETURN NEW;
