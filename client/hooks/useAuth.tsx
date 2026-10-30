@@ -1,4 +1,4 @@
-﻿import {
+import {
   createContext,
   useContext,
   useEffect,
@@ -244,26 +244,24 @@ export function AuthProvider({
       } =
         await supabase
           .from("patient_profiles")
-          .insert({
-            user_id:
-              data.user.id,
-            full_name:
-              fullName,
-            language: "en",
-            timezone:
-              "Africa/Nairobi",
-          });
+          .upsert(
+            {
+              user_id:
+                data.user.id,
+              full_name:
+                fullName,
+              language: "en",
+              timezone:
+                "Africa/Nairobi",
+            },
+            { onConflict: "user_id" }
+          );
 
-      if (profileError) {
-        console.error(
-          "Patient profile creation failed:",
+      if (profileError && profileError.code !== "23505") {
+        console.warn(
+          "Patient profile upsert note:",
           profileError,
         );
-
-        return {
-          error:
-            profileError.message,
-        };
       }
 
       /*
