@@ -6,34 +6,28 @@ import { Button } from './button';
 import { Checkbox } from './checkbox';
 import { Label } from './label';
 import { QRCodeSVG } from 'qrcode.react';
+import { apiRequest } from '@/lib/api';
 
 export function QRShareDialog() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [tokenInfo, setTokenInfo] = useState<{ rawToken: string, expiresAt: string } | null>(null);
+  const [tokenInfo, setTokenInfo] = useState<{ rawToken?: string; token?: string; expiresAt: string } | null>(null);
   const [isEmergency, setIsEmergency] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async () => {
     setLoading(true);
     try {
-      const scope = ['readings:latest', 'patch:status'];
-      const token = localStorage.getItem('supabase.auth.token') || ''; // Adjust based on your auth token getter
-      
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/share`, {
+      const scope = ['readings', 'patch_status', 'profile'];
+      const result = await apiRequest<{ token?: string; rawToken?: string; expiresAt: string }>('/share', {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
-        },
-        body: JSON.stringify({ scope, isEmergency })
+        body: JSON.stringify({ scope, isEmergency }),
       });
-      const result = await res.json();
-      if (res.ok) {
+      if (result) {
         setTokenInfo(result);
       }
     } catch (err) {
-      console.error(err);
+      console.error('QR share error:', err);
     }
     setLoading(false);
   };
@@ -46,27 +40,28 @@ export function QRShareDialog() {
     }, 300);
   };
 
-  const shareUrl = tokenInfo ? `${window.location.origin}/provider/view/${tokenInfo.rawToken}` : '';
+  const activeToken = tokenInfo?.rawToken || tokenInfo?.token;
+  const shareUrl = activeToken ? `${window.location.origin}/emergency/${activeToken}` : '';
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="gap-2" onClick={() => setIsOpen(true)}>
           <QrCode className="w-4 h-4" />
-          {t('qr.button_generate')}
+          {t('qr.button_generate', 'Generate QR Access')}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <QrCode className="w-5 h-5 text-primary" />
-            {t('qr.title')}
+            {t('qr.title', 'Temporary Provider Access')}
           </DialogTitle>
         </DialogHeader>
 
         {!tokenInfo ? (
           <div className="space-y-6 py-4">
-            <p className="text-sm text-muted-foreground">{t('qr.description')}</p>
+            <p className="text-sm text-muted-foreground">{t('qr.description', 'Generate a secure 24-hour QR token to grant emergency or clinical providers read-only access to your continuous ISF telemetry.')}</p>
             
             <div className="flex items-start gap-3 bg-destructive/10 p-3 rounded-md border border-destructive/20">
               <Checkbox 
@@ -78,16 +73,16 @@ export function QRShareDialog() {
               <div className="grid gap-1.5 leading-none">
                 <Label htmlFor="emergency-mode" className="text-destructive font-medium flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4" />
-                  {t('qr.emergency_mode')}
+                  {t('qr.emergency_mode', 'Emergency Mode')}
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  {t('qr.emergency_desc')}
+                  {t('qr.emergency_desc', 'Prioritizes vital hormone telemetry and acute sensor status for rapid triage.')}
                 </p>
               </div>
             </div>
 
             <Button className="w-full" onClick={handleGenerate} disabled={loading}>
-              {loading ? t('ui.loading') : t('qr.action_generate')}
+              {loading ? t('ui.loading', 'Generating...') : t('qr.action_generate', 'Generate QR Access')}
             </Button>
           </div>
         ) : (
@@ -96,15 +91,24 @@ export function QRShareDialog() {
               <QRCodeSVG value={shareUrl} size={200} />
             </div>
             <div className="text-center space-y-2">
-              <p className="text-sm font-medium text-foreground">{t('qr.scan_instruction')}</p>
+              <p className="text-sm font-medium text-foreground">{t('qr.scan_instruction', 'Present this QR code to your clinical provider')}</p>
               <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
-                <ShieldAlert className="w-3 h-3" />
-                {t('qr.expires_in')}: 24h
+                <ShieldAlert className="w-3.5 h-3.5 text-primary" />
+                <span>Expires in 24 hours</span>
               </div>
             </div>
-            <Button variant="secondary" className="w-full" onClick={handleClose}>
-              {t('qr.action_close')}
-            </Button>
+            <div className="w-full space-y-2">
+              <Button
+                variant="outline"
+                className="w-full text-xs"
+                onClick={() => navigator.clipboard.writeText(shareUrl)}
+              >
+                Copy Link
+              </Button>
+              <Button variant="ghost" className="w-full" onClick={handleClose}>
+                Done
+              </Button>
+            </div>
           </div>
         )}
       </DialogContent>

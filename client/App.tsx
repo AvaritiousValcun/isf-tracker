@@ -65,6 +65,11 @@ function AppRoutes() {
       />
 
       <Route
+        path="/provider/view/:token"
+        element={<EmergencyAccessPage />}
+      />
+
+      <Route
         path="/product-concept"
         element={<MicroneedleVisualization />}
       />

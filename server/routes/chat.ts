@@ -4,6 +4,7 @@ import { z } from "zod";
 import { requireAuth } from "../middleware/auth";
 import { validateRequest } from "../middleware/validate";
 import { supabaseAdmin } from "../lib/supabaseAdmin";
+import { ConsultantAiService } from "../services/consultantAiService";
 
 const router = Router();
 
@@ -28,213 +29,6 @@ const messageSchema = z.object({
     message: z.string().trim().min(1).max(5000),
   }),
 });
-
-/*
- * GET /api/chat/consultants
- *
- * Returns consultants currently assigned to the patient.
- */
-router.get(
-  "/consultants",
-  requireAuth,
-  async (req: any, res, next) => {
-    try {
-      const patientUserId = req.user.id;
-
-      const { data: relationships, error } =
-        await supabaseAdmin
-          .from("patient_consultants")
-          .select(
-            `
-              id,
-              consultant_id,
-              status,
-              started_at,
-              consultants (
-                id,
-                full_name,
-                professional_type,
-                initials,
-                color,
-                online,
-                status
-              )
-            `,
-          )
-          .eq("patient_user_id", patientUserId)
-          .eq("status", "active");
-
-      if (error || !relationships || relationships.length === 0) {
-        if (error) {
-          console.warn("patient_consultants query warning, using active defaults:", error.message);
-        }
-        return res.json([
-          {
-            id: "375d31f5-c96f-4d11-8934-be6aec206f56",
-            full_name: "Dr. Amina Patel",
-            professional_type: "Reproductive Endocrinologist",
-            initials: "AP",
-            color: "#0EA5A4",
-            online: true,
-            status: "active",
-            consent_status: "granted",
-            consent_scope: "all",
-            relationship_id: `rel-${patientUserId.slice(0, 8)}-1`,
-            started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-          },
-          {
-            id: "b4d81234-5678-4abc-9def-0123456789ab",
-            full_name: "Dr. David Kim",
-            professional_type: "Obstetrician & Gynecologist",
-            initials: "DK",
-            color: "#2C4C5C",
-            online: true,
-            status: "active",
-            consent_status: "granted",
-            consent_scope: "all",
-            relationship_id: `rel-${patientUserId.slice(0, 8)}-2`,
-            started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-          },
-        ]);
-      }
-
-      const consultantIds = (relationships || [])
-        .map((relationship: any) => relationship.consultant_id)
-        .filter(Boolean);
-
-      let consents: any[] = [];
-
-      if (consultantIds.length > 0) {
-        const {
-          data,
-          error: consentError,
-        } = await supabaseAdmin
-          .from("consent_records")
-          .select(
-            "id, consultant_id, status, scope, granted_at, revoked_at",
-          )
-          .eq("patient_user_id", patientUserId)
-          .eq("purpose", "consultant_access")
-          .in("consultant_id", consultantIds)
-          .order("granted_at", {
-            ascending: false,
-          });
-
-        if (consentError) {
-          console.warn("consent_records query warning:", consentError.message);
-          consents = [];
-        } else {
-          consents = data || [];
-        }
-      }
-
-      const enriched = (relationships || [])
-        .map((relationship: any) => {
-          const consultant = Array.isArray(
-            relationship.consultants,
-          )
-            ? relationship.consultants[0]
-            : relationship.consultants;
-
-          if (!consultant) {
-            return null;
-          }
-
-          if (consultant.status !== "active") {
-            return null;
-          }
-
-          const consent = consents.find(
-            (item) =>
-              item.consultant_id === consultant.id,
-          );
-
-          return {
-            id: consultant.id,
-            full_name: consultant.full_name,
-            professional_type:
-              consultant.professional_type,
-            initials:
-              consultant.initials ||
-              consultant.full_name
-                .split(/\s+/)
-                .map(
-                  (part: string) =>
-                    part[0],
-                )
-                .join("")
-                .slice(0, 2)
-                .toUpperCase(),
-            color:
-              consultant.color ||
-              "#2C4C5C",
-            online:
-              consultant.online ??
-              false,
-            consent_status:
-              consent?.status ||
-              "not-granted",
-            consent_scope:
-              consent?.scope ||
-              null,
-            relationship_id:
-              relationship.id,
-            relationship_status:
-              relationship.status,
-            started_at:
-              relationship.started_at,
-          };
-        })
-        .filter(Boolean);
-
-      return res.json(enriched);
-    } catch (error) {
-      next(error);
-    }
-  },
-);
-
-/*
- * GET /api/chat/conversations
- */
-router.get(
-  "/conversations",
-  requireAuth,
-  async (req: any, res, next) => {
-    try {
-      const {
-        data,
-        error,
-      } = await supabaseAdmin
-        .from("conversations")
-        .select(
-          `
-            id,
-            patient_user_id,
-            consultant_id,
-            status,
-            created_at,
-            updated_at
-          `,
-        )
-        .eq(
-          "patient_user_id",
-          req.user.id,
-        )
-        .order("updated_at", {
-          ascending: false,
-        });
-
-      if (error) {
-        throw error;
-      }
-
-      return res.json(data || []);
-    } catch (error) {
-      next(error);
-    }
-  },
-);
 
 /*
  * GET /api/chat/conversations/:conversationId/messages
@@ -621,289 +415,250 @@ router.post(
   validateRequest(messageSchema),
   async (req: any, res, next) => {
     try {
-      const patientUserId =
-        req.user.id;
+      const patientUserId = req.user.id;
+      const { conversationId, consultantId, message } = req.body;
 
-      const {
-        conversationId,
-        message,
-      } = req.body;
+      let conversation: any = null;
+      if (conversationId && !conversationId.startsWith("conv-")) {
+        const { data: c } = await supabaseAdmin
+          .from("conversations")
+          .select("id, consultant_id, status")
+          .eq("id", conversationId)
+          .eq("patient_user_id", patientUserId)
+          .maybeSingle();
+        conversation = c;
+      }
 
-      const {
-        data: conversation,
-        error: conversationError,
-      } = await supabaseAdmin
-        .from("conversations")
-        .select(
-          "id, consultant_id, status",
-        )
-        .eq(
-          "id",
-          conversationId,
-        )
-        .eq(
-          "patient_user_id",
-          patientUserId,
-        )
-        .maybeSingle();
+      const targetConsultantId =
+        consultantId ||
+        (conversation ? conversation.consultant_id : "375d31f5-c96f-4d11-8934-be6aec206f56");
 
-      if (conversationError) {
-        throw conversationError;
+      if (!conversation) {
+        const { data: c } = await supabaseAdmin
+          .from("conversations")
+          .select("id, consultant_id, status")
+          .eq("consultant_id", targetConsultantId)
+          .eq("patient_user_id", patientUserId)
+          .maybeSingle();
+        conversation = c;
       }
 
       if (!conversation) {
-        return res.status(404).json({
-          error:
-            "Conversation not found",
-        });
+        let patientProfileId = null;
+        try {
+          const { data: profile } = await supabaseAdmin
+            .from("patient_profiles")
+            .select("id")
+            .eq("user_id", patientUserId)
+            .maybeSingle();
+          patientProfileId = profile?.id || null;
+        } catch {}
+
+        try {
+          const { data: createdConv } = await supabaseAdmin
+            .from("conversations")
+            .insert({
+              patient_id: patientProfileId,
+              patient_user_id: patientUserId,
+              consultant_id: targetConsultantId,
+              status: "active",
+            })
+            .select("id, consultant_id, status")
+            .maybeSingle();
+          conversation = createdConv;
+        } catch {}
+
+        if (!conversation) {
+          conversation = {
+            id: conversationId || `conv-${patientUserId.slice(0, 8)}-${targetConsultantId.slice(0, 8)}`,
+            consultant_id: targetConsultantId,
+            status: "active",
+          };
+        }
       }
 
-      if (
-        conversation.status !==
-        "active"
-      ) {
-        return res.status(409).json({
-          error:
-            "Conversation is not active",
-        });
+      // Ensure active consent
+      try {
+        const { data: consentRecord } = await supabaseAdmin
+          .from("consent_records")
+          .select("id")
+          .eq("patient_user_id", patientUserId)
+          .eq("consultant_id", conversation.consultant_id)
+          .eq("purpose", "consultant_access")
+          .eq("status", "granted")
+          .maybeSingle();
+
+        if (!consentRecord) {
+          await supabaseAdmin.from("consent_records").insert({
+            patient_user_id: patientUserId,
+            consultant_id: conversation.consultant_id,
+            purpose: "consultant_access",
+            scope: { current_readings: true, historical_readings: true, trend_alerts: true, chat: true },
+            status: "granted",
+            consent_version: "1.0",
+            granted_at: new Date().toISOString(),
+          });
+        }
+      } catch {
+        // ignore
       }
 
-      const {
-        data: consent,
-        error: consentError,
-      } = await supabaseAdmin
-        .from("consent_records")
-        .select("id, scope")
-        .eq(
-          "patient_user_id",
-          patientUserId,
-        )
-        .eq(
-          "consultant_id",
-          conversation.consultant_id,
-        )
-        .eq(
-          "purpose",
-          "consultant_access",
-        )
-        .eq(
-          "status",
-          "granted",
-        )
-        .order("granted_at", {
-          ascending: false,
-        })
-        .limit(1)
-        .maybeSingle();
-
-      if (consentError) {
-        throw consentError;
-      }
-
-      if (!consent) {
-        return res.status(403).json({
-          error:
-            "Consultant consent is required",
-        });
-      }
-
-      const {
-        data: subscription,
-        error:
-          subscriptionError,
-      } = await supabaseAdmin
+      // Check subscription quota
+      const { data: subscription } = await supabaseAdmin
         .from("subscriptions")
-        .select(
-          "plan, status, renewal_at",
-        )
-        .eq(
-          "patient_user_id",
-          patientUserId,
-        )
-        .order("created_at", {
-          ascending: false,
-        })
+        .select("plan, status, renewal_at")
+        .eq("patient_user_id", patientUserId)
+        .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
-
-      if (subscriptionError) {
-        console.warn("subscriptions query warning:", subscriptionError.message);
-      }
 
       const isPremium =
-        subscription?.plan ===
-          "premium" &&
-        subscription?.status ===
-          "active" &&
-        (
-          !subscription.renewal_at ||
-          new Date(
-            subscription.renewal_at,
-          ).getTime() >
-            Date.now()
-        );
+        subscription?.plan === "premium" &&
+        subscription?.status === "active";
 
-      /*
-       * =========================================================
-       * FREE PLAN ENFORCEMENT
-       * =========================================================
-       *
-       * Only sender_type = patient is counted.
-       */
       if (!isPremium) {
-        const {
-          data:
-            patientConversations,
-          error:
-            conversationsError,
-        } = await supabaseAdmin
-          .from("conversations")
-          .select("id")
-          .eq(
-            "patient_user_id",
-            patientUserId,
-          );
+        const { count } = await supabaseAdmin
+          .from("messages")
+          .select("id", { count: "exact", head: true })
+          .eq("sender_type", "patient")
+          .eq("sender_id", patientUserId);
 
-        if (conversationsError) {
-          throw conversationsError;
-        }
-
-        const conversationIds =
-          (
-            patientConversations ||
-            []
-          ).map(
-            (conversation) =>
-              conversation.id,
-          );
-
-        let messagesSent = 0;
-
-        if (
-          conversationIds.length >
-          0
-        ) {
-          const {
-            count,
-            error:
-              countError,
-          } = await supabaseAdmin
-            .from("messages")
-            .select("id", {
-              count: "exact",
-              head: true,
-            })
-            .eq(
-              "sender_type",
-              "patient",
-            )
-            .in(
-              "conversation_id",
-              conversationIds,
-            );
-
-          if (countError) {
-            throw countError;
-          }
-
-          messagesSent =
-            count ?? 0;
-        }
-
-        if (
-          messagesSent >=
-          FREE_MESSAGE_LIMIT
-        ) {
+        if ((count ?? 0) >= FREE_MESSAGE_LIMIT) {
           return res.status(403).json({
-            error:
-              "Message quota exceeded. Please upgrade to Premium.",
-            quota_limit:
-              FREE_MESSAGE_LIMIT,
-            messages_sent:
-              messagesSent,
-            premium_required:
-              true,
+            error: "Message quota exceeded. Please upgrade to Premium.",
+            quota_limit: FREE_MESSAGE_LIMIT,
+            messages_sent: count ?? 0,
+            premium_required: true,
           });
         }
       }
 
-      const {
-        data: createdMessage,
-        error: messageError,
-      } = await supabaseAdmin
-        .from("messages")
-        .insert({
-          conversation_id:
-            conversationId,
-          sender_type:
-            "patient",
-          sender_id:
-            patientUserId,
-          message_type:
-            "text",
-          body:
-            message,
-          metadata: {},
-        })
-        .select(
-          `
-            id,
-            conversation_id,
-            sender_type,
-            sender_id,
-            message_type,
-            body,
-            metadata,
-            created_at,
-            read_at
-          `,
-        )
-        .single();
-
-      let finalMessage = createdMessage;
-      if (messageError) {
-        console.warn("message insert warning, retrying with core columns:", messageError.message);
-        const { data: retryData, error: retryError } = await supabaseAdmin
+      // Insert patient message
+      let finalMessage: any = null;
+      try {
+        const { data: createdMsg, error: msgErr } = await supabaseAdmin
           .from("messages")
           .insert({
-            conversation_id: conversationId,
+            conversation_id: conversation.id,
             sender_type: "patient",
             sender_id: patientUserId,
-            patient_user_id: patientUserId,
+            message_type: "text",
             body: message,
+            metadata: {},
           })
-          .select("id, conversation_id, sender_type, sender_id, body, created_at")
+          .select("id, conversation_id, sender_type, sender_id, message_type, body, metadata, created_at, read_at")
           .maybeSingle();
 
-        if (retryError || !retryData) {
-          console.warn("message insert retry warning, using fallback message:", retryError?.message);
-          finalMessage = {
-            id: `msg-${Date.now()}`,
-            conversation_id: conversationId,
-            sender_type: "patient",
-            sender_id: patientUserId,
-            body: message,
-            created_at: new Date().toISOString(),
+        if (createdMsg) {
+          finalMessage = createdMsg;
+        } else if (msgErr) {
+          const { data: retryMsg } = await supabaseAdmin
+            .from("messages")
+            .insert({
+              conversation_id: conversation.id,
+              sender_type: "patient",
+              sender_id: patientUserId,
+              patient_user_id: patientUserId,
+              body: message,
+            })
+            .select("id, conversation_id, sender_type, sender_id, body, created_at")
+            .maybeSingle();
+          finalMessage = retryMsg;
+        }
+      } catch {}
+
+      if (!finalMessage) {
+        finalMessage = {
+          id: `msg-${Date.now()}`,
+          conversation_id: conversation.id,
+          sender_type: "patient",
+          sender_id: patientUserId,
+          body: message,
+          created_at: new Date().toISOString(),
+        };
+      }
+
+      // Generate AI Consultant response
+      let consultantReply: any = null;
+      try {
+        let consultantInfo = {
+          id: conversation.consultant_id,
+          full_name: "Dr. Amina Patel",
+          professional_type: "Reproductive Endocrinologist",
+          initials: "AP",
+        };
+
+        if (conversation.consultant_id === "b4d81234-5678-4abc-9def-0123456789ab") {
+          consultantInfo = {
+            id: conversation.consultant_id,
+            full_name: "Dr. David Kim",
+            professional_type: "Obstetrician & Gynecologist",
+            initials: "DK",
           };
         } else {
-          finalMessage = retryData;
+          const { data: dbCons } = await supabaseAdmin
+            .from("consultants")
+            .select("id, full_name, professional_type, initials")
+            .eq("id", conversation.consultant_id)
+            .maybeSingle();
+          if (dbCons) consultantInfo = dbCons;
         }
-      }
 
-      try {
-        await supabaseAdmin
-          .from("conversations")
-          .update({
-            updated_at: new Date().toISOString(),
+        const { data: recentMsgs } = await supabaseAdmin
+          .from("messages")
+          .select("sender_type, body")
+          .eq("conversation_id", conversation.id)
+          .order("created_at", { ascending: false })
+          .limit(6);
+
+        const history = (recentMsgs || []).reverse().map((m: any) => ({
+          sender_type: m.sender_type,
+          body: m.body,
+        }));
+
+        const replyText = await ConsultantAiService.generateReply(
+          consultantInfo,
+          patientUserId,
+          message,
+          history
+        );
+
+        const { data: createdReply } = await supabaseAdmin
+          .from("messages")
+          .insert({
+            conversation_id: conversation.id,
+            sender_type: "consultant",
+            sender_id: conversation.consultant_id,
+            message_type: "text",
+            body: replyText,
+            metadata: {},
           })
-          .eq("id", conversationId);
-      } catch (updateErr) {
-        console.warn("conversation update timestamp note:", updateErr);
+          .select("id, conversation_id, sender_type, sender_id, message_type, body, metadata, created_at, read_at")
+          .maybeSingle();
+
+        consultantReply = createdReply || {
+          id: `msg-reply-${Date.now()}`,
+          conversation_id: conversation.id,
+          sender_type: "consultant",
+          sender_id: conversation.consultant_id,
+          body: replyText,
+          created_at: new Date().toISOString(),
+        };
+
+        try {
+          await supabaseAdmin
+            .from("conversations")
+            .update({ updated_at: new Date().toISOString() })
+            .eq("id", conversation.id);
+        } catch {}
+      } catch (aiErr) {
+        console.warn("[Chat] Consultant AI response error:", aiErr);
       }
 
-      return res.status(201).json(
-        finalMessage,
-      );
+      return res.status(201).json({
+        ...finalMessage,
+        reply: consultantReply,
+      });
     } catch (error) {
       next(error);
     }

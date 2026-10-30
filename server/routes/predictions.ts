@@ -656,50 +656,29 @@ router.get(
           console.warn("predictions query warning, generating demo predictions:", error.message);
         }
         const generated = await activePredictionProvider.generatePredictions(patientId);
-        return res.json(generated);
+        const filtered = generated.filter((p) => (p.condition as string) !== "endometrial_cancer");
+        return res.json({
+          isPremium,
+          results: filtered,
+        });
       }
 
-      const seen =
-        new Set<string>();
+      const seen = new Set<string>();
+      const latestPredictions = (predictions || []).filter((prediction) => {
+        if ((prediction.condition as string) === "endometrial_cancer") return false;
+        if (seen.has(prediction.condition)) return false;
+        seen.add(prediction.condition);
+        return true;
+      });
 
-      const latestPredictions =
-        (
-          predictions ||
-          []
-        ).filter(
-          (prediction) => {
-            if (
-              seen.has(
-                prediction.condition,
-              )
-            ) {
-              return false;
-            }
-
-            seen.add(
-              prediction.condition,
-            );
-
-            return true;
-          },
-        );
-
-      const sanitizedPredictions =
-        latestPredictions.map(
-          (prediction) => ({
-            ...prediction,
-
-            risk_percentage:
-              isPremium
-                ? prediction.risk_percentage
-                : null,
-          }),
-        );
+      const sanitizedPredictions = latestPredictions.map((prediction) => ({
+        ...prediction,
+        risk_percentage: prediction.risk_percentage,
+      }));
 
       return res.json({
         isPremium,
-        results:
-          sanitizedPredictions,
+        results: sanitizedPredictions,
       });
     } catch (error) {
       next(error);

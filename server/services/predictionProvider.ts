@@ -3,7 +3,6 @@ export type PredictionCondition =
   | "type_2_diabetes"
   | "insulin_resistance"
   | "high_blood_pressure"
-  | "endometrial_cancer";
 
 export type PredictionRiskCategory =
   | "low"
@@ -250,50 +249,7 @@ export class DemoPredictionProvider
           message:
             "Synthetic demonstration percentage.",
         },
-      },
-
-      {
-        condition:
-          "endometrial_cancer",
-
-        risk_category:
-          "elevated",
-
-        risk_percentage:
-          18,
-
-        model_id:
-          this.id,
-
-        model_version:
-          "demo-1.1.0",
-
-        feature_version:
-          "demo-1.1.0",
-
-        generated_at:
-          generatedAt,
-
-        expires_at:
-          expiresAt,
-
-        trend:
-          "monitor",
-
-        explanation_data: {
-          provider:
-            "demo",
-
-          clinical_use:
-            "not_for_clinical_decision_making",
-
-          synthetic:
-            true,
-
-          message:
-            "Synthetic demonstration percentage.",
-        },
-      },
+      }
     ];
   }
 }

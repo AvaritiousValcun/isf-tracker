@@ -61,9 +61,7 @@ const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
       { x: 135, y: -20, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
       // Functional groups
       { x: -160, y: 95, z: 0, element: "O", color: "#E06D53", radius: 11 },   // 3-OH Oxygen
-      { x: -185, y: 115, z: 6, element: "H", color: "#94A3B8", radius: 6 },  // 3-OH Hydrogen
       { x: 175, y: -45, z: 12, element: "O", color: "#E06D53", radius: 11 },  // 17-OH Oxygen
-      { x: 200, y: -45, z: 20, element: "H", color: "#94A3B8", radius: 6 },  // 17-OH Hydrogen
       { x: 90, y: -30, z: 50, element: "C", color: "#2C4C5C", radius: 8 },   // C18 methyl
     ],
     bonds: [
@@ -75,9 +73,9 @@ const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
       { a: 12, b: 13, order: 1 }, { a: 13, b: 8, order: 1 },
       { a: 13, b: 14, order: 1 }, { a: 14, b: 15, order: 1 }, { a: 15, b: 16, order: 1 },
       { a: 16, b: 12, order: 1 },
-      { a: 2, b: 17, order: 1 }, { a: 17, b: 18, order: 1 },
-      { a: 16, b: 19, order: 1 }, { a: 19, b: 20, order: 1 },
-      { a: 12, b: 21, order: 1 },
+      { a: 2, b: 17, order: 1 },
+      { a: 16, b: 18, order: 1 },
+      { a: 12, b: 19, order: 1 },
     ],
   },
   progesterone: {
@@ -377,11 +375,11 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
           grad.addColorStop(0.65, "#2C4C5C");
           grad.addColorStop(1, "#182a33");
         } else if (atom.element === "O") {
-          grad.addColorStop(0, "#fca5a5");
+          grad.addColorStop(0, "#fed7aa");
           grad.addColorStop(0.65, atom.color);
           grad.addColorStop(1, "#991b1b");
         } else {
-          grad.addColorStop(0, "#ffffff");
+          grad.addColorStop(0, "#94A3B8");
           grad.addColorStop(0.7, atom.color);
           grad.addColorStop(1, "#475569");
         }

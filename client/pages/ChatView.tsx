@@ -8,12 +8,14 @@ import {
   ChevronRight,
   Clock3,
   Copy,
+  Check,
   LockKeyhole,
   MoreHorizontal,
   QrCode,
   Send,
   ShieldCheck,
   X,
+  Sparkles,
 } from "lucide-react";
 
 interface ChatViewProps {
@@ -33,6 +35,8 @@ export default function ChatView({ language }: ChatViewProps) {
   const { messageCount, refetch: refetchMessageCount } = useMessageCount();
   const [activeConsultantIdx, setActiveConsultantIdx] = useState(0);
   const [message, setMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [sending, setSending] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
   const [qrAccess, setQrAccess] = useState<QrAccess | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -46,20 +50,6 @@ export default function ChatView({ language }: ChatViewProps) {
 
   const canChat = consultant?.consent_status === "granted";
 
-  /*
-   * Consent is now granted through the authenticated backend route
-   * (POST /api/chat/consultants/:consultantId/consent) instead of a
-   * direct Supabase insert from the browser.
-   *
-   * That route independently verifies (using the service-role
-   * client, not RLS alone) that an ACTIVE patient_consultants
-   * relationship exists before it will create the consent_records
-   * row or the conversation, and it writes the "consent_notice"
-   * system message itself via the service-role client -- which is
-   * the only path allowed to write sender_type = 'system' after the
-   * messages RLS fix (see supabase/migrations/
-   * 20260829040000_messages_sender_type_rls_fix.sql).
-   */
   const giveConsent = async () => {
     if (!user || !consultant) return;
     setError(null);
@@ -84,17 +74,8 @@ export default function ChatView({ language }: ChatViewProps) {
     await refetchConversations();
   };
 
-  /*
-   * Messages are sent through the authenticated backend route
-   * (POST /api/chat/messages) instead of a direct Supabase insert.
-   *
-   * The server sets sender_type = 'patient' itself and enforces the
-   * 50-message free limit authoritatively -- the frontend's own
-   * messageCount check below is only a UX shortcut, not the source
-   * of truth.
-   */
   const sendMessage = async () => {
-    if (!message.trim() || !canChat || !conversation) return;
+    if (!message.trim() || !consultant) return;
     if (!isPremium && messageCount >= FREE_MESSAGE_LIMIT) {
       setError("Free message limit reached. Upgrade to Premium for unlimited messaging.");
       return;
@@ -102,34 +83,30 @@ export default function ChatView({ language }: ChatViewProps) {
     setError(null);
     const body = message.trim();
     setMessage("");
+    setSending(true);
+    setIsTyping(true);
+
     try {
       await apiRequest("/chat/messages", {
         method: "POST",
         body: JSON.stringify({
-          conversationId: conversation.id,
+          conversationId: conversation?.id,
+          consultantId: consultant.id,
           message: body,
         }),
       });
+      await refetchMessages();
+      await refetchConversations();
+      await refetchMessageCount();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to send message.");
       setMessage(body);
-      return;
+    } finally {
+      setSending(false);
+      setIsTyping(false);
     }
-    await refetchMessages();
-    await refetchMessageCount();
   };
 
-  /*
-   * QR/temporary-access tokens are created through the authenticated
-   * backend route (POST /api/share) instead of a direct Supabase
-   * insert.
-   *
-   * The server -- not the browser -- generates the random token,
-   * computes its hash, and fixes the 24-hour expiry
-   * (QR_EXPIRATION_HOURS in server/services/qrService.ts), so a
-   * patient's own client can no longer request an arbitrarily long
-   * expiry or an unreviewed scope for their emergency-access token.
-   */
   const generateQr = async () => {
     if (!user) return;
     setError(null);
@@ -140,7 +117,7 @@ export default function ChatView({ language }: ChatViewProps) {
       }>("/share", {
         method: "POST",
         body: JSON.stringify({
-          scope: ["readings", "patch_status"],
+          scope: ["readings", "patch_status", "profile"],
         }),
       });
       setQrAccess({ token: session.token, expiresAt: session.expiresAt });
@@ -158,20 +135,25 @@ export default function ChatView({ language }: ChatViewProps) {
     <div className="page-enter mx-auto max-w-[1250px] px-5 pb-10 pt-7 sm:px-8 lg:px-10 lg:pt-9">
       <div className="mb-7 flex items-end justify-between">
         <div>
-          <p className="mb-2 text-[12px] font-medium text-[#2C4C5C]">Care team</p>
-          <h2 className="font-display text-[27px] font-semibold tracking-[-0.055em] text-[#2C4C5C]">{t(language, "chat.title")}</h2>
-          <p className="mt-2 text-[13px] text-slate-500">{t(language, "chat.intro")}</p>
+          <div className="flex items-center gap-2 mb-2">
+            <p className="text-[12px] font-medium text-[#2C4C5C] dark:text-[#A0B4BE]">Care team</p>
+            <span className="flex items-center gap-1 rounded-full bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 px-2 py-0.5 text-[10px] font-semibold text-[#0EA5A4]">
+              <Sparkles size={11} /> AI Clinical Assistants
+            </span>
+          </div>
+          <h2 className="font-display text-[27px] font-semibold tracking-[-0.055em] text-[#2C4C5C] dark:text-[#E8F2F6]">{t(language, "chat.title")}</h2>
+          <p className="mt-2 text-[13px] text-slate-500 dark:text-[#A0B4BE]">{t(language, "chat.intro")}</p>
         </div>
-        <button onClick={generateQr} className="flex items-center gap-2 rounded-xl border border-[#6C8494]/20 bg-[#6C8494]/[0.06] px-3 py-2 text-[11px] font-semibold text-[#2C4C5C]">
-          <QrCode size={15} /> <span className="hidden sm:inline">{t(language, "chat.emergencyAccess")}</span>
+        <button onClick={generateQr} className="flex items-center gap-2 rounded-xl border border-[#6C8494]/20 bg-[#6C8494]/[0.06] dark:bg-[#1C2F38] px-3.5 py-2.5 text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6] hover:bg-[#6C8494]/15 transition">
+          <QrCode size={16} /> <span className="hidden sm:inline">{t(language, "chat.emergencyAccess")}</span>
         </button>
       </div>
 
       {error && (
-        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[12px] font-medium text-red-700">{error}</div>
+        <div className="mb-4 rounded-xl border border-red-200 dark:border-red-900/40 bg-red-50 dark:bg-red-950/20 px-4 py-3 text-[12px] font-medium text-red-700 dark:text-red-400">{error}</div>
       )}
 
-      <div className="grid overflow-hidden rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] lg:grid-cols-[280px_minmax(0,1fr)]">
+      <div className="grid overflow-hidden rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] lg:grid-cols-[280px_minmax(0,1fr)] shadow-sm">
         {/* Consultant List */}
         <div className="border-b border-slate-200 dark:border-[#243C47] p-3 lg:border-b-0 lg:border-r">
           <p className="px-3 pb-3 pt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-[#738C98]">{t(language, "chat.consultants")}</p>
@@ -182,7 +164,7 @@ export default function ChatView({ language }: ChatViewProps) {
               <button key={item.id} onClick={() => setActiveConsultantIdx(index)} className={`flex w-full items-center gap-3 rounded-xl p-3 text-left transition ${activeConsultantIdx === index ? "bg-[#2C4C5C]/[0.07] dark:bg-[#F3E308]/15" : "hover:bg-slate-50 dark:hover:bg-[#1C2F38]"}`}>
                 <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[10px] font-bold" style={{ background: item.color, color: "#FFFFFF" }}>
                   {item.initials || item.full_name.slice(0, 2).toUpperCase()}
-                  {item.online && <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white dark:border-[#15232A] bg-[#F3E308]" />}
+                  {item.online && <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white dark:border-[#15232A] bg-[#0EA5A4]" />}
                 </div>
                 <div className="min-w-0">
                   <p className="truncate text-[12px] font-semibold text-slate-900 dark:text-[#E8F2F6]">{item.full_name}</p>
@@ -202,7 +184,7 @@ export default function ChatView({ language }: ChatViewProps) {
         </div>
 
         {/* Chat Area */}
-        <div className="flex min-h-[500px] flex-col">
+        <div className="flex min-h-[520px] flex-col">
           {consultant && (
             <>
               <div className="flex items-center gap-3 border-b border-slate-200 dark:border-[#243C47] px-5 py-4">
@@ -212,17 +194,17 @@ export default function ChatView({ language }: ChatViewProps) {
                 <div>
                   <p className="text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">{consultant.full_name}</p>
                   <p className="mt-0.5 flex items-center gap-1.5 text-[10px] text-slate-500 dark:text-[#A0B4BE]">
-                    <span className={`h-1.5 w-1.5 rounded-full ${consultant.online ? "bg-[#F3E308]" : "bg-slate-600"}`} />
+                    <span className={`h-1.5 w-1.5 rounded-full ${consultant.online ? "bg-[#0EA5A4]" : "bg-slate-600"}`} />
                     {consultant.online ? t(language, "chat.available") : t(language, "chat.repliesSoon")}
                   </p>
                 </div>
                 <button className="ml-auto text-slate-500 dark:text-[#A0B4BE]"><MoreHorizontal size={18} /></button>
               </div>
 
-              <div className="flex-1 space-y-4 p-5">
-                <div className="mx-auto flex max-w-[340px] items-center gap-2 rounded-lg bg-[#F3E308]/[0.05] dark:bg-[#F3E308]/15 px-3 py-2 text-[13px] font-medium leading-relaxed text-[#2C4C5C] dark:text-[#E8F2F6]">
+              <div className="flex-1 space-y-4 p-5 overflow-y-auto">
+                <div className="mx-auto flex max-w-[340px] items-center gap-2 rounded-lg bg-[#F3E308]/[0.08] dark:bg-[#F3E308]/15 px-3 py-2 text-[12px] font-medium leading-relaxed text-[#2C4C5C] dark:text-[#E8F2F6]">
                   <ShieldCheck size={14} className="shrink-0 text-[#2C4C5C] dark:text-[#F3E308]" />
-                  <span className="font-semibold text-[13px]">{t(language, "chat.dataChoice")}</span>
+                  <span className="font-semibold">{t(language, "chat.dataChoice")}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="h-px flex-1 bg-[#2C4C5C]/[0.06] dark:bg-[#243C47]" />
@@ -232,6 +214,22 @@ export default function ChatView({ language }: ChatViewProps) {
                 {messages.map((msg) => (
                   <MessageBubble key={msg.id} msg={msg} consultant={consultant} />
                 ))}
+
+                {/* Animated Typing Indicator */}
+                {isTyping && (
+                  <div className="chat-message-row flex w-full gap-3 animate-pulse">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[8px] font-bold" style={{ background: consultant.color, color: "#FFFFFF" }}>
+                      {consultant.initials}
+                    </div>
+                    <div className="chat-message chat-message-incoming bg-[#B8BFC1]/30 dark:bg-[#1C2F38] px-4 py-2.5 text-[12px] leading-relaxed text-slate-600 dark:text-[#A0B4BE] rounded-2xl flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#0EA5A4] animate-bounce" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#0EA5A4] animate-bounce [animation-delay:0.2s]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#0EA5A4] animate-bounce [animation-delay:0.4s]" />
+                      <span className="ml-1 text-[11px] font-medium">{consultant.full_name} is evaluating your readings...</span>
+                    </div>
+                  </div>
+                )}
+
                 {!canChat && (
                   <div className="mx-auto max-w-[360px] rounded-2xl border border-slate-200 dark:border-[#243C47] bg-[#B8BFC1]/[0.10] dark:bg-[#111D23] p-5 text-center">
                     <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-[#6C8494]/20 text-[#7A6600] dark:text-[#F3E308]">
@@ -248,28 +246,26 @@ export default function ChatView({ language }: ChatViewProps) {
               </div>
 
               <div className="border-t border-slate-200 dark:border-[#243C47] p-4">
-                {canChat ? (
-                  <div className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-[#243C47] bg-[#B8BFC1]/[0.10] dark:bg-[#111D23] px-3 py-1.5">
-                    <input
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                      placeholder={t(language, "chat.writeMessage")}
-                      className="min-w-0 flex-1 bg-transparent py-2 text-[11px] text-[#2C4C5C] dark:text-[#E8F2F6] outline-none placeholder:text-slate-600 dark:placeholder:text-[#738C98]"
-                    />
-                    <span className="hidden text-[10px] text-slate-600 sm:block">
-                      {isPremium ? t(language, "chat.unlimited") : `${FREE_MESSAGE_LIMIT - messageCount} ${t(language, "chat.messagesLeft")}`}
-                    </span>
-                    <button onClick={sendMessage} className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2C4C5C] text-white transition hover:bg-[#6C8494]">
-                      <Send size={14} />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-between rounded-xl bg-white px-3 py-3 text-[12px] font-semibold text-slate-800">
-                    <span>{t(language, "chat.consentRequired")}</span>
-                    <LockKeyhole size={13} className="text-slate-800" />
-                  </div>
-                )}
+                <div className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-[#243C47] bg-[#B8BFC1]/[0.10] dark:bg-[#111D23] px-3 py-1.5">
+                  <input
+                    value={message}
+                    disabled={sending}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
+                    placeholder={canChat ? t(language, "chat.writeMessage") : "Type message (consent auto-connects)..."}
+                    className="min-w-0 flex-1 bg-transparent py-2 text-[12px] text-[#2C4C5C] dark:text-[#E8F2F6] outline-none placeholder:text-slate-500 dark:placeholder:text-[#738C98]"
+                  />
+                  <span className="hidden text-[10px] text-slate-500 dark:text-[#A0B4BE] sm:block">
+                    {isPremium ? t(language, "chat.unlimited") : `${Math.max(0, FREE_MESSAGE_LIMIT - messageCount)} ${t(language, "chat.messagesLeft")}`}
+                  </span>
+                  <button
+                    onClick={sendMessage}
+                    disabled={sending || !message.trim()}
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2C4C5C] dark:bg-[#0EA5A4] text-white transition hover:opacity-90 disabled:opacity-40"
+                  >
+                    <Send size={14} />
+                  </button>
+                </div>
               </div>
             </>
           )}
@@ -283,7 +279,7 @@ export default function ChatView({ language }: ChatViewProps) {
 
 function MessageBubble({ msg, consultant }: { msg: MessageInfo; consultant: ConsultantInfo }) {
   if (msg.sender_type === "patient") {
-    return <div className="chat-message chat-message-outgoing bg-[#6C8494] px-4 py-3 text-[11px] leading-relaxed text-white ml-auto max-w-[70%] rounded-2xl">{msg.body}</div>;
+    return <div className="chat-message chat-message-outgoing bg-[#2C4C5C] dark:bg-[#0EA5A4] px-4 py-3 text-[12px] leading-relaxed text-white ml-auto max-w-[70%] rounded-2xl shadow-sm">{msg.body}</div>;
   }
   if (msg.sender_type === "system" || msg.sender_type === "automated_alert") {
     return (
@@ -291,8 +287,8 @@ function MessageBubble({ msg, consultant }: { msg: MessageInfo; consultant: Cons
         <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[8px] font-bold" style={{ background: consultant.color, color: "#FFFFFF" }}>
           {consultant.initials || "IS"}
         </div>
-        <div className="chat-message chat-message-incoming bg-[#B8BFC1] px-4 py-3 text-[13px] leading-relaxed text-slate-900 rounded-2xl max-w-[70%]">
-          {msg.message_type === "trend_alert" && <p className="mb-1 text-[11px] font-semibold text-[#7A6600]">{msg.sender_type === "automated_alert" ? "ISF Tracker Alert" : "System"}</p>}
+        <div className="chat-message chat-message-incoming bg-slate-100 dark:bg-[#1C2F38] px-4 py-3 text-[12px] leading-relaxed text-slate-800 dark:text-[#E8F2F6] rounded-2xl max-w-[70%] border border-slate-200/50 dark:border-white/5">
+          {msg.message_type === "trend_alert" && <p className="mb-1 text-[11px] font-semibold text-[#7A6600] dark:text-[#F3E308]">{msg.sender_type === "automated_alert" ? "ISF Tracker Alert" : "System"}</p>}
           {msg.body}
         </div>
       </div>
@@ -303,39 +299,52 @@ function MessageBubble({ msg, consultant }: { msg: MessageInfo; consultant: Cons
       <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[8px] font-bold" style={{ background: consultant.color, color: "#FFFFFF" }}>
         {consultant.initials}
       </div>
-      <div className="chat-message chat-message-incoming bg-[#B8BFC1] px-4 py-3 text-[13px] leading-relaxed text-slate-900 rounded-2xl max-w-[70%]">{msg.body}</div>
+      <div className="chat-message chat-message-incoming bg-slate-100 dark:bg-[#1C2F38] px-4 py-3 text-[12px] leading-relaxed text-slate-800 dark:text-[#E8F2F6] rounded-2xl max-w-[70%] border border-slate-200/50 dark:border-white/5 shadow-sm">
+        {msg.body}
+      </div>
     </div>
   );
 }
 
 function QrModal({ access, language, onClose }: { access: QrAccess; language: Language; onClose: () => void }) {
+  const [copied, setCopied] = useState(false);
   const qrUrl = `${window.location.origin}/emergency/${access.token}`;
+
+  const handleCopy = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(qrUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2C4C5C]/35 p-5 backdrop-blur-sm">
-      <div className="relative w-full max-w-[360px] rounded-[26px] border border-slate-200 bg-white p-6 text-center shadow-2xl">
-        <button onClick={onClose} className="absolute right-5 top-5 text-slate-500 hover:text-[#2C4C5C]"><X size={17} /></button>
-        <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2C4C5C]/10 text-[#2C4C5C]"><QrCode size={22} /></div>
-        <h3 className="mt-4 font-display text-[19px] font-semibold text-[#2C4C5C]">{t(language, "chat.temporaryAccess")}</h3>
-        <p className="mx-auto mt-2 max-w-[260px] text-[11px] leading-relaxed text-slate-500">{t(language, "chat.qrDesc")}</p>
-        <div className="mx-auto mt-5 flex h-40 w-40 items-center justify-center rounded-xl bg-white p-3 border-2 border-[#2C4C5C]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2C4C5C]/40 p-5 backdrop-blur-sm">
+      <div className="relative w-full max-w-[360px] rounded-[26px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-6 text-center shadow-2xl">
+        <button onClick={onClose} className="absolute right-5 top-5 text-slate-500 hover:text-[#2C4C5C] dark:hover:text-[#F3E308]"><X size={17} /></button>
+        <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2C4C5C]/10 dark:bg-[#F3E308]/15 text-[#2C4C5C] dark:text-[#F3E308]"><QrCode size={22} /></div>
+        <h3 className="mt-4 font-display text-[19px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">{t(language, "chat.temporaryAccess")}</h3>
+        <p className="mx-auto mt-2 max-w-[260px] text-[11px] leading-relaxed text-slate-500 dark:text-[#A0B4BE]">{t(language, "chat.qrDesc")}</p>
+        <div className="mx-auto mt-5 flex h-44 w-44 items-center justify-center rounded-xl bg-white p-3 border-2 border-[#2C4C5C] dark:border-[#0EA5A4]">
           <QRCodeSVG
             value={qrUrl}
-            size={144}
+            size={152}
             level="M"
             bgColor="#ffffff"
             fgColor="#2C4C5C"
           />
         </div>
-        <div className="mt-4 flex items-center justify-center gap-2 text-[11px] text-slate-500">
+        <div className="mt-4 flex items-center justify-center gap-2 text-[11px] text-slate-500 dark:text-[#A0B4BE]">
           <Clock3 size={12} /> Expires {new Date(access.expiresAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}
         </div>
         <button
-          onClick={() => navigator.clipboard?.writeText(qrUrl)}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2C4C5C] py-3 text-[11px] font-bold text-white shadow-sm"
+          onClick={handleCopy}
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2C4C5C] dark:bg-[#0EA5A4] py-3 text-[11px] font-bold text-white shadow-sm hover:opacity-90 transition"
         >
-          <Copy size={14} /> {t(language, "chat.copyLink")}
+          {copied ? <Check size={14} className="text-emerald-300" /> : <Copy size={14} />}
+          {copied ? "Link Copied!" : t(language, "chat.copyLink")}
         </button>
-        <p className="mt-3 flex items-center justify-center gap-1.5 text-[9px] text-slate-600">
+        <p className="mt-3 flex items-center justify-center gap-1.5 text-[9px] text-slate-500 dark:text-[#738C98]">
           <LockKeyhole size={11} /> {t(language, "chat.noMedicalData")}
         </p>
       </div>

@@ -528,7 +528,7 @@
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: #0B8A7C;
+  background: radial-gradient(circle at 50% 50%, #15242c 0%, #0e181d 100%);
   clip-path: circle(0 at 50% 50%);
   pointer-events: none;
 }

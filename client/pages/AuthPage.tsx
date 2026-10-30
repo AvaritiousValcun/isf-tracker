@@ -57,18 +57,22 @@ export default function AuthPage({ onOpenDashboard }: AuthPageProps) {
     const S = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(36, window.innerWidth / window.innerHeight, 0.1, 60);
 
-    S.add(new THREE.HemisphereLight(0xdfeaf0, 0x142229, 0.6));
-    const key = new THREE.DirectionalLight(0xffffff, 0.9);
+    S.add(new THREE.HemisphereLight(0xffffff, 0x223642, 1.2));
+    const key = new THREE.DirectionalLight(0xffffff, 1.8);
     key.position.set(3, 5, 4);
     S.add(key);
 
-    const l1 = new THREE.PointLight(0xcfe8ee, 0.7, 16);
-    l1.position.set(-4, -1, 3);
+    const l1 = new THREE.PointLight(0xdff4fc, 1.6, 22);
+    l1.position.set(-4, -1, 4);
     S.add(l1);
 
-    const l2 = new THREE.PointLight(0x6c8494, 1.5, 18);
+    const l2 = new THREE.PointLight(0x8cb6cb, 2.2, 24);
     l2.position.set(4, 2, -3);
     S.add(l2);
+
+    const l3 = new THREE.PointLight(0xffffff, 1.3, 16);
+    l3.position.set(0, 0, 6);
+    S.add(l3);
 
     const root = new THREE.Group();
     const tilt = new THREE.Group();
@@ -188,9 +192,9 @@ export default function AuthPage({ onOpenDashboard }: AuthPageProps) {
     const HL = 0.42;
 
     const EM: Record<string, THREE.Material> = {
-      C: M(0x7f22fe, { roughness: 0.65, metalness: 0 }),
-      O: M(0xfe9a00, { roughness: 0.65, metalness: 0 }),
-      H: M(0x00bba7, { roughness: 0.65, metalness: 0 }),
+      C: M(0x9333ea, { roughness: 0.35, metalness: 0.15, emissive: 0x3b0764, emissiveIntensity: 0.28 }),
+      O: M(0xfb923c, { roughness: 0.35, metalness: 0.15, emissive: 0x9a3412, emissiveIntensity: 0.32 }),
+      H: M(0x2dd4bf, { roughness: 0.35, metalness: 0.15, emissive: 0x115e59, emissiveIntensity: 0.32 }),
     };
 
     const EG: Record<string, THREE.BufferGeometry> = {
@@ -199,7 +203,7 @@ export default function AuthPage({ onOpenDashboard }: AuthPageProps) {
       H: new THREE.SphereGeometry(0.08, 20, 14),
     };
 
-    const bmat = M(0x5f7881, { roughness: 0.8, metalness: 0 });
+    const bmat = M(0x8faab5, { roughness: 0.45, metalness: 0.12 });
     const bg1 = new THREE.CylinderGeometry(0.032, 0.032, 1, 10);
     const bg2 = new THREE.CylinderGeometry(0.02, 0.02, 1, 8);
 
