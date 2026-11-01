@@ -211,6 +211,38 @@ export default function ChatView({ language }: ChatViewProps) {
                   <span className="text-[10px] uppercase tracking-[0.14em] text-slate-600 dark:text-[#738C98]">{t(language, "chat.today")}</span>
                   <div className="h-px flex-1 bg-[#2C4C5C]/[0.06] dark:bg-[#243C47]" />
                 </div>
+                {messages.length === 0 && (
+                  <div className="mx-auto max-w-md rounded-2xl border border-slate-200/80 dark:border-[#243C47] bg-slate-50/70 dark:bg-[#111D23] p-5 text-center space-y-3">
+                    <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold text-white shadow-sm" style={{ background: consultant.color }}>
+                      {consultant.initials}
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-900 dark:text-[#E8F2F6]">
+                        Consultation with {consultant.full_name}
+                      </h4>
+                      <p className="mt-1 text-xs text-slate-600 dark:text-[#A0B4BE] leading-relaxed">
+                        I am your active {consultant.professional_type}. I review your continuous ISF hormone readings and telemetry in real time. Send a message or pick a question below to start our consultation:
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2 justify-center pt-1">
+                      {[
+                        "How are my latest hormone readings?",
+                        "What do my progesterone levels indicate?",
+                        "Can you explain my androgen pattern?",
+                      ].map((promptText) => (
+                        <button
+                          key={promptText}
+                          onClick={() => {
+                            setMessage(promptText);
+                          }}
+                          className="rounded-full border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1C2F38] px-3 py-1.5 text-[11px] font-medium text-slate-700 dark:text-[#E8F2F6] hover:border-[#0EA5A4] transition shadow-xs cursor-pointer"
+                        >
+                          {promptText}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {messages.map((msg) => (
                   <MessageBubble key={msg.id} msg={msg} consultant={consultant} />
                 ))}
