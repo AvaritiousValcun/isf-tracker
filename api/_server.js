@@ -1142,6 +1142,7 @@ var CLINICAL_FAQ_ITEMS = [
     answers: {
       endocrinologist: "Your latest continuous ISF readings show Progesterone at 19.8 ng/mL and Free Testosterone steady at 38.2 ng/dL. These concentrations confirm robust post-ovulatory luteal stability within ideal physiological reference ranges (progesterone 5\u201325 ng/mL; free testosterone within normal safety margins). Your transdermal patch is capturing continuous dermal interstitial flux accurately with zero detected anomalous spikes.",
       obgyn: "Your current dermal hormone telemetry shows healthy secretory luteal parameters: Progesterone is 19.8 ng/mL, confirming effective ovulatory corpus luteum function, and Free Testosterone levels remain well controlled at 38.2 ng/dL. Uterine lining support is optimal, and no hyperandrogenic surges or erratic fluctuations are present in your continuous stream.",
+      gynecologist: "As your Gynecologist, I am continuously tracking your ISF telemetry: your Progesterone is holding strong at 19.8 ng/mL, and your Free Testosterone is balanced at 38.2 ng/dL. These values confirm healthy secretory endometrial support and strong luteal vascularity. Your hormone rhythm is stable with zero abnormal shifts or hyperandrogenic surges.",
       default: "Your latest continuous ISF readings show Progesterone at 19.8 ng/mL and Free Testosterone at 38.2 ng/dL. Both biomarkers sit comfortably within expected mid-luteal physiological boundaries, indicating stable endocrine velocity and optimal patch diffusion."
     }
   },
@@ -1153,6 +1154,7 @@ var CLINICAL_FAQ_ITEMS = [
     answers: {
       endocrinologist: "Your progesterone reading of 19.8 ng/mL (averaging 18.2 ng/mL with a healthy luteal curve) indicates that successful ovulation occurred and you are currently in the mid-luteal secretory phase. In a normal ovulatory cycle, mid-luteal progesterone ranges between 5.0 and 25.0 ng/mL to maintain endometrial integrity and support thermogenic metabolic balance. The steady 24-hour plateau confirms healthy corpus luteum vascularization.",
       obgyn: "Your progesterone levels indicate strong ovulatory activity and adequate luteal phase support, averaging 18.2 ng/mL along a reassuring luteal curve. Because progesterone is sustaining near ~20 ng/mL without premature cliff drops, your endometrial lining is stable. Mild breast tenderness or slight temperature increases at this level are completely normal physiological responses to healthy progesterone.",
+      gynecologist: "From a gynecological perspective, your 19.8 ng/mL progesterone reading (averaging 18.2 ng/mL across your luteal curve) confirms successful ovulation and mid-luteal secretory maturity. Progesterone stabilizes the uterine lining and prevents early spotting. Sensations like slight breast fullness or temperature rise at this concentration are healthy physiologic markers of robust luteal adequacy.",
       default: "Your progesterone reading of 19.8 ng/mL (averaging 18.2 ng/mL with a healthy luteal curve) confirms ovulatory confirmation and mid-luteal secretory stability. This level adequately supports endometrial maturation with no signs of premature luteal insufficiency."
     }
   },
@@ -1164,6 +1166,7 @@ var CLINICAL_FAQ_ITEMS = [
     answers: {
       endocrinologist: "Your continuous free testosterone pattern is currently holding stable at 38.2 ng/dL, comfortably below the clinical threshold of 45 ng/dL. Unlike in hyperandrogenic conditions such as classical PCOS, where androgen pulsatility shows elevated baseline surges, your continuous ISF profile exhibits minimal diurnal variance and smooth clearance, signaling balanced ovarian and adrenal enzymatic activity.",
       obgyn: "Your free testosterone pattern shows a stable, non-escalating baseline well within asymptomatic female physiological limits. We monitor this continuously through the patch to check for early micro-surges that could cause acne, hirsutism, or anovulatory follicular arrest. Your telemetry confirms clean clearance with no hyperandrogenic risks flagged.",
+      gynecologist: "Your continuous free testosterone pattern is well controlled at 38.2 ng/dL, comfortably below the 45 ng/dL threshold. In gynecology, we evaluate this to rule out follicular arrest, hyperandrogenism, or ovulatory suppression. Your steady baseline confirms smooth ovarian clearing and balanced androgens.",
       default: "Your continuous free testosterone pattern is steady at 38.2 ng/dL (normal threshold <45 ng/dL). Daily interstitial fluid kinetics show smooth clearance without androgenic pulsatility or metabolic spikes."
     }
   },
@@ -1175,6 +1178,7 @@ var CLINICAL_FAQ_ITEMS = [
     answers: {
       endocrinologist: "During this mid-luteal phase when progesterone is dominant, metabolic rate slightly increases. Staying hydrated with electrolyte-rich fluids, maintaining magnesium and B6 intake, and prioritizing 7\u20138 hours of consistent sleep will help mitigate luteal fluid retention and mood fluctuations.",
       obgyn: "In this luteal plateau, focus on complex carbohydrates, gentle endurance or restorative exercise, and adequate hydration. If you experience premenstrual fatigue, light evening stretching and reducing high-sodium meals can noticeably reduce bloating.",
+      gynecologist: "In this mid-luteal plateau, focus on restorative pelvic health: gentle walking or pelvic floor stretching, adequate magnesium intake to ease cramping, balanced complex meals, and 7\u20138 hours of uninterrupted rest to support natural luteal thermoregulation.",
       default: "To support this luteal phase, prioritize adequate hydration, magnesium and vitamin B6 intake, consistent sleep schedules, and moderate physical activity."
     }
   }
@@ -1212,7 +1216,10 @@ function matchClinicalFaq(patientMessage, consultant) {
   if (type.includes("endocrinologist")) {
     return matched.answers.endocrinologist;
   }
-  if (type.includes("gynecologist") || type.includes("ob/gyn") || type.includes("obstetrician")) {
+  if (type.includes("gynecologist")) {
+    return matched.answers.gynecologist || matched.answers.obgyn;
+  }
+  if (type.includes("ob/gyn") || type.includes("obstetrician")) {
     return matched.answers.obgyn;
   }
   return matched.answers.default || matched.answers.endocrinologist;
@@ -1313,21 +1320,23 @@ ${promptText}` }]
       return faqMatch;
     }
     const lower = message.toLowerCase();
-    const isEndo = consultant.professional_type.toLowerCase().includes("endocrinologist");
+    const type = consultant.professional_type.toLowerCase();
+    const isEndo = type.includes("endocrinologist");
+    const isGyn = type.includes("gynecologist") || type.includes("ob/gyn") || type.includes("obstetrician");
     if (/\b(hello|hi|habari|hey|greetings)\b/i.test(message)) {
-      return `Hello! I'm ${consultant.full_name}. I've been monitoring your ISF hormone telemetry and recent readings. How are you feeling today, and what can I assist you with regarding your cycle and biomarker trends?`;
+      return `Hello! I'm ${consultant.full_name}, your ${consultant.professional_type}. I've been monitoring your ISF hormone telemetry and recent readings. How are you feeling today, and what can I assist you with regarding your cycle and biomarker trends?`;
     }
     if (lower.includes("progesterone") || lower.includes("luteal") || lower.includes("ovulat")) {
-      return `Your progesterone levels indicate normal luteal phase activity. Progesterone supports the uterine lining and regulates metabolic temperature. If you notice dips alongside fatigue, stay well hydrated and maintain consistent sleep intervals.`;
+      return isGyn ? `As your Gynecologist, your progesterone levels indicate healthy luteal secretory maturation and endometrial stability. Adequate progesterone protects the uterine lining and prevents spotting. If you notice mild tenderness or temperature shifts, those are normal luteal physiologic markers.` : `Your progesterone levels indicate normal luteal phase activity. Progesterone supports the uterine lining and regulates metabolic temperature. If you notice dips alongside fatigue, stay well hydrated and maintain consistent sleep intervals.`;
     }
     if (lower.includes("androgen") || lower.includes("testosterone") || lower.includes("acne") || lower.includes("hair")) {
-      return isEndo ? `I am observing your free testosterone metrics closely. Temporary elevations can occur around stress peaks or specific cycle phases. I recommend monitoring the 48-hour moving average on your dashboard to see if this trend stabilizes.` : `Elevated free testosterone signals in interstitial fluid can correlate with follicular phase surges or metabolic shifts. Let's keep observing the patch telemetry over the next 3 days.`;
+      return isGyn ? `In gynecological practice, maintaining balanced free testosterone below 45 ng/dL is essential to prevent follicular arrest and irregular cycles. Your current telemetry demonstrates stable androgen kinetics without hyperandrogenic spikes.` : isEndo ? `I am observing your free testosterone metrics closely. Temporary elevations can occur around stress peaks or specific cycle phases. I recommend monitoring the 48-hour moving average on your dashboard to see if this trend stabilizes.` : `Elevated free testosterone signals in interstitial fluid can correlate with follicular phase surges or metabolic shifts. Let's keep observing the patch telemetry over the next 3 days.`;
     }
     if (lower.includes("pcos") || lower.includes("pmos") || lower.includes("risk") || lower.includes("prediction")) {
       return `Our predictive models analyze your continuous free testosterone-to-progesterone ratios. Your current status is being actively monitored, and the trends suggest manageable variations rather than acute endocrine distress. Always consult us if you experience unexpected pelvic pain or irregular spotting.`;
     }
     if (lower.includes("pain") || lower.includes("cramp") || lower.includes("hurt") || lower.includes("headache") || lower.includes("pelvic")) {
-      return `I understand you're experiencing discomfort. Prostaglandin release and hormonal fluctuations during cycle transitions often trigger these symptoms. Warm compresses, adequate hydration, and magnesium-rich foods may help ease the tension. If symptoms worsen, please visit a clinic promptly.`;
+      return isGyn ? `Pelvic discomfort and cramps during cycle transitions often stem from local prostaglandin activity and uterine vascular tone. Warm abdominal compresses, gentle pelvic stretches, and magnesium can provide significant relief. If discomfort becomes acute or atypical, please inform us right away.` : `I understand you're experiencing discomfort. Prostaglandin release and hormonal fluctuations during cycle transitions often trigger these symptoms. Warm compresses, adequate hydration, and magnesium-rich foods may help ease the tension. If symptoms worsen, please visit a clinic promptly.`;
     }
     if (lower.includes("patch") || lower.includes("sensor") || lower.includes("battery") || lower.includes("reading") || lower.includes("transmitting")) {
       return `Your ISF microneedle patch is actively transmitting telemetry. Ensure the skin site remains dry and free of oily lotions to maintain optimal epidermal acoustic contact and reliable biomarker diffusion.`;

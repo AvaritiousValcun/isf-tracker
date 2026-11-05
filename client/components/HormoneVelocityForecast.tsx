@@ -155,7 +155,7 @@ export default function HormoneVelocityForecast({
   return (
     <div className={`rounded-[24px] border p-5 sm:p-6 transition-all duration-300 space-y-6 ${
       showPremium
-        ? "border-[#0EA5A4]/40 dark:border-[#0EA5A4]/35 bg-gradient-to-br from-[#FAFCFD] via-[#F3FAF9] to-[#EBF6F6] dark:from-[#15232A] dark:via-[#13272F] dark:to-[#0F2026] shadow-[0_12px_36px_rgba(14,165,164,0.08)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.45)]"
+        ? "border-amber-300/80 dark:border-amber-500/40 bg-gradient-to-br from-[#FFFDF9] via-[#FFFBF2] to-[#FFF6E5] dark:from-[#15232A] dark:via-[#1D211B] dark:to-[#171B16] shadow-[0_14px_42px_rgba(245,158,11,0.12)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.45)]"
         : "border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] shadow-sm"
     }`}>
       
@@ -163,12 +163,12 @@ export default function HormoneVelocityForecast({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="flex items-center gap-1 rounded-full bg-[#0EA5A4]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#0EA5A4]">
-              <Sparkles size={12} /> 7-Day Velocity Model
+            <span className="flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-500/15 to-orange-500/15 border border-amber-400/30 px-2.5 py-0.5 text-[11px] font-semibold text-amber-800 dark:text-amber-300">
+              <Sparkles size={12} className="text-amber-500" /> 7-Day Velocity Model
             </span>
             {showPremium ? (
-              <Badge className="bg-gradient-to-r from-[#0EA5A4] via-[#0D9488] to-[#14B8A6] text-white hover:opacity-95 text-[10px] flex items-center gap-1 border border-teal-300/30 shadow-xs">
-                <Crown size={11} className="text-amber-300" /> Premium Forecast
+              <Badge className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white hover:opacity-95 text-[10px] flex items-center gap-1 border border-amber-300/40 shadow-xs">
+                <Crown size={11} className="text-yellow-200 fill-yellow-200" /> Premium Forecast
               </Badge>
             ) : (
               <Badge variant="outline" className="text-slate-500 border-slate-300 dark:border-white/10 text-[10px]">
@@ -201,11 +201,11 @@ export default function HormoneVelocityForecast({
               onClick={() => setTierOverride("premium")}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 showPremium
-                  ? "bg-gradient-to-r from-[#0EA5A4] to-[#0D9488] text-white shadow-xs border border-teal-300/40"
-                  : "text-slate-500 hover:text-[#0EA5A4] dark:text-[#A0B4BE]"
+                  ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-md shadow-amber-500/25 border border-amber-300/50"
+                  : "text-slate-500 hover:text-amber-600 dark:text-[#A0B4BE]"
               }`}
             >
-              <Crown size={12} className={showPremium ? "text-amber-300 drop-shadow-xs" : "text-amber-500"} />
+              <Crown size={12} className={showPremium ? "text-yellow-200 fill-yellow-200 drop-shadow-xs" : "text-amber-500"} />
               <span>Premium (7-Day)</span>
             </button>
           </div>
@@ -213,7 +213,7 @@ export default function HormoneVelocityForecast({
           {onOpenReport && (
             <button
               onClick={onOpenReport}
-              className="hidden lg:flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-[#243C47] bg-slate-50 dark:bg-[#1C2F38] px-3 py-1.5 text-xs font-semibold text-[#2C4C5C] dark:text-[#E8F2F6] hover:bg-slate-100 transition"
+              className="hidden lg:flex items-center gap-1.5 rounded-xl border border-amber-400/30 bg-amber-500/10 hover:bg-amber-500/15 px-3 py-1.5 text-xs font-semibold text-amber-800 dark:text-amber-300 transition"
             >
               Doctor Report PDF
             </button>
@@ -225,7 +225,7 @@ export default function HormoneVelocityForecast({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className={`rounded-2xl border p-4 transition ${
           showPremium
-            ? "border-teal-200/70 dark:border-teal-900/40 bg-gradient-to-b from-teal-50/40 to-white dark:from-teal-950/25 dark:to-[#111D23] shadow-xs"
+            ? "border-amber-200/80 dark:border-amber-900/40 bg-gradient-to-b from-amber-50/50 to-white dark:from-amber-950/25 dark:to-[#111D23] shadow-xs"
             : "border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23]"
         }`}>
           <div className="flex items-center justify-between">
@@ -404,9 +404,9 @@ export default function HormoneVelocityForecast({
             </p>
             <button
               onClick={() => setTierOverride("premium")}
-              className="mt-3 flex items-center gap-1.5 rounded-xl bg-[#0EA5A4] hover:bg-[#0C8F8E] text-white px-4 py-2 text-xs font-bold transition shadow-sm"
+              className="mt-3 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 text-white px-4 py-2 text-xs font-bold transition shadow-md shadow-amber-500/25"
             >
-              <Crown size={13} /> Unlock 7-Day Forecast
+              <Crown size={13} className="text-yellow-200 fill-yellow-200" /> Unlock 7-Day Forecast
             </button>
           </div>
         )}

@@ -356,6 +356,25 @@ export default function SettingsView({
             : [];
 
         const merged = [...raw];
+        const hasGynecologist = merged.some(
+          (c: any) =>
+            c.professional_type?.toLowerCase().includes("gynecologist") ||
+            c.full_name?.toLowerCase().includes("grace wanjiku") ||
+            c.id === "c8e23456-789a-4bcd-ef01-23456789abcd"
+        );
+        if (!hasGynecologist) {
+          merged.push({
+            id: "c8e23456-789a-4bcd-ef01-23456789abcd",
+            full_name: "Dr. Grace Wanjiku",
+            professional_type: "Gynecologist",
+            initials: "GW",
+            color: "#E06D53",
+            online: true,
+            status: "active",
+            consent_status: "granted",
+            consent_scope: "all",
+          });
+        }
         for (const def of DEFAULT_CONSULTANTS) {
           if (!merged.some((c: any) => c.id === def.id || c.full_name === def.full_name)) {
             merged.push(def);

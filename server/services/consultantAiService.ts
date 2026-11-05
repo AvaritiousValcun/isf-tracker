@@ -138,18 +138,24 @@ Guidelines:
     }
 
     const lower = message.toLowerCase();
-    const isEndo = consultant.professional_type.toLowerCase().includes("endocrinologist");
+    const type = consultant.professional_type.toLowerCase();
+    const isEndo = type.includes("endocrinologist");
+    const isGyn = type.includes("gynecologist") || type.includes("ob/gyn") || type.includes("obstetrician");
 
     if (/\b(hello|hi|habari|hey|greetings)\b/i.test(message)) {
-      return `Hello! I'm ${consultant.full_name}. I've been monitoring your ISF hormone telemetry and recent readings. How are you feeling today, and what can I assist you with regarding your cycle and biomarker trends?`;
+      return `Hello! I'm ${consultant.full_name}, your ${consultant.professional_type}. I've been monitoring your ISF hormone telemetry and recent readings. How are you feeling today, and what can I assist you with regarding your cycle and biomarker trends?`;
     }
 
     if (lower.includes("progesterone") || lower.includes("luteal") || lower.includes("ovulat")) {
-      return `Your progesterone levels indicate normal luteal phase activity. Progesterone supports the uterine lining and regulates metabolic temperature. If you notice dips alongside fatigue, stay well hydrated and maintain consistent sleep intervals.`;
+      return isGyn
+        ? `As your Gynecologist, your progesterone levels indicate healthy luteal secretory maturation and endometrial stability. Adequate progesterone protects the uterine lining and prevents spotting. If you notice mild tenderness or temperature shifts, those are normal luteal physiologic markers.`
+        : `Your progesterone levels indicate normal luteal phase activity. Progesterone supports the uterine lining and regulates metabolic temperature. If you notice dips alongside fatigue, stay well hydrated and maintain consistent sleep intervals.`;
     }
 
     if (lower.includes("androgen") || lower.includes("testosterone") || lower.includes("acne") || lower.includes("hair")) {
-      return isEndo
+      return isGyn
+        ? `In gynecological practice, maintaining balanced free testosterone below 45 ng/dL is essential to prevent follicular arrest and irregular cycles. Your current telemetry demonstrates stable androgen kinetics without hyperandrogenic spikes.`
+        : isEndo
         ? `I am observing your free testosterone metrics closely. Temporary elevations can occur around stress peaks or specific cycle phases. I recommend monitoring the 48-hour moving average on your dashboard to see if this trend stabilizes.`
         : `Elevated free testosterone signals in interstitial fluid can correlate with follicular phase surges or metabolic shifts. Let's keep observing the patch telemetry over the next 3 days.`;
     }
@@ -159,7 +165,9 @@ Guidelines:
     }
 
     if (lower.includes("pain") || lower.includes("cramp") || lower.includes("hurt") || lower.includes("headache") || lower.includes("pelvic")) {
-      return `I understand you're experiencing discomfort. Prostaglandin release and hormonal fluctuations during cycle transitions often trigger these symptoms. Warm compresses, adequate hydration, and magnesium-rich foods may help ease the tension. If symptoms worsen, please visit a clinic promptly.`;
+      return isGyn
+        ? `Pelvic discomfort and cramps during cycle transitions often stem from local prostaglandin activity and uterine vascular tone. Warm abdominal compresses, gentle pelvic stretches, and magnesium can provide significant relief. If discomfort becomes acute or atypical, please inform us right away.`
+        : `I understand you're experiencing discomfort. Prostaglandin release and hormonal fluctuations during cycle transitions often trigger these symptoms. Warm compresses, adequate hydration, and magnesium-rich foods may help ease the tension. If symptoms worsen, please visit a clinic promptly.`;
     }
 
     if (lower.includes("patch") || lower.includes("sensor") || lower.includes("battery") || lower.includes("reading") || lower.includes("transmitting")) {

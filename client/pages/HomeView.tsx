@@ -1021,11 +1021,11 @@ export default function HomeView({
                     onClick={() => setChartMode("velocity")}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                       chartMode === "velocity"
-                        ? "bg-[#0EA5A4] text-white shadow-xs"
+                        ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-xs border border-amber-300/40"
                         : "text-slate-500 hover:text-slate-900 dark:text-[#A0B4BE]"
                     }`}
                   >
-                    <Sparkles size={12} /> 7-Day Velocity
+                    <Sparkles size={12} className={chartMode === "velocity" ? "text-yellow-200" : ""} /> 7-Day Velocity
                   </button>
 
                   <button
@@ -1044,9 +1044,9 @@ export default function HomeView({
                 <button
                   type="button"
                   onClick={() => setReportModalOpen(true)}
-                  className="flex items-center gap-1.5 rounded-xl border border-[#0EA5A4]/30 bg-[#0EA5A4]/10 hover:bg-[#0EA5A4]/20 px-3 py-1.5 text-xs font-bold text-[#0EA5A4] transition shadow-xs"
+                  className="flex items-center gap-1.5 rounded-xl border border-amber-400/40 bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/15 hover:bg-amber-500/20 px-3 py-1.5 text-xs font-bold text-amber-800 dark:text-amber-300 transition shadow-xs"
                 >
-                  <FileText size={13} />
+                  <FileText size={13} className="text-amber-600 dark:text-amber-400" />
                   <span>Doctor PDF</span>
                 </button>
               </div>

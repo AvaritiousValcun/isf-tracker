@@ -88,12 +88,46 @@ export default function ChatView({ language }: ChatViewProps) {
 
   // Guarantee all 3 core care team specialists (including Gynecologist) are always available
   const effectiveConsultants: ConsultantInfo[] = (() => {
-    const list = consultants.length > 0 ? [...consultants] : [...DEFAULT_CONSULTANTS];
+    const list = [...(consultants.length > 0 ? consultants : DEFAULT_CONSULTANTS)];
+    
+    // Ensure that a Gynecologist specialist is ALWAYS available
+    const hasGynecologist = list.some(
+      (c) =>
+        c.professional_type?.toLowerCase() === "gynecologist" ||
+        c.full_name?.toLowerCase().includes("grace wanjiku") ||
+        c.id === "c8e23456-789a-4bcd-ef01-23456789abcd"
+    );
+
+    if (!hasGynecologist) {
+      list.push({
+        id: "c8e23456-789a-4bcd-ef01-23456789abcd",
+        full_name: "Dr. Grace Wanjiku",
+        professional_type: "Gynecologist",
+        initials: "GW",
+        color: "#E06D53",
+        online: true,
+        status: "active",
+        consent_status: "granted",
+        consent_scope: {
+          current_readings: true,
+          historical_readings: true,
+          trend_alerts: true,
+          chat: true,
+        },
+        relationship_id: "rel-default-grace",
+        relationship_status: "active",
+        started_at: new Date().toISOString(),
+      });
+    }
+
     for (const def of DEFAULT_CONSULTANTS) {
       if (!list.some((c) => c.id === def.id || c.full_name === def.full_name)) {
-        list.push(def);
+        if (list.length < 3) {
+          list.push(def);
+        }
       }
     }
+
     return list;
   })();
   const consultant =
@@ -117,9 +151,16 @@ export default function ChatView({ language }: ChatViewProps) {
       const existing = prev[consultant.id] || [];
       if (serverMessages.length === 0 && existing.length === 0) {
         // Seed default greeting from doctor
+        const type = consultant.professional_type?.toLowerCase() || "";
         const welcomeBody =
           DEFAULT_WELCOME_MESSAGES[consultant.id] ||
-          `Hello! I am ${consultant.full_name}, your ${consultant.professional_type}. I review your continuous ISF hormone readings and telemetry in real time. How may I assist you today?`;
+          (type.includes("gynecologist")
+            ? `Hello! I am ${consultant.full_name}, your Gynecologist. I specialize in reproductive physiology, luteal phase adequacy, and hormone rhythm tracking. What aspects of your progesterone or free testosterone trends would you like to discuss today?`
+            : type.includes("endocrinologist")
+            ? `Hello! I am ${consultant.full_name}, your Endocrinologist. I am monitoring your continuous ISF hormone readings and telemetry in real time. Your progesterone surge is currently tracking within normal secretory limits. How can I assist you with your cycle telemetry today?`
+            : type.includes("nutritionist")
+            ? `Hello! I am ${consultant.full_name}, your Clinical Nutritionist. I am monitoring your metabolic trends and ISF biomarker stability. How can I help support your nutrition and hormonal balance today?`
+            : `Hello! I am ${consultant.full_name}, your ${consultant.professional_type}. I review your continuous ISF hormone readings and telemetry in real time. How may I assist you today?`);
 
         return {
           ...prev,
@@ -501,18 +542,22 @@ export default function ChatView({ language }: ChatViewProps) {
                       </div>
 
                       <p className="text-[11px] text-slate-600 dark:text-[#A0B4BE] leading-relaxed mb-3">
-                        {item.id.includes("375d31f5")
-                          ? "Specializes in continuous hormone telemetry, progesterone velocity curves, and free testosterone balance."
-                          : item.id.includes("c8e23456")
+                        {item.professional_type?.toLowerCase().includes("gynecologist")
                           ? "Specializes in reproductive physiology, luteal phase adequacy, hormonal wellness, and pelvic health."
+                          : item.professional_type?.toLowerCase().includes("endocrinologist")
+                          ? "Specializes in continuous hormone telemetry, progesterone velocity curves, and free testosterone balance."
+                          : item.professional_type?.toLowerCase().includes("nutritionist")
+                          ? "Specializes in metabolic nutrition, insulin sensitivity, and luteal dietary rhythm."
                           : "Specializes in luteal phase stability, cycle kinematics, ovulation support, and clinical symptom review."}
                       </p>
 
                       <div className="flex flex-wrap gap-1.5 mb-4">
-                        {(item.id.includes("375d31f5")
-                          ? ["ISF Biomarkers", "Progesterone", "Free Testosterone"]
-                          : item.id.includes("c8e23456")
+                        {(item.professional_type?.toLowerCase().includes("gynecologist")
                           ? ["Progesterone", "Free Testosterone", "Pelvic Health"]
+                          : item.professional_type?.toLowerCase().includes("endocrinologist")
+                          ? ["ISF Biomarkers", "Progesterone", "Free Testosterone"]
+                          : item.professional_type?.toLowerCase().includes("nutritionist")
+                          ? ["Metabolic Balance", "Electrolytes", "Dietary Rhythm"]
                           : ["Ovulation Kinetics", "Luteal Phase", "Symptom Review"]
                         ).map((badge) => (
                           <span
@@ -696,8 +741,8 @@ export default function ChatView({ language }: ChatViewProps) {
                   />
                   <span className="hidden text-[10px] sm:flex items-center gap-1">
                     {isPremium ? (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-teal-300 dark:border-teal-700/50 bg-teal-50 dark:bg-teal-950/40 px-2 py-0.5 font-semibold text-teal-700 dark:text-teal-300">
-                        <Crown size={10} className="text-amber-500" />
+                      <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 dark:border-amber-700/50 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 font-semibold text-amber-700 dark:text-amber-300">
+                        <Crown size={10} className="text-amber-500 fill-amber-500" />
                         {t(language, "chat.unlimited")}
                       </span>
                     ) : (

@@ -418,9 +418,38 @@ export function useConsultants() {
 
         if (Array.isArray(result) && result.length > 0) {
           const merged = [...result];
+          const hasGynecologist = merged.some(
+            (c) =>
+              c.professional_type?.toLowerCase().includes("gynecologist") ||
+              c.full_name?.toLowerCase().includes("grace wanjiku") ||
+              c.id === "c8e23456-789a-4bcd-ef01-23456789abcd"
+          );
+          if (!hasGynecologist) {
+            merged.push({
+              id: "c8e23456-789a-4bcd-ef01-23456789abcd",
+              full_name: "Dr. Grace Wanjiku",
+              professional_type: "Gynecologist",
+              initials: "GW",
+              color: "#E06D53",
+              online: true,
+              status: "active",
+              consent_status: "granted",
+              consent_scope: {
+                current_readings: true,
+                historical_readings: true,
+                trend_alerts: true,
+                chat: true,
+              },
+              relationship_id: "rel-default-grace",
+              relationship_status: "active",
+              started_at: new Date().toISOString(),
+            });
+          }
           for (const def of DEFAULT_CONSULTANTS) {
             if (!merged.some((c) => c.id === def.id || c.full_name === def.full_name)) {
-              merged.push(def);
+              if (merged.length < 3) {
+                merged.push(def);
+              }
             }
           }
           setConsultants(merged);

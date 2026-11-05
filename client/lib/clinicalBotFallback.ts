@@ -18,6 +18,7 @@ export function generateClientConsultantReply(
   }
 
   const lower = patientMessage.toLowerCase();
+  const isGyn = consultant.professional_type.toLowerCase().includes("gynecologist");
 
   // Greetings
   if (/\b(hello|hi|habari|hey|greetings|good morning|good afternoon|good evening)\b/i.test(lower)) {
@@ -26,12 +27,16 @@ export function generateClientConsultantReply(
 
   // Progesterone questions
   if (lower.includes("progesterone") || lower.includes("luteal")) {
-    return `Looking at your latest continuous ISF telemetry, your progesterone is averaging 18.2 ng/mL with a healthy luteal curve. Normal luteal progesterone ranges between 5.0 and 25.0 ng/mL, confirming robust secretory endometrium support. No sudden luteal drops have been flagged. Are you experiencing any breast tenderness or mood changes?`;
+    return isGyn
+      ? `As your Gynecologist, looking at your continuous ISF telemetry, your progesterone is averaging 18.2 ng/mL with a healthy luteal curve. Normal luteal progesterone ranges between 5.0 and 25.0 ng/mL, confirming optimal secretory endometrial stabilization. No premature luteal drops have been flagged. Are you experiencing any breast tenderness or pelvic fullness?`
+      : `Looking at your latest continuous ISF telemetry, your progesterone is averaging 18.2 ng/mL with a healthy luteal curve. Normal luteal progesterone ranges between 5.0 and 25.0 ng/mL, confirming robust secretory endometrium support. No sudden luteal drops have been flagged. Are you experiencing any breast tenderness or mood changes?`;
   }
 
   // Free Testosterone questions
   if (lower.includes("androgen") || lower.includes("testosterone") || lower.includes("chin") || lower.includes("hair") || lower.includes("acne")) {
-    return `Your continuous free testosterone readings are currently steady at 38 ng/dL, safely beneath the elevated threshold of 45 ng/dL. This indicates stable follicular androgen metabolism without hyperandrogenic surges today. We will keep monitoring your free testosterone to ensure it remains well balanced.`;
+    return isGyn
+      ? `From a gynecological perspective, your continuous free testosterone readings are holding steady at 38 ng/dL, safely beneath the elevated threshold of 45 ng/dL. This confirms balanced follicular androgen metabolism without hyperandrogenic pulses or ovulatory disruption.`
+      : `Your continuous free testosterone readings are currently steady at 38 ng/dL, safely beneath the elevated threshold of 45 ng/dL. This indicates stable follicular androgen metabolism without hyperandrogenic surges today. We will keep monitoring your free testosterone to ensure it remains well balanced.`;
   }
 
   // Prediction / Risk / PCOS / Insulin resistance
@@ -41,7 +46,9 @@ export function generateClientConsultantReply(
 
   // Pain / Cramps / Symptoms
   if (lower.includes("pain") || lower.includes("cramp") || lower.includes("cramping") || lower.includes("ache") || lower.includes("bleed")) {
-    return `I hear your concern. Cyclical pelvic sensations can correlate with rapid shifts in progesterone velocity. If pain is mild to moderate, tracking the exact onset relative to your patch readings is helpful. However, if you experience sudden, severe unilateral pelvic pain, heavy abnormal bleeding, or fever, please seek urgent medical evaluation immediately.`;
+    return isGyn
+      ? `As your Gynecologist, cyclical pelvic sensations and mild uterine cramping during the luteal phase often correlate with local prostaglandin release and progesterone velocity descent. Tracking symptom onset relative to your patch readings is very helpful. However, if you experience sudden, severe unilateral pelvic pain, abnormal heavy bleeding, or fever, please seek urgent medical evaluation immediately.`
+      : `I hear your concern. Cyclical pelvic sensations can correlate with rapid shifts in progesterone velocity. If pain is mild to moderate, tracking the exact onset relative to your patch readings is helpful. However, if you experience sudden, severe unilateral pelvic pain, heavy abnormal bleeding, or fever, please seek urgent medical evaluation immediately.`;
   }
 
   // Cycle / Period / Ovulation
