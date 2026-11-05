@@ -3436,10 +3436,6 @@ import {
   verifyRegistrationResponse
 } from "@simplewebauthn/server";
 var RP_NAME = process.env.WEBAUTHN_RP_NAME || "ISF Tracker";
-var RP_ID = process.env.WEBAUTHN_RP_ID || new URL(
-  process.env.FRONTEND_URL || "http://localhost:5173"
-).hostname;
-var ORIGIN = process.env.WEBAUTHN_ORIGIN || process.env.FRONTEND_URL || "http://localhost:5173";
 var memoryChallengeStore = /* @__PURE__ */ new Map();
 function cleanupMemoryChallenges() {
   const now = Date.now();
@@ -3448,6 +3444,47 @@ function cleanupMemoryChallenges() {
       memoryChallengeStore.delete(key);
     }
   }
+}
+function resolveRpConfig(clientOrigin, clientHost) {
+  let hostname = "";
+  let origin = "";
+  if (clientOrigin) {
+    try {
+      const url = new URL(clientOrigin);
+      hostname = url.hostname;
+      origin = url.origin;
+    } catch (_) {
+    }
+  }
+  if (!hostname && clientHost) {
+    try {
+      hostname = clientHost.split(":")[0];
+      const protocol = hostname === "localhost" || hostname === "127.0.0.1" ? "http" : "https";
+      origin = `${protocol}://${clientHost}`;
+    } catch (_) {
+    }
+  }
+  if (!hostname) {
+    if (process.env.WEBAUTHN_RP_ID) {
+      hostname = process.env.WEBAUTHN_RP_ID;
+    } else if (process.env.FRONTEND_URL) {
+      try {
+        hostname = new URL(process.env.FRONTEND_URL).hostname;
+      } catch (_) {
+        hostname = "localhost";
+      }
+    } else {
+      hostname = "localhost";
+    }
+  }
+  if (!origin) {
+    origin = process.env.WEBAUTHN_ORIGIN || process.env.FRONTEND_URL || `http://${hostname}`;
+  }
+  return {
+    rpName: process.env.WEBAUTHN_RP_NAME || RP_NAME,
+    rpID: hostname,
+    origin
+  };
 }
 function bufferToBase64URL(buffer) {
   return Buffer.from(buffer).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
@@ -3660,15 +3697,16 @@ var PasskeyService = class {
     );
   }
   /**
-   * Generate WebAuthn registration options.
+   * Generate WebAuthn registration options with dynamic RP ID and origin detection.
    */
-  static async getRegistrationOptions(userId, email) {
+  static async getRegistrationOptions(userId, email, clientOrigin, clientHost) {
+    const config = resolveRpConfig(clientOrigin, clientHost);
     const existingCredentials = await getCredentialsForUser(
       userId
     );
     const options = await generateRegistrationOptions({
-      rpName: RP_NAME,
-      rpID: RP_ID,
+      rpName: config.rpName,
+      rpID: config.rpID,
       userName: email || `patient-${userId}`,
       userDisplayName: email || "ISF Tracker Patient",
       userID: new TextEncoder().encode(
@@ -3702,7 +3740,7 @@ var PasskeyService = class {
   /**
    * Verify a newly registered passkey.
    */
-  static async verifyRegistration(userId, response) {
+  static async verifyRegistration(userId, response, clientOrigin, clientHost) {
     const clientData = decodeClientData(
       response.response.clientDataJSON
     );
@@ -3724,14 +3762,16 @@ var PasskeyService = class {
         error: "Registration challenge is invalid or expired."
       };
     }
+    const detectedOrigin = clientData.origin || clientOrigin;
+    const config = resolveRpConfig(detectedOrigin, clientHost);
     let verification;
     try {
       verification = await verifyRegistrationResponse(
         {
           response,
           expectedChallenge: challenge,
-          expectedOrigin: ORIGIN,
-          expectedRPID: RP_ID,
+          expectedOrigin: detectedOrigin || config.origin,
+          expectedRPID: config.rpID,
           requireUserVerification: false
         }
       );
@@ -3780,9 +3820,10 @@ var PasskeyService = class {
     };
   }
   /**
-   * Generate authentication options.
+   * Generate authentication options with dynamic RP ID detection.
    */
-  static async getAuthenticationOptions(email) {
+  static async getAuthenticationOptions(email, clientOrigin, clientHost) {
+    const config = resolveRpConfig(clientOrigin, clientHost);
     let userId;
     if (email) {
       try {
@@ -3804,7 +3845,7 @@ var PasskeyService = class {
     ) : [];
     const options = await generateAuthenticationOptions(
       {
-        rpID: RP_ID,
+        rpID: config.rpID,
         allowCredentials: credentials.map(
           (credential) => ({
             id: credential.credential_id,
@@ -3826,7 +3867,7 @@ var PasskeyService = class {
   /**
    * Verify a passkey authentication response.
    */
-  static async verifyAuthentication(response) {
+  static async verifyAuthentication(response, clientOrigin, clientHost) {
     const credentialId = response.id;
     const credential = await getCredentialById(
       credentialId
@@ -3858,14 +3899,16 @@ var PasskeyService = class {
         error: "Authentication challenge is invalid or expired."
       };
     }
+    const detectedOrigin = clientData.origin || clientOrigin;
+    const config = resolveRpConfig(detectedOrigin, clientHost);
     let verification;
     try {
       verification = await verifyAuthenticationResponse(
         {
           response,
           expectedChallenge: challenge,
-          expectedOrigin: ORIGIN,
-          expectedRPID: RP_ID,
+          expectedOrigin: detectedOrigin || config.origin,
+          expectedRPID: config.rpID,
           credential: {
             id: credential.credential_id,
             publicKey: base64URLToBuffer(
@@ -3957,14 +4000,24 @@ var PasskeyService = class {
 
 // server/routes/passkey.ts
 var router8 = Router8();
+function extractClientOrigin(req) {
+  return req.body?.origin || req.headers.origin || req.headers.referer || void 0;
+}
+function extractClientHost(req) {
+  return req.body?.hostname || req.headers["x-forwarded-host"] || req.headers.host || void 0;
+}
 router8.post(
   "/register/options",
   requireAuth,
   async (req, res, next) => {
     try {
+      const origin = extractClientOrigin(req);
+      const host = extractClientHost(req);
       const options = await PasskeyService.getRegistrationOptions(
         req.user.id,
-        req.user.email
+        req.user.email,
+        origin,
+        host
       );
       return res.json(options);
     } catch (error) {
@@ -3977,9 +4030,13 @@ router8.post(
   requireAuth,
   async (req, res, next) => {
     try {
+      const origin = extractClientOrigin(req);
+      const host = extractClientHost(req);
       const result = await PasskeyService.verifyRegistration(
         req.user.id,
-        req.body
+        req.body,
+        origin,
+        host
       );
       if (!result.verified) {
         return res.status(400).json(result);
@@ -3994,8 +4051,12 @@ router8.post(
   "/authenticate/options",
   async (req, res, next) => {
     try {
+      const origin = extractClientOrigin(req);
+      const host = extractClientHost(req);
       const options = await PasskeyService.getAuthenticationOptions(
-        req.body?.email
+        req.body?.email,
+        origin,
+        host
       );
       return res.json(options);
     } catch (error) {
@@ -4007,8 +4068,12 @@ router8.post(
   "/authenticate/verify",
   async (req, res, next) => {
     try {
+      const origin = extractClientOrigin(req);
+      const host = extractClientHost(req);
       const result = await PasskeyService.verifyAuthentication(
-        req.body
+        req.body,
+        origin,
+        host
       );
       if (!result.verified) {
         return res.status(401).json(result);

@@ -498,8 +498,13 @@ export default function SettingsView({
         {
           method: "POST",
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({
+            origin: window.location.origin,
+            hostname: window.location.hostname,
+          }),
         }
       );
 
@@ -529,7 +534,11 @@ export default function SettingsView({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(attResp),
+          body: JSON.stringify({
+            ...attResp,
+            origin: window.location.origin,
+            hostname: window.location.hostname,
+          }),
         }
       );
 

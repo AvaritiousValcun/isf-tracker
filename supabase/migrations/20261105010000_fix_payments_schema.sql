@@ -1,33 +1,46 @@
 -- ============================================================================
 -- ISF TRACKER
--- FIX PAYMENTS SCHEMA & POSTGREST SCHEMA CACHE RELOAD
+-- COMPREHENSIVE FIX FOR PAYMENTS SCHEMA & POSTGREST SCHEMA CACHE RELOAD
 -- Migration: 20261105010000_fix_payments_schema.sql
 -- ============================================================================
 
--- Ensure payments table exists
+-- 1. Ensure the payments table exists with primary key
 CREATE TABLE IF NOT EXISTS public.payments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    subscription_id UUID NOT NULL REFERENCES public.subscriptions(id) ON DELETE CASCADE,
-    provider TEXT NOT NULL DEFAULT 'mpesa',
-    provider_reference TEXT,
-    amount NUMERIC NOT NULL CHECK (amount >= 0),
-    currency TEXT NOT NULL DEFAULT 'KES',
-    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed', 'refunded')),
-    paid_at TIMESTAMPTZ,
-    raw_reference_hash TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- Ensure the 'provider' column exists if table was created previously without it
-ALTER TABLE IF EXISTS public.payments 
+-- 2. Safely add all required columns if they don't already exist on public.payments
+ALTER TABLE public.payments 
+ADD COLUMN IF NOT EXISTS subscription_id UUID REFERENCES public.subscriptions(id) ON DELETE CASCADE;
+
+ALTER TABLE public.payments 
 ADD COLUMN IF NOT EXISTS provider TEXT NOT NULL DEFAULT 'mpesa';
 
--- Ensure provider_reference index exists
+ALTER TABLE public.payments 
+ADD COLUMN IF NOT EXISTS provider_reference TEXT;
+
+ALTER TABLE public.payments 
+ADD COLUMN IF NOT EXISTS amount NUMERIC NOT NULL DEFAULT 0;
+
+ALTER TABLE public.payments 
+ADD COLUMN IF NOT EXISTS currency TEXT NOT NULL DEFAULT 'KES';
+
+ALTER TABLE public.payments 
+ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'pending';
+
+ALTER TABLE public.payments 
+ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ;
+
+ALTER TABLE public.payments 
+ADD COLUMN IF NOT EXISTS raw_reference_hash TEXT;
+
+-- 3. Now create indexes safely (since provider_reference and subscription_id are guaranteed to exist above)
 CREATE INDEX IF NOT EXISTS idx_payments_provider_reference
 ON public.payments(provider_reference);
 
 CREATE INDEX IF NOT EXISTS idx_payments_subscription_id
 ON public.payments(subscription_id);
 
--- Reload PostgREST schema cache to make column immediately visible
+-- 4. Reload PostgREST schema cache to make updated columns and tables immediately available
 NOTIFY pgrst, 'reload schema';

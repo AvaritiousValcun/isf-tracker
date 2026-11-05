@@ -10,6 +10,7 @@ import {
   usePatch,
   useTrendEvents,
   useReferenceRanges,
+  useSubscription,
 } from "@/hooks/useData";
 import {
   t,
@@ -639,7 +640,10 @@ export default function HomeView({
     setNudgeDismissed,
   ] = useState(false);
 
-  const [chartMode, setChartMode] = useState<"velocity" | "realtime">("velocity");
+  const { subscription } = useSubscription();
+  const isPremium = subscription?.plan === "premium" && subscription?.status === "active";
+
+  const [chartMode, setChartMode] = useState<"velocity" | "realtime">("realtime");
   const [reportModalOpen, setReportModalOpen] = useState(false);
 
   const androgenRange =
@@ -800,6 +804,9 @@ export default function HomeView({
               <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-200 dark:border-teal-500/30 bg-teal-50 dark:bg-teal-950/40 px-3 py-1 text-[11px] font-semibold text-teal-800 dark:text-teal-300">
                 <Sparkles size={12} className="text-[#7A6600] dark:text-[#F3E308]" />
                 Micro-needle Telemetry Active
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-[#1C2F38] px-3 py-1 text-[11px] font-semibold text-slate-700 dark:text-[#E8F2F6]">
+                {isPremium ? "Premium Account" : "Free Version"}
               </span>
               <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-[#738C98]">
                 {dateStr}

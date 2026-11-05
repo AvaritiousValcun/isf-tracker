@@ -6,15 +6,38 @@ import { supabaseAdmin } from "../lib/supabaseAdmin";
 
 const router = Router();
 
+function extractClientOrigin(req: any) {
+  return (
+    req.body?.origin ||
+    req.headers.origin ||
+    req.headers.referer ||
+    undefined
+  );
+}
+
+function extractClientHost(req: any) {
+  return (
+    req.body?.hostname ||
+    req.headers["x-forwarded-host"] ||
+    req.headers.host ||
+    undefined
+  );
+}
+
 router.post(
   "/register/options",
   requireAuth,
   async (req: any, res, next) => {
     try {
+      const origin = extractClientOrigin(req);
+      const host = extractClientHost(req);
+
       const options =
         await PasskeyService.getRegistrationOptions(
           req.user.id,
           req.user.email,
+          origin,
+          host,
         );
 
       return res.json(options);
@@ -29,10 +52,15 @@ router.post(
   requireAuth,
   async (req: any, res, next) => {
     try {
+      const origin = extractClientOrigin(req);
+      const host = extractClientHost(req);
+
       const result =
         await PasskeyService.verifyRegistration(
           req.user.id,
           req.body,
+          origin,
+          host,
         );
 
       if (!result.verified) {
@@ -50,9 +78,14 @@ router.post(
   "/authenticate/options",
   async (req: any, res, next) => {
     try {
+      const origin = extractClientOrigin(req);
+      const host = extractClientHost(req);
+
       const options =
         await PasskeyService.getAuthenticationOptions(
           req.body?.email,
+          origin,
+          host,
         );
 
       return res.json(options);
@@ -66,24 +99,19 @@ router.post(
   "/authenticate/verify",
   async (req: any, res, next) => {
     try {
+      const origin = extractClientOrigin(req);
+      const host = extractClientHost(req);
+
       const result =
         await PasskeyService.verifyAuthentication(
           req.body,
+          origin,
+          host,
         );
 
       if (!result.verified) {
         return res.status(401).json(result);
       }
-
-      /*
-       * IMPORTANT:
-       *
-       * WebAuthn verification proves that the
-       * authenticator possesses the private key
-       * belonging to the registered credential.
-       *
-       * This endpoint returns the verified patient ID.
-       */
 
       return res.json({
         success: true,

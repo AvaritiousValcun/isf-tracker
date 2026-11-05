@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { PasskeyService } from "./passkeyService";
+import { PasskeyService, resolveRpConfig } from "./passkeyService";
 import { supabaseAdmin } from "../lib/supabaseAdmin";
 
 describe("PasskeyService Resilient Challenge and PostgREST Schema Fallback", () => {
@@ -26,6 +26,43 @@ describe("PasskeyService Resilient Challenge and PostgREST Schema Fallback", () 
           eq: vi.fn().mockResolvedValue({ error: null }),
         }),
       } as any;
+    });
+  });
+
+  describe("Dynamic RP ID & Origin Resolution", () => {
+    it("correctly resolves localhost when client visits from local development port", () => {
+      const config = resolveRpConfig("http://localhost:5173");
+      expect(config.rpID).toBe("localhost");
+      expect(config.origin).toBe("http://localhost:5173");
+    });
+
+    it("correctly resolves production Vercel domain when client visits from vercel.app", () => {
+      const config = resolveRpConfig("https://isf-tracker.vercel.app");
+      expect(config.rpID).toBe("isf-tracker.vercel.app");
+      expect(config.origin).toBe("https://isf-tracker.vercel.app");
+    });
+
+    it("correctly resolves preview deployment domain from host header", () => {
+      const config = resolveRpConfig(undefined, "isf-tracker-preview-git-test.vercel.app");
+      expect(config.rpID).toBe("isf-tracker-preview-git-test.vercel.app");
+      expect(config.origin).toBe("https://isf-tracker-preview-git-test.vercel.app");
+    });
+
+    it("generates options with dynamic rp.id matching client origin to avoid domain invalid errors", async () => {
+      const userId = "00000000-0000-4000-a000-000000000001";
+      const localOptions = await PasskeyService.getRegistrationOptions(
+        userId,
+        "test@example.com",
+        "http://localhost:5173",
+      );
+      expect(localOptions.rp.id).toBe("localhost");
+
+      const vercelOptions = await PasskeyService.getRegistrationOptions(
+        userId,
+        "test@example.com",
+        "https://isf-tracker.vercel.app",
+      );
+      expect(vercelOptions.rp.id).toBe("isf-tracker.vercel.app");
     });
   });
 

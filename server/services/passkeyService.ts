@@ -12,17 +12,6 @@ import { supabaseAdmin } from "../lib/supabaseAdmin";
 
 const RP_NAME = process.env.WEBAUTHN_RP_NAME || "ISF Tracker";
 
-const RP_ID =
-  process.env.WEBAUTHN_RP_ID ||
-  new URL(
-    process.env.FRONTEND_URL || "http://localhost:5173",
-  ).hostname;
-
-const ORIGIN =
-  process.env.WEBAUTHN_ORIGIN ||
-  process.env.FRONTEND_URL ||
-  "http://localhost:5173";
-
 export type StoredPasskey = {
   id: string;
   user_id: string;
@@ -56,6 +45,73 @@ function cleanupMemoryChallenges(): void {
       memoryChallengeStore.delete(key);
     }
   }
+}
+
+/**
+ * Dynamically resolves Relying Party configuration (RP ID and Origin)
+ * based on the client's current request domain. This prevents the WebAuthn error:
+ * "The RP ID '...' is invalid for this domain" when running on localhost,
+ * preview environments, or custom domains.
+ */
+export function resolveRpConfig(
+  clientOrigin?: string,
+  clientHost?: string,
+): {
+  rpName: string;
+  rpID: string;
+  origin: string;
+} {
+  let hostname = "";
+  let origin = "";
+
+  // 1. If client origin is provided (e.g., "http://localhost:5173" or "https://isf-tracker.vercel.app")
+  if (clientOrigin) {
+    try {
+      const url = new URL(clientOrigin);
+      hostname = url.hostname;
+      origin = url.origin;
+    } catch (_) {}
+  }
+
+  // 2. If host header is provided (e.g., "localhost:5173" or "isf-tracker.vercel.app")
+  if (!hostname && clientHost) {
+    try {
+      hostname = clientHost.split(":")[0];
+      const protocol =
+        hostname === "localhost" || hostname === "127.0.0.1"
+          ? "http"
+          : "https";
+      origin = `${protocol}://${clientHost}`;
+    } catch (_) {}
+  }
+
+  // 3. Fallback to environment variables or safe default
+  if (!hostname) {
+    if (process.env.WEBAUTHN_RP_ID) {
+      hostname = process.env.WEBAUTHN_RP_ID;
+    } else if (process.env.FRONTEND_URL) {
+      try {
+        hostname = new URL(process.env.FRONTEND_URL).hostname;
+      } catch (_) {
+        hostname = "localhost";
+      }
+    } else {
+      hostname = "localhost";
+    }
+  }
+
+  if (!origin) {
+    origin =
+      process.env.WEBAUTHN_ORIGIN ||
+      process.env.FRONTEND_URL ||
+      `http://${hostname}`;
+  }
+
+  return {
+    rpName: process.env.WEBAUTHN_RP_NAME || RP_NAME,
+    rpID: hostname,
+    origin,
+  };
 }
 
 /**
@@ -420,12 +476,16 @@ export class PasskeyService {
   }
 
   /**
-   * Generate WebAuthn registration options.
+   * Generate WebAuthn registration options with dynamic RP ID and origin detection.
    */
   static async getRegistrationOptions(
     userId: string,
     email?: string,
+    clientOrigin?: string,
+    clientHost?: string,
   ) {
+    const config = resolveRpConfig(clientOrigin, clientHost);
+
     const existingCredentials =
       await getCredentialsForUser(
         userId,
@@ -433,8 +493,8 @@ export class PasskeyService {
 
     const options =
       await generateRegistrationOptions({
-        rpName: RP_NAME,
-        rpID: RP_ID,
+        rpName: config.rpName,
+        rpID: config.rpID,
         userName:
           email ||
           `patient-${userId}`,
@@ -487,6 +547,8 @@ export class PasskeyService {
   static async verifyRegistration(
     userId: string,
     response: RegistrationResponseJSON,
+    clientOrigin?: string,
+    clientHost?: string,
   ) {
     const clientData =
       decodeClientData(
@@ -520,6 +582,9 @@ export class PasskeyService {
       };
     }
 
+    const detectedOrigin = clientData.origin || clientOrigin;
+    const config = resolveRpConfig(detectedOrigin, clientHost);
+
     let verification;
 
     try {
@@ -530,9 +595,9 @@ export class PasskeyService {
             expectedChallenge:
               challenge,
             expectedOrigin:
-              ORIGIN,
+              detectedOrigin || config.origin,
             expectedRPID:
-              RP_ID,
+              config.rpID,
             requireUserVerification:
               false,
           },
@@ -616,11 +681,15 @@ export class PasskeyService {
   }
 
   /**
-   * Generate authentication options.
+   * Generate authentication options with dynamic RP ID detection.
    */
   static async getAuthenticationOptions(
     email?: string,
+    clientOrigin?: string,
+    clientHost?: string,
   ) {
+    const config = resolveRpConfig(clientOrigin, clientHost);
+
     let userId:
       | string
       | undefined;
@@ -656,7 +725,7 @@ export class PasskeyService {
     const options =
       await generateAuthenticationOptions(
         {
-          rpID: RP_ID,
+          rpID: config.rpID,
 
           allowCredentials:
             credentials.map(
@@ -688,6 +757,8 @@ export class PasskeyService {
    */
   static async verifyAuthentication(
     response: AuthenticationResponseJSON,
+    clientOrigin?: string,
+    clientHost?: string,
   ) {
     const credentialId =
       response.id;
@@ -737,6 +808,9 @@ export class PasskeyService {
       };
     }
 
+    const detectedOrigin = clientData.origin || clientOrigin;
+    const config = resolveRpConfig(detectedOrigin, clientHost);
+
     let verification;
 
     try {
@@ -747,9 +821,9 @@ export class PasskeyService {
             expectedChallenge:
               challenge,
             expectedOrigin:
-              ORIGIN,
+              detectedOrigin || config.origin,
             expectedRPID:
-              RP_ID,
+              config.rpID,
 
             credential: {
               id: credential.credential_id,
