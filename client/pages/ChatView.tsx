@@ -15,12 +15,18 @@ import { t, type Language } from "@/lib/i18n";
 import { apiRequest } from "@/lib/api";
 import { generateClientConsultantReply } from "@/lib/clinicalBotFallback";
 import ClinicalReportExportModal from "@/components/ClinicalReportExportModal";
+import ClinicalFaqModal from "@/components/ClinicalFaqModal";
+import { CLINICAL_FAQ_ITEMS } from "@shared/clinicalFaq";
 import {
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Clock3,
   Copy,
   Check,
   ExternalLink,
+  HelpCircle,
+  BookOpen,
   LockKeyhole,
   MoreHorizontal,
   QrCode,
@@ -61,6 +67,8 @@ export default function ChatView({ language }: ChatViewProps) {
   const [qrOpen, setQrOpen] = useState(false);
   const [qrAccess, setQrAccess] = useState<QrAccess | null>(null);
   const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [faqModalOpen, setFaqModalOpen] = useState(false);
+  const [expandedFaqId, setExpandedFaqId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Local message store keyed by consultant ID to ensure instantaneous feedback & offline fallback
@@ -328,6 +336,15 @@ export default function ChatView({ language }: ChatViewProps) {
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
+          {/* Quick FAQ / Instant Answers Button */}
+          <button
+            onClick={() => setFaqModalOpen(true)}
+            className="flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#1C2F38] hover:bg-slate-100 dark:hover:bg-[#243C47] px-3.5 py-2.5 text-[12px] font-semibold text-slate-700 dark:text-[#E8F2F6] transition shadow-xs cursor-pointer"
+          >
+            <HelpCircle size={15} className="text-[#0EA5A4]" />
+            <span className="hidden sm:inline">Clinical Q&A</span>
+          </button>
+
           {/* Doctor-Ready Clinical Report Export Button */}
           <button
             onClick={() => setReportModalOpen(true)}
@@ -507,27 +524,93 @@ export default function ChatView({ language }: ChatViewProps) {
                   </div>
                 )}
 
-                {/* Quick Consultation Question Chips */}
-                <div className="pt-2">
-                  <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-2">
-                    Quick Clinical Questions:
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      "How are my latest hormone readings?",
-                      "What do my progesterone levels indicate?",
-                      "Can you explain my androgen pattern?",
-                      "When is my next predicted cycle transition?",
-                    ].map((promptText) => (
-                      <button
-                        key={promptText}
-                        onClick={() => handleSendMessage(promptText)}
-                        disabled={sending}
-                        className="rounded-full border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#1C2F38] px-3 py-1.5 text-[11px] font-medium text-slate-700 dark:text-[#E8F2F6] hover:border-[#0EA5A4] hover:bg-white dark:hover:bg-[#243C47] transition shadow-xs cursor-pointer disabled:opacity-50"
-                      >
-                        {promptText}
-                      </button>
-                    ))}
+                {/* Common Clinical Questions & Instant Answers Section */}
+                <div className="pt-3 border-t border-slate-200/60 dark:border-white/5 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#2C4C5C] dark:text-[#E8F2F6]">
+                      <Sparkles size={13} className="text-[#0EA5A4]" />
+                      <span>Frequently Asked Clinical Questions</span>
+                    </div>
+                    <button
+                      onClick={() => setFaqModalOpen(true)}
+                      className="text-[10px] font-semibold text-[#0EA5A4] hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <BookOpen size={11} /> Browse All Verified Answers
+                    </button>
+                  </div>
+
+                  {/* Interactive Cards with Instant Answer Toggle */}
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {CLINICAL_FAQ_ITEMS.slice(0, 4).map((item) => {
+                      const isExpanded = expandedFaqId === item.id;
+                      const type = consultant.professional_type.toLowerCase();
+                      const answerText = type.includes("endocrinologist")
+                        ? item.answers.endocrinologist
+                        : type.includes("gynecologist") || type.includes("ob/gyn")
+                        ? item.answers.obgyn
+                        : item.answers.default;
+
+                      return (
+                        <div
+                          key={item.id}
+                          className={`rounded-xl border p-2.5 transition text-left ${
+                            isExpanded
+                              ? "border-[#0EA5A4] bg-[#0EA5A4]/[0.03] dark:border-[#0EA5A4]/50 shadow-xs"
+                              : "border-slate-200/80 dark:border-white/10 bg-slate-50/70 dark:bg-[#1C2F38]/60 hover:border-[#0EA5A4]/50"
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-1.5">
+                            <div className="flex-1 min-w-0">
+                              <span className="inline-block rounded-md bg-[#2C4C5C]/5 dark:bg-white/10 px-1.5 py-0.5 text-[9px] font-bold text-[#2C4C5C] dark:text-[#A0B4BE] mb-1">
+                                {item.category}
+                              </span>
+                              <p className="text-[11px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6] leading-tight">
+                                {item.question}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Expanded Instant Answer */}
+                          {isExpanded && (
+                            <div className="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-white/10 text-[11px] leading-relaxed text-slate-700 dark:text-[#E8F2F6]/90 animate-in fade-in duration-150">
+                              <div className="flex items-center gap-1 text-[10px] font-bold text-[#0EA5A4] mb-1">
+                                <span>{consultant.full_name}'s Verified Answer:</span>
+                              </div>
+                              <p>{answerText}</p>
+                            </div>
+                          )}
+
+                          {/* Action Buttons */}
+                          <div className="mt-2 flex items-center justify-between gap-1.5 pt-1">
+                            <button
+                              onClick={() =>
+                                setExpandedFaqId(isExpanded ? null : item.id)
+                              }
+                              className="text-[10px] font-medium text-slate-500 hover:text-[#0EA5A4] dark:text-[#A0B4BE] flex items-center gap-1 cursor-pointer"
+                            >
+                              {isExpanded ? (
+                                <>
+                                  <ChevronUp size={12} /> Hide Answer
+                                </>
+                              ) : (
+                                <>
+                                  <ChevronDown size={12} /> Instant Answer
+                                </>
+                              )}
+                            </button>
+
+                            <button
+                              onClick={() => handleSendMessage(item.question)}
+                              disabled={sending}
+                              className="flex items-center gap-1 rounded-lg bg-[#2C4C5C] dark:bg-[#0EA5A4] px-2 py-1 text-[10px] font-bold text-white shadow-xs hover:opacity-90 disabled:opacity-50 transition cursor-pointer"
+                            >
+                              <Send size={10} />
+                              <span>Ask Doctor</span>
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -584,6 +667,14 @@ export default function ChatView({ language }: ChatViewProps) {
         onClose={() => setReportModalOpen(false)}
         patientName={profile?.full_name || "Amina Mwangi"}
         patientRef={profile?.patient_reference || "ISF-PT-2026-8841"}
+      />
+
+      {/* Clinical FAQ & Instant Answers Modal */}
+      <ClinicalFaqModal
+        isOpen={faqModalOpen}
+        onClose={() => setFaqModalOpen(false)}
+        consultant={consultant}
+        onSelectQuestion={(q) => handleSendMessage(q)}
       />
     </div>
   );

@@ -1,3 +1,5 @@
+import { matchClinicalFaq } from "@shared/clinicalFaq";
+
 export interface ConsultantProfile {
   id?: string;
   full_name: string;
@@ -9,6 +11,12 @@ export function generateClientConsultantReply(
   consultant: ConsultantProfile,
   patientMessage: string,
 ): string {
+  // 1. Direct match with curated clinical FAQ
+  const faqAnswer = matchClinicalFaq(patientMessage, consultant);
+  if (faqAnswer) {
+    return faqAnswer;
+  }
+
   const lower = patientMessage.toLowerCase();
 
   // Greetings

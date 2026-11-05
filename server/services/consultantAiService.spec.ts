@@ -111,4 +111,48 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
     expect(typeof reply).toBe("string");
     expect(reply.length).toBeGreaterThan(20);
   });
+
+  describe("Curated Clinical FAQ hardcoded matches", () => {
+    it("should match 'How are my latest hormone readings?' with accurate clinical telemetry answers", async () => {
+      const reply = await ConsultantAiService.generateReply(
+        drAmina,
+        testPatientUserId,
+        "How are my latest hormone readings?"
+      );
+      expect(reply).toContain("19.8 ng/mL");
+      expect(reply).toContain("38.2 ng/dL");
+      expect(reply.toLowerCase()).toContain("estradiol velocity");
+    });
+
+    it("should match 'What do my progesterone levels indicate?' with ovulatory confirmation", async () => {
+      const reply = await ConsultantAiService.generateReply(
+        drAmina,
+        testPatientUserId,
+        "What do my progesterone levels indicate?"
+      );
+      expect(reply).toContain("19.8 ng/mL");
+      expect(reply.toLowerCase()).toContain("ovulation");
+      expect(reply.toLowerCase()).toContain("secretory phase");
+    });
+
+    it("should match 'Can you explain my androgen pattern?' with stable baseline details", async () => {
+      const reply = await ConsultantAiService.generateReply(
+        drAmina,
+        testPatientUserId,
+        "Can you explain my androgen pattern?"
+      );
+      expect(reply).toContain("38.2 ng/dL");
+      expect(reply.toLowerCase()).toContain("threshold of 45 ng/dl");
+    });
+
+    it("should match 'When is my next predicted cycle transition?' with 6-7 day forecast", async () => {
+      const reply = await ConsultantAiService.generateReply(
+        drAmina,
+        testPatientUserId,
+        "When is my next predicted cycle transition?"
+      );
+      expect(reply.toLowerCase()).toContain("6 to 7 days");
+      expect(reply.toLowerCase()).toContain("luteal-to-follicular");
+    });
+  });
 });

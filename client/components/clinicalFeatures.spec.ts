@@ -54,5 +54,36 @@ describe("Clinical Features & Velocity Models", () => {
       expect(reply).toContain("18.2 ng/mL");
       expect(reply).toContain("luteal curve");
     });
+
+    describe("Hardcoded Curated Questions Matching Answers", () => {
+      const drAmina = {
+        full_name: "Dr. Amina Patel",
+        professional_type: "Reproductive Endocrinologist",
+      };
+
+      it("answers 'How are my latest hormone readings?' with exact telemetry", () => {
+        const reply = generateClientConsultantReply(drAmina, "How are my latest hormone readings?");
+        expect(reply).toContain("19.8 ng/mL");
+        expect(reply).toContain("38.2 ng/dL");
+        expect(reply.toLowerCase()).toContain("estradiol velocity");
+      });
+
+      it("answers 'What do my progesterone levels indicate?' with ovulatory confirmation", () => {
+        const reply = generateClientConsultantReply(drAmina, "What do my progesterone levels indicate?");
+        expect(reply).toContain("19.8 ng/mL");
+        expect(reply.toLowerCase()).toContain("secretory phase");
+      });
+
+      it("answers 'Can you explain my androgen pattern?' with stable baseline details", () => {
+        const reply = generateClientConsultantReply(drAmina, "Can you explain my androgen pattern?");
+        expect(reply).toContain("38.2 ng/dL");
+        expect(reply.toLowerCase()).toContain("threshold of 45 ng/dl");
+      });
+
+      it("answers 'When is my next predicted cycle transition?' with 6-7 day forecast", () => {
+        const reply = generateClientConsultantReply(drAmina, "When is my next predicted cycle transition?");
+        expect(reply.toLowerCase()).toContain("6 to 7 days");
+      });
+    });
   });
 });

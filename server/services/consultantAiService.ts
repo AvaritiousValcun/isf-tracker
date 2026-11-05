@@ -1,4 +1,5 @@
 import { supabaseAdmin } from "../lib/supabaseAdmin";
+import { matchClinicalFaq } from "../../shared/clinicalFaq";
 
 export interface ConsultantContext {
   id: string;
@@ -33,6 +34,12 @@ export class ConsultantAiService {
     patientMessage: string,
     history: ChatHistoryItem[] = []
   ): Promise<string> {
+    // 0. High-priority clinical FAQ match for instant, authoritative answers
+    const faqMatch = matchClinicalFaq(patientMessage, consultant);
+    if (faqMatch) {
+      return faqMatch;
+    }
+
     // 1. Fetch patient's recent hormone readings for clinical context (fast with timeout)
     let readingsContext = "";
     try {
@@ -127,6 +134,11 @@ Guidelines:
     consultant: ConsultantContext,
     message: string
   ): string {
+    const faqMatch = matchClinicalFaq(message, consultant);
+    if (faqMatch) {
+      return faqMatch;
+    }
+
     const lower = message.toLowerCase();
     const isEndo = consultant.professional_type.toLowerCase().includes("endocrinologist");
 
