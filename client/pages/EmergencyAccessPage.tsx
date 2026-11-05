@@ -9,6 +9,7 @@ import {
   Clock3,
   HeartPulse,
   LockKeyhole,
+  Printer,
   RefreshCw,
   ShieldCheck,
   UserRound,
@@ -352,15 +353,26 @@ export default function EmergencyAccessPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 rounded-xl border border-[#2C4C5C]/10 bg-[#2C4C5C]/[0.04] px-3 py-2">
-              <ShieldCheck
-                size={16}
-                className="text-[#2C4C5C]"
-              />
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-[11px] font-semibold text-[#2C4C5C] hover:bg-slate-50 transition shadow-xs print:hidden cursor-pointer"
+              >
+                <Printer size={14} />
+                <span>Print Summary</span>
+              </button>
 
-              <span className="text-[11px] font-semibold">
-                Time-limited access
-              </span>
+              <div className="flex items-center gap-2 rounded-xl border border-[#2C4C5C]/10 bg-[#2C4C5C]/[0.04] px-3 py-2">
+                <ShieldCheck
+                  size={16}
+                  className="text-[#2C4C5C]"
+                />
+
+                <span className="text-[11px] font-semibold">
+                  Time-limited access
+                </span>
+              </div>
             </div>
           </div>
 
