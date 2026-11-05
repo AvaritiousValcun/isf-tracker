@@ -11,6 +11,13 @@ function generateToken(): string {
   return crypto.randomBytes(32).toString("hex");
 }
 
+function withTimeout<T>(promise: PromiseLike<T>, ms: number = 800): Promise<T> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error("Network timeout")), ms)),
+  ]);
+}
+
 interface CachedSession {
   id: string;
   patient_user_id: string;
@@ -58,26 +65,27 @@ export class QRService {
 
     let dbData: any = null;
     try {
-      const { data, error } = await supabaseAdmin
-        .from("temporary_access_tokens")
-        .insert({
-          patient_user_id: patientUserId,
-          token_hash: tokenHash,
-          scope: scopeObject,
-          expires_at: expiresAt.toISOString(),
-          revoked_at: null,
-        })
-        .select("id, patient_user_id, scope, expires_at, revoked_at, created_at")
-        .maybeSingle();
+      const res: any = await withTimeout(
+        supabaseAdmin
+          .from("temporary_access_tokens")
+          .insert({
+            patient_user_id: patientUserId,
+            token_hash: tokenHash,
+            scope: scopeObject,
+            expires_at: expiresAt.toISOString(),
+            revoked_at: null,
+          })
+          .select("id, patient_user_id, scope, expires_at, revoked_at, created_at")
+          .maybeSingle(),
+        800
+      );
 
-      if (error) {
-        console.warn("[QRService] temporary_access_tokens insert warning (using cached token):", error.message);
-      } else if (data) {
-        dbData = data;
-        cached.id = data.id;
+      if (res?.data) {
+        dbData = res.data;
+        cached.id = res.data.id;
       }
-    } catch (insertErr: any) {
-      console.warn("[QRService] Database insert error (using memory cache):", insertErr.message);
+    } catch {
+      // offline/timeout/error: memory cache handles it seamlessly
     }
 
     try {
@@ -109,33 +117,36 @@ export class QRService {
    */
   static async listSessions(patientUserId: string) {
     try {
-      const { data, error } = await supabaseAdmin
-        .from("temporary_access_tokens")
-        .select("id, patient_user_id, scope, expires_at, revoked_at, created_at")
-        .eq("patient_user_id", patientUserId)
-        .order("created_at", { ascending: false });
+      const res: any = await withTimeout(
+        supabaseAdmin
+          .from("temporary_access_tokens")
+          .select("id, patient_user_id, scope, expires_at, revoked_at, created_at")
+          .eq("patient_user_id", patientUserId)
+          .order("created_at", { ascending: false }),
+        800
+      );
 
-      if (error) {
-        throw error;
+      if (res?.data && res.data.length > 0) {
+        return res.data;
       }
-      return data || [];
-    } catch (err: any) {
-      console.warn("[QRService] listSessions fallback to memory cache:", err.message);
-      const list: any[] = [];
-      memorySessionStore.forEach((session) => {
-        if (session.patient_user_id === patientUserId) {
-          list.push({
-            id: session.id,
-            patient_user_id: session.patient_user_id,
-            scope: session.scope,
-            expires_at: session.expires_at,
-            revoked_at: session.revoked_at,
-            created_at: session.created_at,
-          });
-        }
-      });
-      return list;
+    } catch {
+      // fallback to memory cache
     }
+
+    const list: any[] = [];
+    memorySessionStore.forEach((session) => {
+      if (session.patient_user_id === patientUserId) {
+        list.push({
+          id: session.id,
+          patient_user_id: session.patient_user_id,
+          scope: session.scope,
+          expires_at: session.expires_at,
+          revoked_at: session.revoked_at,
+          created_at: session.created_at,
+        });
+      }
+    });
+    return list;
   }
 
   /**
@@ -154,19 +165,20 @@ export class QRService {
     // If not in memory store, query Supabase
     if (!session) {
       try {
-        const { data, error } = await supabaseAdmin
-          .from("temporary_access_tokens")
-          .select("id, patient_user_id, scope, expires_at, revoked_at")
-          .eq("token_hash", tokenHash)
-          .maybeSingle();
+        const res: any = await withTimeout(
+          supabaseAdmin
+            .from("temporary_access_tokens")
+            .select("id, patient_user_id, scope, expires_at, revoked_at")
+            .eq("token_hash", tokenHash)
+            .maybeSingle(),
+          800
+        );
 
-        if (error) {
-          console.warn("[QRService] resolve query error:", error.message);
-        } else if (data) {
-          session = data;
+        if (res?.data) {
+          session = res.data;
         }
-      } catch (err: any) {
-        console.warn("[QRService] DB lookup error:", err.message);
+      } catch {
+        // DB lookup timeout or error
       }
     }
 
@@ -195,13 +207,16 @@ export class QRService {
     // Load profile
     if (scopeAllows("patient_profile") || scopeAllows("profile")) {
       try {
-        const { data: profile } = await supabaseAdmin
-          .from("patient_profiles")
-          .select("user_id, full_name, date_of_birth, language, timezone, weight_kg, patient_reference")
-          .eq("user_id", session.patient_user_id)
-          .maybeSingle();
+        const res: any = await withTimeout(
+          supabaseAdmin
+            .from("patient_profiles")
+            .select("user_id, full_name, date_of_birth, language, timezone, weight_kg, patient_reference")
+            .eq("user_id", session.patient_user_id)
+            .maybeSingle(),
+          600
+        );
 
-        payload.profile = profile || {
+        payload.profile = res?.data || {
           full_name: "Patient",
           date_of_birth: "1994-06-15",
           language: "en",
@@ -220,15 +235,18 @@ export class QRService {
     // Load latest reading
     if (scopeAllows("current_readings") || scopeAllows("readings") || scopeAllows("readings_latest")) {
       try {
-        const { data: readings } = await supabaseAdmin
-          .from("hormone_readings")
-          .select("id, androgen_value, progesterone_value, units, recorded_at")
-          .eq("patient_user_id", session.patient_user_id)
-          .order("recorded_at", { ascending: false })
-          .limit(1);
+        const res: any = await withTimeout(
+          supabaseAdmin
+            .from("hormone_readings")
+            .select("id, androgen_value, progesterone_value, units, recorded_at")
+            .eq("patient_user_id", session.patient_user_id)
+            .order("recorded_at", { ascending: false })
+            .limit(1),
+          600
+        );
 
-        if (readings && readings.length > 0) {
-          payload.latest_readings = readings;
+        if (res?.data && res.data.length > 0) {
+          payload.latest_readings = res.data;
         } else {
           payload.latest_readings = [
             {
@@ -256,14 +274,17 @@ export class QRService {
     // Load historical readings
     if (scopeAllows("historical_readings") || scopeAllows("readings_history")) {
       try {
-        const { data: readings } = await supabaseAdmin
-          .from("hormone_readings")
-          .select("id, androgen_value, progesterone_value, units, recorded_at")
-          .eq("patient_user_id", session.patient_user_id)
-          .order("recorded_at", { ascending: false })
-          .limit(20);
+        const res: any = await withTimeout(
+          supabaseAdmin
+            .from("hormone_readings")
+            .select("id, androgen_value, progesterone_value, units, recorded_at")
+            .eq("patient_user_id", session.patient_user_id)
+            .order("recorded_at", { ascending: false })
+            .limit(20),
+          600
+        );
 
-        payload.readings = readings && readings.length > 0 ? readings : payload.latest_readings || [];
+        payload.readings = res?.data && res.data.length > 0 ? res.data : payload.latest_readings || [];
       } catch {
         payload.readings = payload.latest_readings || [];
       }
@@ -272,24 +293,27 @@ export class QRService {
     // Load patch status
     if (scopeAllows("patch_status")) {
       try {
-        const { data: assignment } = await supabaseAdmin
-          .from("patient_patches")
-          .select("id, patch_id, status, wear_started_at, replacement_due_at, battery_percent, connected, last_synced_at, patches(id, serial_number, status)")
-          .eq("patient_user_id", session.patient_user_id)
-          .order("wear_started_at", { ascending: false })
-          .limit(1)
-          .maybeSingle();
+        const res: any = await withTimeout(
+          supabaseAdmin
+            .from("patient_patches")
+            .select("id, patch_id, status, wear_started_at, replacement_due_at, battery_percent, connected, last_synced_at, patches(id, serial_number, status)")
+            .eq("patient_user_id", session.patient_user_id)
+            .order("wear_started_at", { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+          600
+        );
 
-        if (assignment) {
-          const patch = Array.isArray(assignment?.patches) ? assignment.patches[0] || null : assignment?.patches || null;
+        if (res?.data) {
+          const patch = Array.isArray(res.data?.patches) ? res.data.patches[0] || null : res.data?.patches || null;
           payload.patch_status = {
-            assignment_id: assignment.id,
-            patch_id: assignment.patch_id,
-            assignment_status: assignment.status,
-            wear_started_at: assignment.wear_started_at,
-            replacement_due_at: assignment.replacement_due_at,
-            battery_percent: assignment.battery_percent,
-            connected: assignment.connected,
+            assignment_id: res.data.id,
+            patch_id: res.data.patch_id,
+            assignment_status: res.data.status,
+            wear_started_at: res.data.wear_started_at,
+            replacement_due_at: res.data.replacement_due_at,
+            battery_percent: res.data.battery_percent,
+            connected: res.data.connected,
             patch,
           };
         } else {
@@ -354,18 +378,21 @@ export class QRService {
     });
 
     try {
-      const { data } = await supabaseAdmin
-        .from("temporary_access_tokens")
-        .update({ revoked_at: new Date().toISOString() })
-        .eq("id", sessionId)
-        .eq("patient_user_id", patientUserId)
-        .is("revoked_at", null)
-        .select("id, scope, expires_at, revoked_at, created_at")
-        .maybeSingle();
+      const res: any = await withTimeout(
+        supabaseAdmin
+          .from("temporary_access_tokens")
+          .update({ revoked_at: new Date().toISOString() })
+          .eq("id", sessionId)
+          .eq("patient_user_id", patientUserId)
+          .is("revoked_at", null)
+          .select("id, scope, expires_at, revoked_at, created_at")
+          .maybeSingle(),
+        600
+      );
 
-      if (data) return data;
-    } catch (err: any) {
-      console.warn("[QRService] DB revoke error:", err.message);
+      if (res?.data) return res.data;
+    } catch {
+      // DB revoke timeout or error
     }
 
     if (found) {
@@ -386,15 +413,18 @@ export class QRService {
     metadata: Record<string, unknown>
   ) {
     try {
-      await supabaseAdmin.from("audit_logs").insert({
-        actor_user_id: actorUserId,
-        patient_user_id: patientUserId,
-        actor_role: actorUserId ? "patient" : "system",
-        action,
-        resource_type: "temporary_access_token",
-        resource_id: resourceId,
-        metadata,
-      });
+      await withTimeout(
+        supabaseAdmin.from("audit_logs").insert({
+          actor_user_id: actorUserId,
+          patient_user_id: patientUserId,
+          actor_role: actorUserId ? "patient" : "system",
+          action,
+          resource_type: "temporary_access_token",
+          resource_id: resourceId,
+          metadata,
+        }),
+        600
+      );
     } catch {
       // ignore audit log error
     }

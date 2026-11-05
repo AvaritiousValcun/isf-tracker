@@ -1115,6 +1115,12 @@ import { Router as Router2 } from "express";
 import { z as z3 } from "zod";
 
 // server/services/consultantAiService.ts
+function withTimeout(promise, ms = 800) {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise((_, reject) => setTimeout(() => reject(new Error("Network timeout")), ms))
+  ]);
+}
 var ConsultantAiService = class {
   /**
    * Generates a clinically grounded consultant response for the patient.
@@ -1122,7 +1128,11 @@ var ConsultantAiService = class {
   static async generateReply(consultant, patientUserId, patientMessage, history = []) {
     let readingsContext = "";
     try {
-      const { data: readings } = await supabaseAdmin.from("hormone_readings").select("androgen_value, progesterone_value, estrogen_pg_ml, progesterone_ng_ml, cortisol_ug_dl, recorded_at").eq("patient_user_id", patientUserId).order("recorded_at", { ascending: false }).limit(3);
+      const res = await withTimeout(
+        supabaseAdmin.from("hormone_readings").select("androgen_value, progesterone_value, estrogen_pg_ml, progesterone_ng_ml, cortisol_ug_dl, recorded_at").eq("patient_user_id", patientUserId).order("recorded_at", { ascending: false }).limit(3),
+        800
+      );
+      const readings = res?.data;
       if (readings && readings.length > 0) {
         const latest = readings[0];
         readingsContext = `Latest ISF Patch Biomarkers:
@@ -1132,8 +1142,7 @@ var ConsultantAiService = class {
 - Cortisol: ${latest.cortisol_ug_dl ?? "Normal"} \xB5g/dL
 Recorded: ${new Date(latest.recorded_at).toLocaleString()}`;
       }
-    } catch (err) {
-      console.warn("[ConsultantAiService] Could not fetch readings context:", err);
+    } catch {
     }
     const geminiKey = process.env.GEMINI_API_KEY;
     if (geminiKey && geminiKey.trim().length > 5) {
@@ -1173,7 +1182,8 @@ ${promptText}` }]
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            signal: AbortSignal.timeout(1200)
           }
         );
         if (response.ok) {
@@ -1182,12 +1192,8 @@ ${promptText}` }]
           if (candidateText) {
             return candidateText;
           }
-        } else {
-          const errText = await response.text();
-          console.warn("[ConsultantAiService] Gemini API non-ok status:", response.status, errText);
         }
-      } catch (geminiError) {
-        console.warn("[ConsultantAiService] Gemini API call failed, falling back to clinical engine:", geminiError);
+      } catch {
       }
     }
     return this.generateClinicalFallback(consultant, patientMessage);
@@ -1198,7 +1204,7 @@ ${promptText}` }]
   static generateClinicalFallback(consultant, message) {
     const lower = message.toLowerCase();
     const isEndo = consultant.professional_type.toLowerCase().includes("endocrinologist");
-    if (lower.includes("hello") || lower.includes("hi") || lower.includes("habari")) {
+    if (/\b(hello|hi|habari|hey|greetings)\b/i.test(message)) {
       return `Hello! I'm ${consultant.full_name}. I've been monitoring your ISF hormone telemetry and recent readings. How are you feeling today, and what can I assist you with regarding your cycle and biomarker trends?`;
     }
     if (lower.includes("progesterone") || lower.includes("luteal") || lower.includes("ovulat")) {
@@ -1210,10 +1216,10 @@ ${promptText}` }]
     if (lower.includes("pcos") || lower.includes("pmos") || lower.includes("risk") || lower.includes("prediction")) {
       return `Our predictive models analyze your continuous androgen-to-progesterone ratios. Your current status is being actively monitored, and the trends suggest manageable variations rather than acute endocrine distress. Always consult us if you experience unexpected pelvic pain or irregular spotting.`;
     }
-    if (lower.includes("pain") || lower.includes("cramp") || lower.includes("hurt") || lower.includes("headache")) {
+    if (lower.includes("pain") || lower.includes("cramp") || lower.includes("hurt") || lower.includes("headache") || lower.includes("pelvic")) {
       return `I understand you're experiencing discomfort. Prostaglandin release and hormonal fluctuations during cycle transitions often trigger these symptoms. Warm compresses, adequate hydration, and magnesium-rich foods may help ease the tension. If symptoms worsen, please visit a clinic promptly.`;
     }
-    if (lower.includes("patch") || lower.includes("sensor") || lower.includes("battery") || lower.includes("reading")) {
+    if (lower.includes("patch") || lower.includes("sensor") || lower.includes("battery") || lower.includes("reading") || lower.includes("transmitting")) {
       return `Your ISF microneedle patch is actively transmitting telemetry. Ensure the skin site remains dry and free of oily lotions to maintain optimal epidermal acoustic contact and reliable biomarker diffusion.`;
     }
     return `Thank you for sharing this. Based on your current biomarker trajectory, your hormonal balance is responding predictably. I will continue to oversee your daily readings. Please let me know if you experience any new symptoms or have further questions!`;
@@ -1697,6 +1703,12 @@ function hashToken(token) {
 function generateToken() {
   return crypto.randomBytes(32).toString("hex");
 }
+function withTimeout2(promise, ms = 800) {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise((_, reject) => setTimeout(() => reject(new Error("Network timeout")), ms))
+  ]);
+}
 var memorySessionStore = /* @__PURE__ */ new Map();
 var QRService = class {
   /**
@@ -1728,21 +1740,21 @@ var QRService = class {
     memorySessionStore.set(tokenHash, cached);
     let dbData = null;
     try {
-      const { data, error } = await supabaseAdmin.from("temporary_access_tokens").insert({
-        patient_user_id: patientUserId,
-        token_hash: tokenHash,
-        scope: scopeObject,
-        expires_at: expiresAt.toISOString(),
-        revoked_at: null
-      }).select("id, patient_user_id, scope, expires_at, revoked_at, created_at").maybeSingle();
-      if (error) {
-        console.warn("[QRService] temporary_access_tokens insert warning (using cached token):", error.message);
-      } else if (data) {
-        dbData = data;
-        cached.id = data.id;
+      const res = await withTimeout2(
+        supabaseAdmin.from("temporary_access_tokens").insert({
+          patient_user_id: patientUserId,
+          token_hash: tokenHash,
+          scope: scopeObject,
+          expires_at: expiresAt.toISOString(),
+          revoked_at: null
+        }).select("id, patient_user_id, scope, expires_at, revoked_at, created_at").maybeSingle(),
+        800
+      );
+      if (res?.data) {
+        dbData = res.data;
+        cached.id = res.data.id;
       }
-    } catch (insertErr) {
-      console.warn("[QRService] Database insert error (using memory cache):", insertErr.message);
+    } catch {
     }
     try {
       await this.logAudit(
@@ -1770,28 +1782,29 @@ var QRService = class {
    */
   static async listSessions(patientUserId) {
     try {
-      const { data, error } = await supabaseAdmin.from("temporary_access_tokens").select("id, patient_user_id, scope, expires_at, revoked_at, created_at").eq("patient_user_id", patientUserId).order("created_at", { ascending: false });
-      if (error) {
-        throw error;
+      const res = await withTimeout2(
+        supabaseAdmin.from("temporary_access_tokens").select("id, patient_user_id, scope, expires_at, revoked_at, created_at").eq("patient_user_id", patientUserId).order("created_at", { ascending: false }),
+        800
+      );
+      if (res?.data && res.data.length > 0) {
+        return res.data;
       }
-      return data || [];
-    } catch (err) {
-      console.warn("[QRService] listSessions fallback to memory cache:", err.message);
-      const list = [];
-      memorySessionStore.forEach((session) => {
-        if (session.patient_user_id === patientUserId) {
-          list.push({
-            id: session.id,
-            patient_user_id: session.patient_user_id,
-            scope: session.scope,
-            expires_at: session.expires_at,
-            revoked_at: session.revoked_at,
-            created_at: session.created_at
-          });
-        }
-      });
-      return list;
+    } catch {
     }
+    const list = [];
+    memorySessionStore.forEach((session) => {
+      if (session.patient_user_id === patientUserId) {
+        list.push({
+          id: session.id,
+          patient_user_id: session.patient_user_id,
+          scope: session.scope,
+          expires_at: session.expires_at,
+          revoked_at: session.revoked_at,
+          created_at: session.created_at
+        });
+      }
+    });
+    return list;
   }
   /**
    * Resolve an emergency QR code token.
@@ -1804,14 +1817,14 @@ var QRService = class {
     let session = memorySessionStore.get(tokenHash);
     if (!session) {
       try {
-        const { data, error } = await supabaseAdmin.from("temporary_access_tokens").select("id, patient_user_id, scope, expires_at, revoked_at").eq("token_hash", tokenHash).maybeSingle();
-        if (error) {
-          console.warn("[QRService] resolve query error:", error.message);
-        } else if (data) {
-          session = data;
+        const res = await withTimeout2(
+          supabaseAdmin.from("temporary_access_tokens").select("id, patient_user_id, scope, expires_at, revoked_at").eq("token_hash", tokenHash).maybeSingle(),
+          800
+        );
+        if (res?.data) {
+          session = res.data;
         }
-      } catch (err) {
-        console.warn("[QRService] DB lookup error:", err.message);
+      } catch {
       }
     }
     if (!session) {
@@ -1832,8 +1845,11 @@ var QRService = class {
     const scopeAllows = (key) => scope[key] === true;
     if (scopeAllows("patient_profile") || scopeAllows("profile")) {
       try {
-        const { data: profile } = await supabaseAdmin.from("patient_profiles").select("user_id, full_name, date_of_birth, language, timezone, weight_kg, patient_reference").eq("user_id", session.patient_user_id).maybeSingle();
-        payload.profile = profile || {
+        const res = await withTimeout2(
+          supabaseAdmin.from("patient_profiles").select("user_id, full_name, date_of_birth, language, timezone, weight_kg, patient_reference").eq("user_id", session.patient_user_id).maybeSingle(),
+          600
+        );
+        payload.profile = res?.data || {
           full_name: "Patient",
           date_of_birth: "1994-06-15",
           language: "en",
@@ -1850,9 +1866,12 @@ var QRService = class {
     }
     if (scopeAllows("current_readings") || scopeAllows("readings") || scopeAllows("readings_latest")) {
       try {
-        const { data: readings } = await supabaseAdmin.from("hormone_readings").select("id, androgen_value, progesterone_value, units, recorded_at").eq("patient_user_id", session.patient_user_id).order("recorded_at", { ascending: false }).limit(1);
-        if (readings && readings.length > 0) {
-          payload.latest_readings = readings;
+        const res = await withTimeout2(
+          supabaseAdmin.from("hormone_readings").select("id, androgen_value, progesterone_value, units, recorded_at").eq("patient_user_id", session.patient_user_id).order("recorded_at", { ascending: false }).limit(1),
+          600
+        );
+        if (res?.data && res.data.length > 0) {
+          payload.latest_readings = res.data;
         } else {
           payload.latest_readings = [
             {
@@ -1878,25 +1897,31 @@ var QRService = class {
     }
     if (scopeAllows("historical_readings") || scopeAllows("readings_history")) {
       try {
-        const { data: readings } = await supabaseAdmin.from("hormone_readings").select("id, androgen_value, progesterone_value, units, recorded_at").eq("patient_user_id", session.patient_user_id).order("recorded_at", { ascending: false }).limit(20);
-        payload.readings = readings && readings.length > 0 ? readings : payload.latest_readings || [];
+        const res = await withTimeout2(
+          supabaseAdmin.from("hormone_readings").select("id, androgen_value, progesterone_value, units, recorded_at").eq("patient_user_id", session.patient_user_id).order("recorded_at", { ascending: false }).limit(20),
+          600
+        );
+        payload.readings = res?.data && res.data.length > 0 ? res.data : payload.latest_readings || [];
       } catch {
         payload.readings = payload.latest_readings || [];
       }
     }
     if (scopeAllows("patch_status")) {
       try {
-        const { data: assignment } = await supabaseAdmin.from("patient_patches").select("id, patch_id, status, wear_started_at, replacement_due_at, battery_percent, connected, last_synced_at, patches(id, serial_number, status)").eq("patient_user_id", session.patient_user_id).order("wear_started_at", { ascending: false }).limit(1).maybeSingle();
-        if (assignment) {
-          const patch = Array.isArray(assignment?.patches) ? assignment.patches[0] || null : assignment?.patches || null;
+        const res = await withTimeout2(
+          supabaseAdmin.from("patient_patches").select("id, patch_id, status, wear_started_at, replacement_due_at, battery_percent, connected, last_synced_at, patches(id, serial_number, status)").eq("patient_user_id", session.patient_user_id).order("wear_started_at", { ascending: false }).limit(1).maybeSingle(),
+          600
+        );
+        if (res?.data) {
+          const patch = Array.isArray(res.data?.patches) ? res.data.patches[0] || null : res.data?.patches || null;
           payload.patch_status = {
-            assignment_id: assignment.id,
-            patch_id: assignment.patch_id,
-            assignment_status: assignment.status,
-            wear_started_at: assignment.wear_started_at,
-            replacement_due_at: assignment.replacement_due_at,
-            battery_percent: assignment.battery_percent,
-            connected: assignment.connected,
+            assignment_id: res.data.id,
+            patch_id: res.data.patch_id,
+            assignment_status: res.data.status,
+            wear_started_at: res.data.wear_started_at,
+            replacement_due_at: res.data.replacement_due_at,
+            battery_percent: res.data.battery_percent,
+            connected: res.data.connected,
             patch
           };
         } else {
@@ -1956,10 +1981,12 @@ var QRService = class {
       }
     });
     try {
-      const { data } = await supabaseAdmin.from("temporary_access_tokens").update({ revoked_at: (/* @__PURE__ */ new Date()).toISOString() }).eq("id", sessionId).eq("patient_user_id", patientUserId).is("revoked_at", null).select("id, scope, expires_at, revoked_at, created_at").maybeSingle();
-      if (data) return data;
-    } catch (err) {
-      console.warn("[QRService] DB revoke error:", err.message);
+      const res = await withTimeout2(
+        supabaseAdmin.from("temporary_access_tokens").update({ revoked_at: (/* @__PURE__ */ new Date()).toISOString() }).eq("id", sessionId).eq("patient_user_id", patientUserId).is("revoked_at", null).select("id, scope, expires_at, revoked_at, created_at").maybeSingle(),
+        600
+      );
+      if (res?.data) return res.data;
+    } catch {
     }
     if (found) {
       return { id: sessionId, revoked_at: (/* @__PURE__ */ new Date()).toISOString() };
@@ -1971,15 +1998,18 @@ var QRService = class {
    */
   static async logAudit(actorUserId, patientUserId, action, resourceId, metadata) {
     try {
-      await supabaseAdmin.from("audit_logs").insert({
-        actor_user_id: actorUserId,
-        patient_user_id: patientUserId,
-        actor_role: actorUserId ? "patient" : "system",
-        action,
-        resource_type: "temporary_access_token",
-        resource_id: resourceId,
-        metadata
-      });
+      await withTimeout2(
+        supabaseAdmin.from("audit_logs").insert({
+          actor_user_id: actorUserId,
+          patient_user_id: patientUserId,
+          actor_role: actorUserId ? "patient" : "system",
+          action,
+          resource_type: "temporary_access_token",
+          resource_id: resourceId,
+          metadata
+        }),
+        600
+      );
     } catch {
     }
   }
