@@ -29,14 +29,9 @@ export function generateClientConsultantReply(
     return `Looking at your latest continuous ISF telemetry, your progesterone is averaging 18.2 ng/mL with a healthy luteal curve. Normal luteal progesterone ranges between 5.0 and 25.0 ng/mL, confirming robust secretory endometrium support. No sudden luteal drops have been flagged. Are you experiencing any breast tenderness or mood changes?`;
   }
 
-  // Androgen / Testosterone questions
+  // Free Testosterone questions
   if (lower.includes("androgen") || lower.includes("testosterone") || lower.includes("chin") || lower.includes("hair") || lower.includes("acne")) {
-    return `Your continuous androgen readings are currently steady at 38 ng/dL, safely beneath the elevated threshold of 45 ng/dL. This indicates stable follicular androgen metabolism without hyperandrogenic surges today. We will keep monitoring for any cyclical androgen spikes.`;
-  }
-
-  // Estrogen / Estradiol questions
-  if (lower.includes("estrogen") || lower.includes("estradiol") || lower.includes("velocity")) {
-    return `Your estradiol velocity is tracking smoothly at approximately -11.0 pg/mL/day, which is characteristic of the mid-to-late luteal descent. Your estrogen-to-progesterone ratio remains well balanced, minimizing risk of estrogen dominance symptoms.`;
+    return `Your continuous free testosterone readings are currently steady at 38 ng/dL, safely beneath the elevated threshold of 45 ng/dL. This indicates stable follicular androgen metabolism without hyperandrogenic surges today. We will keep monitoring your free testosterone to ensure it remains well balanced.`;
   }
 
   // Prediction / Risk / PCOS / Insulin resistance

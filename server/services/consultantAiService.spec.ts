@@ -54,7 +54,7 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
 
     expect(reply).toBeDefined();
     expect(typeof reply).toBe("string");
-    expect(reply.toLowerCase()).toContain("androgen");
+    expect(reply.toLowerCase()).toContain("free testosterone");
     expect(reply.toLowerCase()).toMatch(/trend|average|moving|monitor|observe/);
   });
 
@@ -121,7 +121,7 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
       );
       expect(reply).toContain("19.8 ng/mL");
       expect(reply).toContain("38.2 ng/dL");
-      expect(reply.toLowerCase()).toContain("estradiol velocity");
+      expect(reply.toLowerCase()).toContain("free testosterone");
     });
 
     it("should match 'What do my progesterone levels indicate?' with ovulatory confirmation", async () => {
@@ -145,14 +145,14 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
       expect(reply.toLowerCase()).toContain("threshold of 45 ng/dl");
     });
 
-    it("should match 'When is my next predicted cycle transition?' with 6-7 day forecast", async () => {
+    it("should match 'What lifestyle adjustments support my current cycle phase?' with clinical recommendations", async () => {
       const reply = await ConsultantAiService.generateReply(
         drAmina,
         testPatientUserId,
-        "When is my next predicted cycle transition?"
+        "What lifestyle adjustments support my current cycle phase?"
       );
-      expect(reply.toLowerCase()).toContain("6 to 7 days");
-      expect(reply.toLowerCase()).toContain("luteal-to-follicular");
+      expect(reply.toLowerCase()).toContain("magnesium");
+      expect(reply.toLowerCase()).toContain("sleep");
     });
   });
 });

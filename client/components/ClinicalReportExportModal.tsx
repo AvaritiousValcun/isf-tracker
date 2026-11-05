@@ -71,37 +71,26 @@ Progesterone:
   - Velocity Trend:    -1.8 ng/mL/day (Expected late-luteal descent)
   - Interpretation:    Robust secretory transformation. Ovulatory biphasic shift confirmed.
 
-Androgens (Free & Total):
+Free Testosterone:
   - 14-Day Mean:       38.2 ng/dL
   - Reference Upper:   < 45.0 ng/dL
   - Peak:              41.6 ng/dL
   - Velocity Trend:    +0.2 ng/dL/day (Stable basal profile)
   - Interpretation:    Within clinical safety margins; no acute hyperandrogenic surge.
 
-Estradiol (Estrogen E2):
-  - 14-Day Mean:       142.0 pg/mL
-  - Luteal Ratio:      8.7 (Balanced E2/P4 index)
-  - Velocity:          -11.0 pg/mL/day (Physiologic pre-menstrual descent)
-
 2. 7-DAY FORWARD HORMONE VELOCITY FORECAST
 --------------------------------------------------------------------------------
   - Current Cycle Phase: Mid-to-Late Luteal (Cycle Day 21)
-  - Projected Luteolysis: In 4.5 to 5.5 days
-  - Projected Next Cycle Day 1: In 6.2 days (± 1.1 days)
+  - Progesterone Velocity: -1.8 ng/mL/day (Secretory descent)
+  - Free Testosterone Velocity: +0.2 ng/dL/day (Stable physiological baseline)
   - Luteal Phase Adequacy: 13.1 total days (Adequate, no luteal phase defect)
 
 3. PREDICTIVE HEALTH RISK STRATIFICATION
 --------------------------------------------------------------------------------
-  - PCOS / Hyperandrogenism Risk:     31.0% (Moderate monitoring recommended)
-  - Insulin Resistance Risk Index:     24.0% (Mild-moderate metabolic correlation)
-  - Cardiovascular Biomarker Score:    8.5%  (Low risk)
-  - Hypertension / Vascular Strain:    9.0%  (Low risk)
-
-4. SUGGESTED CLINICAL DISCUSSION POINTS FOR ATTENDING PHYSICIAN
---------------------------------------------------------------------------------
-  1. Correlate continuous progesterone velocity with cycle symptoms and luteal length.
-  2. Correlate androgen profile (38.2 ng/dL) with pelvic ultrasound antral follicle count.
-  3. Review metabolic markers (fasting insulin / lipid panel) in view of 24.0% IR index.
+  - PCOS / Free Testosterone Balance: 31.0% (Moderate monitoring recommended)
+  - Insulin Resistance Risk Index:    24.0% (Mild-moderate metabolic correlation)
+  - Non-Alcoholic Liver Disease (NAFLD): 9.0% (Low risk baseline)
+  - Type 2 Diabetes:                  12.0% (Low risk baseline)
 
 ATTENDING CLINICIAN SIGN-OFF
 --------------------------------------------------------------------------------
@@ -269,7 +258,7 @@ Date:           ______________________________________
                   </tr>
 
                   <tr className="hover:bg-slate-50 dark:hover:bg-[#15232A]/50">
-                    <td className="py-2.5 px-3 font-semibold text-[#7C3AED]">Total Androgens</td>
+                    <td className="py-2.5 px-3 font-semibold text-[#7C3AED]">Free Testosterone</td>
                     <td className="py-2.5 px-3">38.2 ng/dL</td>
                     <td className="py-2.5 px-3 font-medium">41.6 ng/dL</td>
                     <td className="py-2.5 px-3 text-slate-500 dark:text-[#A0B4BE]">&lt; 45.0 ng/dL (Normal)</td>
@@ -280,36 +269,6 @@ Date:           ______________________________________
                     </td>
                     <td className="py-2.5 px-3 text-slate-600 dark:text-[#A0B4BE]">
                       +0.2 ng/dL/day (Stable baseline)
-                    </td>
-                  </tr>
-
-                  <tr className="hover:bg-slate-50 dark:hover:bg-[#15232A]/50">
-                    <td className="py-2.5 px-3 font-semibold text-[#2C4C5C] dark:text-[#F3E308]">Estradiol (E2)</td>
-                    <td className="py-2.5 px-3">142.0 pg/mL</td>
-                    <td className="py-2.5 px-3 font-medium">218.0 pg/mL</td>
-                    <td className="py-2.5 px-3 text-slate-500 dark:text-[#A0B4BE]">60 &ndash; 250 pg/mL (Luteal)</td>
-                    <td className="py-2.5 px-3">
-                      <span className="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
-                        91.0%
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3 text-slate-600 dark:text-[#A0B4BE]">
-                      &minus;11.0 pg/mL/day (Pre-menstrual)
-                    </td>
-                  </tr>
-
-                  <tr className="hover:bg-slate-50 dark:hover:bg-[#15232A]/50">
-                    <td className="py-2.5 px-3 font-semibold text-slate-700 dark:text-slate-300">Glycemic Correlation</td>
-                    <td className="py-2.5 px-3">88.4 mg/dL eq</td>
-                    <td className="py-2.5 px-3 font-medium">116.0 mg/dL eq</td>
-                    <td className="py-2.5 px-3 text-slate-500 dark:text-[#A0B4BE]">70 &ndash; 120 mg/dL (Euglycemic)</td>
-                    <td className="py-2.5 px-3">
-                      <span className="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
-                        96.7%
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3 text-slate-600 dark:text-[#A0B4BE]">
-                      Postprandial spikes controlled
                     </td>
                   </tr>
                 </tbody>
@@ -333,18 +292,18 @@ Date:           ______________________________________
               </div>
 
               <div className="rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#15232A] p-3 print:border-slate-200">
-                <span className="text-[10px] font-semibold text-slate-400 uppercase">Estrogen Velocity</span>
-                <p className="text-base font-bold text-[#7C3AED] mt-0.5">&minus;11.0 pg/mL/day</p>
+                <span className="text-[10px] font-semibold text-slate-400 uppercase">Free Testosterone Velocity</span>
+                <p className="text-base font-bold text-[#7C3AED] mt-0.5">+0.2 ng/dL/day</p>
                 <p className="text-[11px] text-slate-500 mt-1">
-                  Normal pre-menstrual descent. Ratio to P4 is balanced (8.7).
+                  Stable non-escalating baseline profile within normal safety margins.
                 </p>
               </div>
 
               <div className="rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#15232A] p-3 print:border-slate-200">
-                <span className="text-[10px] font-semibold text-slate-400 uppercase">Predicted Transition</span>
-                <p className="text-base font-bold text-slate-900 dark:text-white print:text-black mt-0.5">Menses in 6.2 Days</p>
+                <span className="text-[10px] font-semibold text-slate-400 uppercase">Luteal Adequacy</span>
+                <p className="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">13.1 Days</p>
                 <p className="text-[11px] text-slate-500 mt-1">
-                  Confidence interval: &plusmn; 1.1 days (Total luteal length: 13.1 days).
+                  Confidence interval: &plusmn; 1.1 days (Normal secretory duration &gt;11 days).
                 </p>
               </div>
             </div>
@@ -358,7 +317,7 @@ Date:           ______________________________________
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="rounded-xl border border-slate-200 dark:border-[#243C47] p-3 bg-white dark:bg-[#15232A] print:border-slate-200">
-                <p className="text-[10px] font-semibold text-slate-400">PCOS / Androgen Excess</p>
+                <p className="text-[10px] font-semibold text-slate-400">PCOS / FT Balance</p>
                 <p className="text-xl font-bold text-amber-500 dark:text-[#F3E308] mt-1">31.0%</p>
                 <span className="text-[10px] text-amber-600 font-medium">Moderate (Monitoring)</span>
               </div>
@@ -370,35 +329,17 @@ Date:           ______________________________________
               </div>
 
               <div className="rounded-xl border border-slate-200 dark:border-[#243C47] p-3 bg-white dark:bg-[#15232A] print:border-slate-200">
-                <p className="text-[10px] font-semibold text-slate-400">Cardiovascular Risk</p>
-                <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">8.5%</p>
+                <p className="text-[10px] font-semibold text-slate-400">Non-Alcoholic Liver Disease</p>
+                <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">9.0%</p>
                 <span className="text-[10px] text-emerald-600 font-medium">Low Risk Baseline</span>
               </div>
 
               <div className="rounded-xl border border-slate-200 dark:border-[#243C47] p-3 bg-white dark:bg-[#15232A] print:border-slate-200">
-                <p className="text-[10px] font-semibold text-slate-400">Hypertension / Strain</p>
-                <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">9.0%</p>
-                <span className="text-[10px] text-emerald-600 font-medium">Low Vascular Strain</span>
+                <p className="text-[10px] font-semibold text-slate-400">Type 2 Diabetes</p>
+                <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">12.0%</p>
+                <span className="text-[10px] text-emerald-600 font-medium">Low Risk Baseline</span>
               </div>
             </div>
-          </div>
-
-          {/* Suggested Clinical Discussion Prompts for Doctor */}
-          <div className="rounded-2xl border border-[#0EA5A4]/30 bg-[#0EA5A4]/[0.04] dark:bg-[#0EA5A4]/10 p-5 space-y-2">
-            <h4 className="text-xs font-bold text-[#0EA5A4] flex items-center gap-1.5 uppercase tracking-wider">
-              <Stethoscope size={15} /> 4. Doctor Review Prompts &bull; Questions for Your Clinician
-            </h4>
-            <ul className="text-xs text-slate-700 dark:text-[#A0B4BE] space-y-1.5 list-disc pl-5 leading-relaxed">
-              <li>
-                <strong>Luteal Phase Adequacy:</strong> Your progesterone nadir and 13.1-day projected luteal length indicate sufficient ovulatory function. Discuss with your doctor if progesterone supplementation is needed for fertility planning.
-              </li>
-              <li>
-                <strong>Androgen Profile Correlation:</strong> Continuous androgen levels average 38.2 ng/dL. Discuss whether correlating this with transvaginal ultrasound antral follicle count (AFC) is recommended.
-              </li>
-              <li>
-                <strong>Metabolic Sensitivity:</strong> With a 24.0% insulin resistance index, review lifestyle factors, dietary glycemic index, and fasting glucose if indicated.
-              </li>
-            </ul>
           </div>
 
           {/* Doctor Signature & Attending Physician Section */}

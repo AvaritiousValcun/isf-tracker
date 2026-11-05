@@ -65,7 +65,7 @@ describe("Clinical Features & Velocity Models", () => {
         const reply = generateClientConsultantReply(drAmina, "How are my latest hormone readings?");
         expect(reply).toContain("19.8 ng/mL");
         expect(reply).toContain("38.2 ng/dL");
-        expect(reply.toLowerCase()).toContain("estradiol velocity");
+        expect(reply.toLowerCase()).toContain("free testosterone");
       });
 
       it("answers 'What do my progesterone levels indicate?' with ovulatory confirmation", () => {

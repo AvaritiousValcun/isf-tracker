@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Sparkles, Eye, RotateCw, Play, Pause, Layers } from "lucide-react";
 
-type HormoneType = "estradiol" | "progesterone" | "cortisol";
+type HormoneType = "progesterone" | "freeTestosterone";
 
 interface Atom {
   x: number;
@@ -30,54 +30,6 @@ interface HormoneConfig {
 }
 
 const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
-  estradiol: {
-    name: "17β-Estradiol (E2)",
-    formula: "C₁₈H₂₄O₂",
-    mw: "272.38 g/mol",
-    targetRange: "30 – 400 pg/mL",
-    phase: "Follicular & Pre-Ovulatory Peak",
-    description: "Primary biological estrogen regulating follicular growth and endometrial proliferation in ISF.",
-    atoms: [
-      // Ring A (Aromatic)
-      { x: -110, y: -25, z: 0, element: "C", color: "#9333EA", radius: 9 },
-      { x: -145, y: 15, z: 8, element: "C", color: "#9333EA", radius: 9 },
-      { x: -120, y: 60, z: 0, element: "C", color: "#9333EA", radius: 9 },
-      { x: -70, y: 60, z: -8, element: "C", color: "#9333EA", radius: 9 },
-      { x: -40, y: 20, z: 0, element: "C", color: "#9333EA", radius: 9 },
-      { x: -65, y: -25, z: 8, element: "C", color: "#9333EA", radius: 9 },
-      // Ring B
-      { x: -35, y: 65, z: 20, element: "C", color: "#9333EA", radius: 9 },
-      { x: 15, y: 65, z: 12, element: "C", color: "#9333EA", radius: 9 },
-      { x: 40, y: 20, z: 0, element: "C", color: "#9333EA", radius: 9 },
-      { x: 10, y: -25, z: -10, element: "C", color: "#9333EA", radius: 9 },
-      // Ring C
-      { x: 15, y: -70, z: 0, element: "C", color: "#9333EA", radius: 9 },
-      { x: 65, y: -70, z: 15, element: "C", color: "#9333EA", radius: 9 },
-      { x: 90, y: -25, z: 5, element: "C", color: "#9333EA", radius: 9 },
-      { x: 60, y: 20, z: -10, element: "C", color: "#9333EA", radius: 9 },
-      // Ring D (5-carbon)
-      { x: 105, y: 60, z: 0, element: "C", color: "#9333EA", radius: 9 },
-      { x: 145, y: 35, z: 12, element: "C", color: "#9333EA", radius: 9 },
-      { x: 135, y: -20, z: 0, element: "C", color: "#9333EA", radius: 9 },
-      // Functional groups
-      { x: -160, y: 95, z: 0, element: "O", color: "#FB923C", radius: 11 },   // 3-OH Oxygen
-      { x: 175, y: -45, z: 12, element: "O", color: "#FB923C", radius: 11 },  // 17-OH Oxygen
-      { x: 90, y: -30, z: 50, element: "C", color: "#9333EA", radius: 8 },   // C18 methyl
-    ],
-    bonds: [
-      { a: 0, b: 1, order: 2 }, { a: 1, b: 2, order: 1 }, { a: 2, b: 3, order: 2 },
-      { a: 3, b: 4, order: 1 }, { a: 4, b: 5, order: 2 }, { a: 5, b: 0, order: 1 },
-      { a: 4, b: 6, order: 1 }, { a: 6, b: 7, order: 1 }, { a: 7, b: 8, order: 1 },
-      { a: 8, b: 9, order: 1 }, { a: 9, b: 5, order: 1 },
-      { a: 9, b: 10, order: 1 }, { a: 10, b: 11, order: 1 }, { a: 11, b: 12, order: 1 },
-      { a: 12, b: 13, order: 1 }, { a: 13, b: 8, order: 1 },
-      { a: 13, b: 14, order: 1 }, { a: 14, b: 15, order: 1 }, { a: 15, b: 16, order: 1 },
-      { a: 16, b: 12, order: 1 },
-      { a: 2, b: 17, order: 1 },
-      { a: 16, b: 18, order: 1 },
-      { a: 12, b: 19, order: 1 },
-    ],
-  },
   progesterone: {
     name: "Progesterone (P4)",
     formula: "C₂₁H₃₀O₂",
@@ -130,13 +82,13 @@ const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
       { a: 12, b: 22, order: 1 },
     ],
   },
-  cortisol: {
-    name: "Cortisol (Hydrocortisone)",
-    formula: "C₂₁H₃₀O₅",
-    mw: "362.46 g/mol",
-    targetRange: "6 – 23 µg/dL",
-    phase: "Circadian Rhythm Baseline",
-    description: "Glucocorticoid tracking systemic physiological stress, adrenal balance, and metabolic dynamics in ISF.",
+  freeTestosterone: {
+    name: "Free Testosterone (FT)",
+    formula: "C₁₉H₂₈O₂",
+    mw: "288.42 g/mol",
+    targetRange: "1.0 – 8.5 pg/mL",
+    phase: "Basal Dermal Telemetry",
+    description: "Bioactive unbound androgen tracking follicular development, metabolic tone, and hyperandrogenic safety margins in ISF.",
     atoms: [
       // Ring A
       { x: -110, y: -25, z: 0, element: "C", color: "#9333EA", radius: 9 },
@@ -159,14 +111,11 @@ const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
       { x: 105, y: 60, z: 0, element: "C", color: "#9333EA", radius: 9 },
       { x: 145, y: 35, z: 12, element: "C", color: "#9333EA", radius: 9 },
       { x: 135, y: -20, z: 0, element: "C", color: "#9333EA", radius: 9 },
-      // Functional groups
+      // Functional groups: 3-Keto =O and 17β-OH
       { x: -155, y: 95, z: 0, element: "O", color: "#FB923C", radius: 11 },   // 3-Keto =O
-      { x: 25, y: -100, z: -10, element: "O", color: "#FB923C", radius: 11 }, // 11β-OH
-      { x: 140, y: 15, z: -35, element: "O", color: "#FB923C", radius: 11 },  // 17α-OH
-      { x: 175, y: -45, z: 12, element: "C", color: "#9333EA", radius: 9 },   // C20
-      { x: 195, y: -25, z: 25, element: "O", color: "#FB923C", radius: 11 },  // 20-Keto =O
-      { x: 205, y: -80, z: 5, element: "C", color: "#9333EA", radius: 8 },    // C21
-      { x: 240, y: -90, z: 15, element: "O", color: "#FB923C", radius: 11 },  // 21-OH
+      { x: 175, y: -45, z: 12, element: "O", color: "#FB923C", radius: 11 },  // 17-OH Oxygen
+      { x: -65, y: -30, z: 48, element: "C", color: "#9333EA", radius: 8 },   // C19 methyl
+      { x: 90, y: -30, z: 48, element: "C", color: "#9333EA", radius: 8 },    // C18 methyl
     ],
     bonds: [
       { a: 0, b: 1, order: 1 }, { a: 1, b: 2, order: 1 }, { a: 2, b: 3, order: 1 },
@@ -178,10 +127,9 @@ const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
       { a: 13, b: 14, order: 1 }, { a: 14, b: 15, order: 1 }, { a: 15, b: 16, order: 1 },
       { a: 16, b: 12, order: 1 },
       { a: 2, b: 17, order: 2 },
-      { a: 10, b: 18, order: 1 },
-      { a: 16, b: 19, order: 1 },
-      { a: 16, b: 20, order: 1 }, { a: 20, b: 21, order: 2 }, { a: 20, b: 22, order: 1 },
-      { a: 22, b: 23, order: 1 },
+      { a: 16, b: 18, order: 1 },
+      { a: 5, b: 19, order: 1 },
+      { a: 12, b: 20, order: 1 },
     ],
   },
 };
@@ -197,7 +145,7 @@ interface FluidParticle {
 }
 
 export default function Hormone3DVisualizer({ compact = false }: { compact?: boolean }) {
-  const [hormone, setHormone] = useState<HormoneType>("estradiol");
+  const [hormone, setHormone] = useState<HormoneType>("progesterone");
   const [isRotating, setIsRotating] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -478,7 +426,7 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
 
         {/* Hormone Selector Pills */}
         <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#111D23] p-1 shadow-xs">
-          {(["estradiol", "progesterone", "cortisol"] as HormoneType[]).map((h) => (
+          {(["progesterone", "freeTestosterone"] as HormoneType[]).map((h) => (
             <button
               key={h}
               type="button"
@@ -489,7 +437,7 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
                   : "text-slate-600 dark:text-[#A0B4BE] hover:bg-slate-100 dark:hover:bg-[#1C2F38] hover:text-[#2C4C5C] dark:hover:text-[#F3E308]"
               }`}
             >
-              {h === "estradiol" ? "Estradiol (E2)" : h === "progesterone" ? "Progesterone" : "Cortisol"}
+              {h === "progesterone" ? "Progesterone" : "Free Testosterone"}
             </button>
           ))}
         </div>

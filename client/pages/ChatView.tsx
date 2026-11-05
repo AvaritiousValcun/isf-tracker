@@ -55,6 +55,8 @@ const DEFAULT_WELCOME_MESSAGES: Record<string, string> = {
     "Hello! I am Dr. Amina Patel, your Reproductive Endocrinologist. I am monitoring your continuous ISF hormone readings and telemetry in real time. Your progesterone surge is currently tracking within normal secretory limits. How can I assist you with your cycle telemetry today?",
   "b4d81234-5678-4abc-9def-0123456789ab":
     "Greetings, I'm Dr. David Kim, your OB/GYN clinical specialist. I have access to your continuous patch telemetry and luteal phase stability markers. What symptoms or questions would you like to review?",
+  "c8e23456-789a-4bcd-ef01-23456789abcd":
+    "Hello! I am Dr. Grace Wanjiku, your Gynecologist. I specialize in reproductive physiology, luteal phase adequacy, and hormone rhythm tracking. What aspects of your progesterone or free testosterone trends would you like to discuss today?",
 };
 
 export default function ChatView({ language }: ChatViewProps) {
@@ -461,7 +463,7 @@ export default function ChatView({ language }: ChatViewProps) {
                 Choose a specialist below to begin your personalized consultation regarding continuous ISF hormone readings, luteal velocity, and cycle patterns.
               </p>
 
-              <div className="mt-7 grid w-full max-w-[700px] gap-4 sm:grid-cols-2 text-left">
+              <div className="mt-7 grid w-full max-w-[880px] gap-4 sm:grid-cols-2 lg:grid-cols-3 text-left">
                 {effectiveConsultants.map((item, idx) => (
                   <div
                     key={item.id}
@@ -491,14 +493,18 @@ export default function ChatView({ language }: ChatViewProps) {
 
                       <p className="text-[11px] text-slate-600 dark:text-[#A0B4BE] leading-relaxed mb-3">
                         {item.id.includes("375d31f5")
-                          ? "Specializes in continuous hormone telemetry, progesterone velocity curves, and hyperandrogenic patterns."
+                          ? "Specializes in continuous hormone telemetry, progesterone velocity curves, and free testosterone balance."
+                          : item.id.includes("c8e23456")
+                          ? "Specializes in reproductive physiology, luteal phase adequacy, hormonal wellness, and pelvic health."
                           : "Specializes in luteal phase stability, cycle kinematics, ovulation support, and clinical symptom review."}
                       </p>
 
                       <div className="flex flex-wrap gap-1.5 mb-4">
                         {(item.id.includes("375d31f5")
-                          ? ["ISF Biomarkers", "Progesterone", "Androgens"]
-                          : ["Cycle Forecast", "Luteal Phase", "Symptom Review"]
+                          ? ["ISF Biomarkers", "Progesterone", "Free Testosterone"]
+                          : item.id.includes("c8e23456")
+                          ? ["Progesterone", "Free Testosterone", "Pelvic Health"]
+                          : ["Ovulation Kinetics", "Luteal Phase", "Symptom Review"]
                         ).map((badge) => (
                           <span
                             key={badge}

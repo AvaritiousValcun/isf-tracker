@@ -57,10 +57,8 @@ export class ConsultantAiService {
       if (readings && readings.length > 0) {
         const latest = readings[0];
         readingsContext = `Latest ISF Patch Biomarkers:
-- Androgen: ${latest.androgen_value ?? "Normal"} pg/mL
+- Free Testosterone: ${latest.androgen_value ?? "Normal"} pg/mL
 - Progesterone: ${latest.progesterone_value ?? latest.progesterone_ng_ml ?? "Normal"} ng/mL
-- Estrogen: ${latest.estrogen_pg_ml ?? "Normal"} pg/mL
-- Cortisol: ${latest.cortisol_ug_dl ?? "Normal"} µg/dL
 Recorded: ${new Date(latest.recorded_at).toLocaleString()}`;
       }
     } catch {
@@ -152,12 +150,12 @@ Guidelines:
 
     if (lower.includes("androgen") || lower.includes("testosterone") || lower.includes("acne") || lower.includes("hair")) {
       return isEndo
-        ? `I am observing your androgen metrics closely. Temporary elevations can occur around stress peaks or specific cycle phases. I recommend monitoring the 48-hour moving average on your dashboard to see if this trend stabilizes.`
-        : `Elevated androgen signals in interstitial fluid can correlate with follicular phase surges or metabolic shifts. Let's keep observing the patch telemetry over the next 3 days.`;
+        ? `I am observing your free testosterone metrics closely. Temporary elevations can occur around stress peaks or specific cycle phases. I recommend monitoring the 48-hour moving average on your dashboard to see if this trend stabilizes.`
+        : `Elevated free testosterone signals in interstitial fluid can correlate with follicular phase surges or metabolic shifts. Let's keep observing the patch telemetry over the next 3 days.`;
     }
 
     if (lower.includes("pcos") || lower.includes("pmos") || lower.includes("risk") || lower.includes("prediction")) {
-      return `Our predictive models analyze your continuous androgen-to-progesterone ratios. Your current status is being actively monitored, and the trends suggest manageable variations rather than acute endocrine distress. Always consult us if you experience unexpected pelvic pain or irregular spotting.`;
+      return `Our predictive models analyze your continuous free testosterone-to-progesterone ratios. Your current status is being actively monitored, and the trends suggest manageable variations rather than acute endocrine distress. Always consult us if you experience unexpected pelvic pain or irregular spotting.`;
     }
 
     if (lower.includes("pain") || lower.includes("cramp") || lower.includes("hurt") || lower.includes("headache") || lower.includes("pelvic")) {

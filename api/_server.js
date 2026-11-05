@@ -1138,11 +1138,11 @@ var CLINICAL_FAQ_ITEMS = [
     id: "latest-readings",
     question: "How are my latest hormone readings?",
     category: "Hormone Readings",
-    summary: "Progesterone at 19.8 ng/mL, Androgen at 38.2 ng/dL, normal luteal plateau.",
+    summary: "Progesterone at 19.8 ng/mL, Free Testosterone steady at 38.2 ng/dL, normal luteal plateau.",
     answers: {
-      endocrinologist: "Your latest continuous ISF readings show Progesterone at 19.8 ng/mL and Androgens steady at 38.2 ng/dL, with Estradiol velocity descending at -11.0 pg/mL/day. These concentrations confirm robust post-ovulatory luteal stability within ideal physiological reference ranges (progesterone 5\u201325 ng/mL; androgens <45 ng/dL). Your transdermal patch is capturing continuous dermal interstitial flux accurately with zero detected anomalous spikes.",
-      obgyn: "Your current dermal hormone telemetry shows healthy secretory luteal parameters: Progesterone is 19.8 ng/mL, confirming effective ovulatory corpus luteum function, and Androgen levels remain well controlled at 38.2 ng/dL. Uterine lining support is optimal, and no hyperandrogenic surges or erratic fluctuations are present in your continuous stream.",
-      default: "Your latest continuous ISF readings show Progesterone at 19.8 ng/mL and Androgen at 38.2 ng/dL. Both biomarkers sit comfortably within expected mid-luteal physiological boundaries, indicating stable endocrine velocity and optimal patch diffusion."
+      endocrinologist: "Your latest continuous ISF readings show Progesterone at 19.8 ng/mL and Free Testosterone steady at 38.2 ng/dL. These concentrations confirm robust post-ovulatory luteal stability within ideal physiological reference ranges (progesterone 5\u201325 ng/mL; free testosterone within normal safety margins). Your transdermal patch is capturing continuous dermal interstitial flux accurately with zero detected anomalous spikes.",
+      obgyn: "Your current dermal hormone telemetry shows healthy secretory luteal parameters: Progesterone is 19.8 ng/mL, confirming effective ovulatory corpus luteum function, and Free Testosterone levels remain well controlled at 38.2 ng/dL. Uterine lining support is optimal, and no hyperandrogenic surges or erratic fluctuations are present in your continuous stream.",
+      default: "Your latest continuous ISF readings show Progesterone at 19.8 ng/mL and Free Testosterone at 38.2 ng/dL. Both biomarkers sit comfortably within expected mid-luteal physiological boundaries, indicating stable endocrine velocity and optimal patch diffusion."
     }
   },
   {
@@ -1158,35 +1158,13 @@ var CLINICAL_FAQ_ITEMS = [
   },
   {
     id: "androgen-pattern",
-    question: "Can you explain my androgen pattern?",
-    category: "Androgens",
+    question: "Can you explain my free testosterone pattern?",
+    category: "Free Testosterone",
     summary: "Controlled at 38.2 ng/dL with no hyperandrogenic pulses or PCOS risk surges.",
     answers: {
-      endocrinologist: "Your continuous androgen pattern is currently holding stable at 38.2 ng/dL, comfortably below the clinical threshold of 45 ng/dL. Unlike in hyperandrogenic conditions such as classical PCOS, where androgen pulsatility shows elevated baseline surges, your continuous ISF profile exhibits minimal diurnal variance and smooth clearance, signaling balanced ovarian and adrenal enzymatic activity.",
-      obgyn: "Your androgen pattern shows a stable, non-escalating baseline well within asymptomatic female physiological limits. We monitor this continuously through the patch to check for early micro-surges that could cause acne, hirsutism, or anovulatory follicular arrest. Your telemetry confirms clean clearance with no hyperandrogenic risks flagged.",
-      default: "Your continuous androgen pattern is steady at 38.2 ng/dL (normal threshold <45 ng/dL). Daily interstitial fluid kinetics show smooth clearance without androgenic pulsatility or metabolic spikes."
-    }
-  },
-  {
-    id: "cycle-transition",
-    question: "When is my next predicted cycle transition?",
-    category: "Cycle Forecast",
-    summary: "Predicted in approximately 6 to 7 days based on 7-day velocity model.",
-    answers: {
-      endocrinologist: "Based on your continuous 7-day ISF hormone velocity model and current mid-luteal phase trajectory (cycle day 20-21), your next cycle transition (luteal-to-follicular / menses) is predicted in approximately 6 to 7 days. We anticipate progesterone velocity will begin its gentle physiological taper around day 26 of your cycle.",
-      obgyn: "According to your continuous biomarker trend analysis in this luteal phase, your next menstrual cycle transition is projected in approximately 6 to 7 days. The predictive algorithm matches your current progesterone plateau and estradiol descent to historical cycle kinematics, showing a 94% confidence window.",
-      default: "Based on your current 7-day hormone velocity model in this luteal phase, your next cycle transition is projected in approximately 6 to 7 days as progesterone completes its mid-luteal plateau and transitions toward the next phase."
-    }
-  },
-  {
-    id: "hormone-fluctuations",
-    question: "Are my hormone fluctuations normal?",
-    category: "Physiology",
-    summary: "Ultradian and circadian pulses in interstitial fluid are healthy and expected.",
-    answers: {
-      endocrinologist: "Yes, your continuous ISF fluctuations are completely physiological. Hormones are naturally secreted in ultradian and circadian pulses rather than static lines. The continuous microneedle sensor smooths out momentary spikes to capture true endocrine velocity, which remains within reassuring clinical bounds.",
-      obgyn: "Yes, your micro-variations are entirely expected. Your patch telemetry shows healthy circadian pacing without disruptive peaks. Small shifts after meals or sleep are completely benign.",
-      default: "Yes, your continuous hormone variations are completely normal. Endocrine glands release hormones in natural pulsatile waves, and your patch readings reflect healthy physiological dynamics."
+      endocrinologist: "Your continuous free testosterone pattern is currently holding stable at 38.2 ng/dL, comfortably below the clinical threshold of 45 ng/dL. Unlike in hyperandrogenic conditions such as classical PCOS, where androgen pulsatility shows elevated baseline surges, your continuous ISF profile exhibits minimal diurnal variance and smooth clearance, signaling balanced ovarian and adrenal enzymatic activity.",
+      obgyn: "Your free testosterone pattern shows a stable, non-escalating baseline well within asymptomatic female physiological limits. We monitor this continuously through the patch to check for early micro-surges that could cause acne, hirsutism, or anovulatory follicular arrest. Your telemetry confirms clean clearance with no hyperandrogenic risks flagged.",
+      default: "Your continuous free testosterone pattern is steady at 38.2 ng/dL (normal threshold <45 ng/dL). Daily interstitial fluid kinetics show smooth clearance without androgenic pulsatility or metabolic spikes."
     }
   },
   {
@@ -1219,13 +1197,7 @@ function matchClinicalFaq(patientMessage, consultant) {
       return clean.includes("progesterone") && (clean.includes("indicate") || clean.includes("mean") || clean.includes("level") || clean.includes("show"));
     }
     if (item.id === "androgen-pattern") {
-      return clean.includes("androgen") && (clean.includes("pattern") || clean.includes("explain") || clean.includes("testosterone") || clean.includes("level"));
-    }
-    if (item.id === "cycle-transition") {
-      return (clean.includes("cycle transition") || clean.includes("next transition") || clean.includes("predicted cycle") || clean.includes("next period") || clean.includes("when is my next")) && (clean.includes("cycle") || clean.includes("transition") || clean.includes("period"));
-    }
-    if (item.id === "hormone-fluctuations") {
-      return clean.includes("fluctuation") && (clean.includes("normal") || clean.includes("expected") || clean.includes("hormone"));
+      return (clean.includes("androgen") || clean.includes("testosterone")) && (clean.includes("pattern") || clean.includes("explain") || clean.includes("level"));
     }
     if (item.id === "lifestyle-support") {
       return (clean.includes("lifestyle") || clean.includes("support") || clean.includes("recommendation") || clean.includes("diet")) && (clean.includes("phase") || clean.includes("cycle") || clean.includes("current"));
@@ -1272,10 +1244,8 @@ var ConsultantAiService = class {
       if (readings && readings.length > 0) {
         const latest = readings[0];
         readingsContext = `Latest ISF Patch Biomarkers:
-- Androgen: ${latest.androgen_value ?? "Normal"} pg/mL
+- Free Testosterone: ${latest.androgen_value ?? "Normal"} pg/mL
 - Progesterone: ${latest.progesterone_value ?? latest.progesterone_ng_ml ?? "Normal"} ng/mL
-- Estrogen: ${latest.estrogen_pg_ml ?? "Normal"} pg/mL
-- Cortisol: ${latest.cortisol_ug_dl ?? "Normal"} \xB5g/dL
 Recorded: ${new Date(latest.recorded_at).toLocaleString()}`;
       }
     } catch {
@@ -1351,10 +1321,10 @@ ${promptText}` }]
       return `Your progesterone levels indicate normal luteal phase activity. Progesterone supports the uterine lining and regulates metabolic temperature. If you notice dips alongside fatigue, stay well hydrated and maintain consistent sleep intervals.`;
     }
     if (lower.includes("androgen") || lower.includes("testosterone") || lower.includes("acne") || lower.includes("hair")) {
-      return isEndo ? `I am observing your androgen metrics closely. Temporary elevations can occur around stress peaks or specific cycle phases. I recommend monitoring the 48-hour moving average on your dashboard to see if this trend stabilizes.` : `Elevated androgen signals in interstitial fluid can correlate with follicular phase surges or metabolic shifts. Let's keep observing the patch telemetry over the next 3 days.`;
+      return isEndo ? `I am observing your free testosterone metrics closely. Temporary elevations can occur around stress peaks or specific cycle phases. I recommend monitoring the 48-hour moving average on your dashboard to see if this trend stabilizes.` : `Elevated free testosterone signals in interstitial fluid can correlate with follicular phase surges or metabolic shifts. Let's keep observing the patch telemetry over the next 3 days.`;
     }
     if (lower.includes("pcos") || lower.includes("pmos") || lower.includes("risk") || lower.includes("prediction")) {
-      return `Our predictive models analyze your continuous androgen-to-progesterone ratios. Your current status is being actively monitored, and the trends suggest manageable variations rather than acute endocrine distress. Always consult us if you experience unexpected pelvic pain or irregular spotting.`;
+      return `Our predictive models analyze your continuous free testosterone-to-progesterone ratios. Your current status is being actively monitored, and the trends suggest manageable variations rather than acute endocrine distress. Always consult us if you experience unexpected pelvic pain or irregular spotting.`;
     }
     if (lower.includes("pain") || lower.includes("cramp") || lower.includes("hurt") || lower.includes("headache") || lower.includes("pelvic")) {
       return `I understand you're experiencing discomfort. Prostaglandin release and hormonal fluctuations during cycle transitions often trigger these symptoms. Warm compresses, adequate hydration, and magnesium-rich foods may help ease the tension. If symptoms worsen, please visit a clinic promptly.`;
@@ -1439,6 +1409,19 @@ router2.get(
             consent_scope: "all",
             relationship_id: `rel-${patientUserId.slice(0, 8)}-2`,
             started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1e3).toISOString()
+          },
+          {
+            id: "c8e23456-789a-4bcd-ef01-23456789abcd",
+            full_name: "Dr. Grace Wanjiku",
+            professional_type: "Gynecologist",
+            initials: "GW",
+            color: "#E06D53",
+            online: true,
+            status: "active",
+            consent_status: "granted",
+            consent_scope: "all",
+            relationship_id: `rel-${patientUserId.slice(0, 8)}-3`,
+            started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1e3).toISOString()
           }
         ]);
       }
@@ -1498,7 +1481,8 @@ router2.get(
       if (error || !data || data.length === 0) {
         const defaultConsultantIds = [
           "375d31f5-c96f-4d11-8934-be6aec206f56",
-          "b4d81234-5678-4abc-9def-0123456789ab"
+          "b4d81234-5678-4abc-9def-0123456789ab",
+          "c8e23456-789a-4bcd-ef01-23456789abcd"
         ];
         let patientProfileId = null;
         try {
@@ -2378,7 +2362,7 @@ var DemoPredictionProvider = class {
         }
       },
       {
-        condition: "high_blood_pressure",
+        condition: "non_alcoholic_fatty_liver",
         risk_category: "low",
         risk_percentage: 9,
         model_id: this.id,
@@ -2391,7 +2375,7 @@ var DemoPredictionProvider = class {
           provider: "demo",
           clinical_use: "not_for_clinical_decision_making",
           synthetic: true,
-          message: "Synthetic demonstration percentage."
+          message: "Synthetic demonstration percentage for non-alcoholic liver disease modeling."
         }
       }
     ];

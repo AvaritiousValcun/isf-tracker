@@ -2,7 +2,8 @@ export type PredictionCondition =
   | "pmos_pcos"
   | "type_2_diabetes"
   | "insulin_resistance"
-  | "high_blood_pressure"
+  | "non_alcoholic_fatty_liver"
+  | "high_blood_pressure";
 
 export type PredictionRiskCategory =
   | "low"
@@ -210,7 +211,7 @@ export class DemoPredictionProvider
 
       {
         condition:
-          "high_blood_pressure",
+          "non_alcoholic_fatty_liver",
 
         risk_category:
           "low",
@@ -247,7 +248,7 @@ export class DemoPredictionProvider
             true,
 
           message:
-            "Synthetic demonstration percentage.",
+            "Synthetic demonstration percentage for non-alcoholic liver disease modeling.",
         },
       }
     ];

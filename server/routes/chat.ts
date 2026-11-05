@@ -96,6 +96,19 @@ router.get(
             relationship_id: `rel-${patientUserId.slice(0, 8)}-2`,
             started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
           },
+          {
+            id: "c8e23456-789a-4bcd-ef01-23456789abcd",
+            full_name: "Dr. Grace Wanjiku",
+            professional_type: "Gynecologist",
+            initials: "GW",
+            color: "#E06D53",
+            online: true,
+            status: "active",
+            consent_status: "granted",
+            consent_scope: "all",
+            relationship_id: `rel-${patientUserId.slice(0, 8)}-3`,
+            started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+          },
         ]);
       }
 
@@ -192,6 +205,7 @@ router.get(
         const defaultConsultantIds = [
           "375d31f5-c96f-4d11-8934-be6aec206f56",
           "b4d81234-5678-4abc-9def-0123456789ab",
+          "c8e23456-789a-4bcd-ef01-23456789abcd",
         ];
 
         let patientProfileId = null;

@@ -266,7 +266,10 @@ export default function PredictiveView() {
       case "insulin_resistance":
         return "Insulin Resistance";
       case "high_blood_pressure":
-        return "High Blood Pressure (Hypertension)";
+      case "hypertension":
+      case "non_alcoholic_fatty_liver":
+      case "nafld":
+        return "Non-Alcoholic Liver Disease (NAFLD)";
       case "cardiovascular":
         return "Cardiovascular Health";
       default:
@@ -287,7 +290,10 @@ export default function PredictiveView() {
         return 12.0;
       case "insulin_resistance":
         return 24.0;
+      case "non_alcoholic_fatty_liver":
+      case "nafld":
       case "high_blood_pressure":
+      case "hypertension":
         return 9.0;
       case "cardiovascular":
         return 8.5;
@@ -476,7 +482,7 @@ export default function PredictiveView() {
                 <h2 className="text-xl font-semibold text-foreground">
                   {t("predictive.section1_title", "Future PMOS / PCOS Risk")}
                 </h2>
-                <p className="text-xs text-muted-foreground">Continuous androgen-to-progesterone ratio correlation</p>
+                <p className="text-xs text-muted-foreground">Continuous free testosterone-to-progesterone ratio correlation</p>
               </div>
               {showPremiumFeatures && (
                 <span className="text-xs font-semibold text-[#0EA5A4] flex items-center gap-1">
@@ -551,7 +557,7 @@ export default function PredictiveView() {
 
                 {showPremiumFeatures && (
                   <div className="mt-4 pt-4 border-t border-slate-100 dark:border-[#243C47] flex flex-wrap items-center justify-between text-xs text-muted-foreground gap-2">
-                    <span>Biomarker weights: Androgen (58%), Progesterone (27%), Cortisol (15%)</span>
+                    <span>Biomarker weights: Free Testosterone (58%), Progesterone (27%), Cortisol (15%)</span>
                     <span className="text-[#0EA5A4] font-medium">Confidence Interval: 94.2%</span>
                   </div>
                 )}

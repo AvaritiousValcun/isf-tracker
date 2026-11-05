@@ -35,7 +35,7 @@ describe("DemoPredictionProvider - Predictive Risk Engine", () => {
     // Conditions checked
     const t2d = results.find((r) => r.condition === "type_2_diabetes");
     const insulin = results.find((r) => r.condition === "insulin_resistance");
-    const hbp = results.find((r) => r.condition === "high_blood_pressure");
+    const nafld = results.find((r) => r.condition === "non_alcoholic_fatty_liver" || r.condition === "high_blood_pressure");
 
     expect(t2d).toBeDefined();
     expect(typeof t2d?.risk_percentage).toBe("number");
@@ -43,8 +43,8 @@ describe("DemoPredictionProvider - Predictive Risk Engine", () => {
     expect(insulin).toBeDefined();
     expect(typeof insulin?.risk_percentage).toBe("number");
 
-    expect(hbp).toBeDefined();
-    expect(typeof hbp?.risk_percentage).toBe("number");
+    expect(nafld).toBeDefined();
+    expect(typeof nafld?.risk_percentage).toBe("number");
 
     // Verify percentages are non-identical (each condition has its own calibrated value)
     expect(t2d?.risk_percentage).not.toBe(insulin?.risk_percentage);

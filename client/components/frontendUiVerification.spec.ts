@@ -16,9 +16,9 @@ describe("Frontend UI & User Interface Elements Verification", () => {
 
     it("translates critical clinical labels correctly", () => {
       expect(t("en", "home.progesterone")).toBe("Progesterone");
-      expect(t("en", "home.androgen")).toBe("Androgen");
+      expect(t("en", "home.androgen")).toBe("Free Testosterone");
       expect(t("sw", "home.progesterone")).toBe("Progesteroni");
-      expect(t("sw", "home.androgen")).toBe("Androjeni");
+      expect(t("sw", "home.androgen")).toBe("Testosterone Huru");
     });
   });
 
@@ -32,8 +32,8 @@ describe("Frontend UI & User Interface Elements Verification", () => {
   });
 
   describe("Care Team & Consultant AI Bots", () => {
-    it("has both Dr. Amina Patel and Dr. David Kim active by default", () => {
-      expect(DEFAULT_CONSULTANTS).toHaveLength(2);
+    it("has Dr. Amina Patel, Dr. David Kim, and Dr. Grace Wanjiku active by default", () => {
+      expect(DEFAULT_CONSULTANTS).toHaveLength(3);
 
       const amina = DEFAULT_CONSULTANTS.find((c) => c.full_name === "Dr. Amina Patel");
       expect(amina).toBeDefined();
@@ -46,15 +46,24 @@ describe("Frontend UI & User Interface Elements Verification", () => {
       expect(david?.professional_type).toBe("Obstetrician & Gynecologist");
       expect(david?.consent_status).toBe("granted");
       expect(david?.online).toBe(true);
+
+      const grace = DEFAULT_CONSULTANTS.find((c) => c.full_name === "Dr. Grace Wanjiku");
+      expect(grace).toBeDefined();
+      expect(grace?.professional_type).toBe("Gynecologist");
+      expect(grace?.consent_status).toBe("granted");
+      expect(grace?.online).toBe(true);
     });
 
     it("maps initial conversations for each consultant", () => {
-      expect(DEFAULT_CONVERSATIONS).toHaveLength(2);
+      expect(DEFAULT_CONVERSATIONS).toHaveLength(3);
       expect(DEFAULT_CONVERSATIONS.map((c) => c.consultant_id)).toContain(
         "375d31f5-c96f-4d11-8934-be6aec206f56"
       );
       expect(DEFAULT_CONVERSATIONS.map((c) => c.consultant_id)).toContain(
         "b4d81234-5678-4abc-9def-0123456789ab"
+      );
+      expect(DEFAULT_CONVERSATIONS.map((c) => c.consultant_id)).toContain(
+        "c8e23456-789a-4bcd-ef01-23456789abcd"
       );
     });
 
@@ -66,7 +75,7 @@ describe("Frontend UI & User Interface Elements Verification", () => {
       expect(progReply).toContain("18.2 ng/mL");
       expect(progReply).toContain("luteal curve");
 
-      // Androgens inquiry
+      // Free Testosterone inquiry
       const andrReply = generateClientConsultantReply(consultant, "Are my androgens high?");
       expect(andrReply).toContain("38 ng/dL");
       expect(andrReply).toContain("45 ng/dL");
@@ -74,7 +83,7 @@ describe("Frontend UI & User Interface Elements Verification", () => {
       // Velocity inquiry
       const velReply = generateClientConsultantReply(consultant, "What is my hormone velocity?");
       expect(velReply).toContain("velocity");
-      expect(velReply).toContain("-11.0 pg/mL/day");
+      expect(velReply).toContain("telemetry");
 
       // Urgent pain symptoms
       const painReply = generateClientConsultantReply(consultant, "I have severe pelvic pain and cramping");

@@ -39,11 +39,11 @@ const FORECAST_DATA = [
     progesterone: 18.2,
     progesteroneUpper: 19.5,
     progesteroneLower: 17.0,
-    estrogen: 165,
-    estrogenUpper: 180,
-    estrogenLower: 150,
+    freeTestosterone: 4.8,
+    freeTestosteroneUpper: 5.4,
+    freeTestosteroneLower: 4.2,
     velocityP: -0.4,
-    velocityE: -3.0,
+    velocityFT: +0.1,
     phase: "Mid-Luteal Peak",
   },
   {
@@ -52,11 +52,11 @@ const FORECAST_DATA = [
     progesterone: 17.6,
     progesteroneUpper: 19.0,
     progesteroneLower: 16.2,
-    estrogen: 158,
-    estrogenUpper: 172,
-    estrogenLower: 144,
+    freeTestosterone: 4.7,
+    freeTestosteroneUpper: 5.3,
+    freeTestosteroneLower: 4.1,
     velocityP: -0.6,
-    velocityE: -7.0,
+    velocityFT: +0.1,
     phase: "Luteal Plateau",
   },
   {
@@ -65,11 +65,11 @@ const FORECAST_DATA = [
     progesterone: 16.5,
     progesteroneUpper: 18.2,
     progesteroneLower: 14.8,
-    estrogen: 148,
-    estrogenUpper: 164,
-    estrogenLower: 132,
+    freeTestosterone: 4.6,
+    freeTestosteroneUpper: 5.2,
+    freeTestosteroneLower: 4.0,
     velocityP: -1.1,
-    velocityE: -10.0,
+    velocityFT: 0.0,
     phase: "Luteal Maintenance",
   },
   {
@@ -78,11 +78,11 @@ const FORECAST_DATA = [
     progesterone: 14.8,
     progesteroneUpper: 16.6,
     progesteroneLower: 12.9,
-    estrogen: 136,
-    estrogenUpper: 152,
-    estrogenLower: 120,
+    freeTestosterone: 4.5,
+    freeTestosteroneUpper: 5.1,
+    freeTestosteroneLower: 3.9,
     velocityP: -1.7,
-    velocityE: -12.0,
+    velocityFT: 0.0,
     phase: "Early Luteolysis",
   },
   {
@@ -91,11 +91,11 @@ const FORECAST_DATA = [
     progesterone: 12.2,
     progesteroneUpper: 14.2,
     progesteroneLower: 10.1,
-    estrogen: 122,
-    estrogenUpper: 138,
-    estrogenLower: 105,
+    freeTestosterone: 4.4,
+    freeTestosteroneUpper: 5.0,
+    freeTestosteroneLower: 3.8,
     velocityP: -2.6,
-    velocityE: -14.0,
+    velocityFT: -0.1,
     phase: "Active Luteolysis",
   },
   {
@@ -104,12 +104,12 @@ const FORECAST_DATA = [
     progesterone: 8.9,
     progesteroneUpper: 11.0,
     progesteroneLower: 6.8,
-    estrogen: 106,
-    estrogenUpper: 122,
-    estrogenLower: 90,
+    freeTestosterone: 4.3,
+    freeTestosteroneUpper: 4.9,
+    freeTestosteroneLower: 3.7,
     velocityP: -3.3,
-    velocityE: -16.0,
-    phase: "Pre-Menstrual Descent",
+    velocityFT: -0.1,
+    phase: "Late Luteal Descent",
   },
   {
     dayLabel: "+6 Days (D27)",
@@ -117,11 +117,11 @@ const FORECAST_DATA = [
     progesterone: 5.4,
     progesteroneUpper: 7.2,
     progesteroneLower: 3.6,
-    estrogen: 88,
-    estrogenUpper: 104,
-    estrogenLower: 72,
+    freeTestosterone: 4.2,
+    freeTestosteroneUpper: 4.8,
+    freeTestosteroneLower: 3.6,
     velocityP: -3.5,
-    velocityE: -18.0,
+    velocityFT: -0.1,
     phase: "Luteal Termination",
   },
   {
@@ -130,12 +130,12 @@ const FORECAST_DATA = [
     progesterone: 2.3,
     progesteroneUpper: 3.8,
     progesteroneLower: 1.0,
-    estrogen: 72,
-    estrogenUpper: 86,
-    estrogenLower: 58,
+    freeTestosterone: 4.1,
+    freeTestosteroneUpper: 4.7,
+    freeTestosteroneLower: 3.5,
     velocityP: -3.1,
-    velocityE: -16.0,
-    phase: "Cycle Transition (Menses)",
+    velocityFT: -0.1,
+    phase: "Basal Follicular Reset",
   },
 ];
 
@@ -176,7 +176,7 @@ export default function HormoneVelocityForecast({
             Forward Hormone Velocity Forecast
           </h3>
           <p className="text-xs text-slate-500 dark:text-[#A0B4BE] mt-0.5">
-            Predictive continuous trajectories of Progesterone and Estrogen heading over the next 7 days.
+            Predictive continuous trajectories of Progesterone and Free Testosterone heading over the next 7 days.
           </p>
         </div>
 
@@ -217,7 +217,7 @@ export default function HormoneVelocityForecast({
       </div>
 
       {/* Velocity Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="rounded-2xl border border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23] p-4">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase text-slate-400">Progesterone Velocity</span>
@@ -234,29 +234,15 @@ export default function HormoneVelocityForecast({
 
         <div className="rounded-2xl border border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23] p-4">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase text-slate-400">Estrogen Velocity</span>
+            <span className="text-[11px] font-semibold uppercase text-slate-400">Free Testosterone Velocity</span>
             <span className="h-2 w-2 rounded-full bg-[#7C3AED]" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#7C3AED]">&minus;11.0</span>
+            <span className="text-2xl font-bold text-[#7C3AED]">+0.1</span>
             <span className="text-xs text-slate-500">pg/mL/day</span>
           </div>
           <p className="mt-1 text-[11px] text-slate-600 dark:text-[#A0B4BE]">
-            Synchronized pre-menses descent; balanced E2/P4 ratio.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23] p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase text-slate-400">Predicted Menses</span>
-            <Calendar size={14} className="text-[#F3E308]" />
-          </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900 dark:text-[#E8F2F6]">6.2</span>
-            <span className="text-xs text-slate-500">days away</span>
-          </div>
-          <p className="mt-1 text-[11px] text-slate-600 dark:text-[#A0B4BE]">
-            High confidence window: Nov 11 &ndash; Nov 13 (&plusmn;1.1 days).
+            Stable basal profile within asymptomatic physiological bounds.
           </p>
         </div>
 
@@ -303,15 +289,15 @@ export default function HormoneVelocityForecast({
                 unit=" ng"
               />
 
-              {/* Right Y Axis: Estrogen (pg/mL) */}
+              {/* Right Y Axis: Free Testosterone (pg/mL) */}
               <YAxis
-                yAxisId="estrogen"
+                yAxisId="freeTestosterone"
                 orientation="right"
-                domain={[0, 250]}
+                domain={[0, 8]}
                 tick={{ fontSize: 10, fill: "#7C3AED" }}
                 axisLine={false}
                 tickLine={false}
-                width={44}
+                width={40}
                 unit=" pg"
               />
 
@@ -329,11 +315,11 @@ export default function HormoneVelocityForecast({
                         <span className="font-bold">{item?.progesterone} ng/mL</span>
                       </div>
                       <div className="flex items-center justify-between gap-4">
-                        <span className="text-[#7C3AED] font-semibold">Estrogen (E2):</span>
-                        <span className="font-bold">{item?.estrogen} pg/mL</span>
+                        <span className="text-[#7C3AED] font-semibold">Free Testosterone (FT):</span>
+                        <span className="font-bold">{item?.freeTestosterone} pg/mL</span>
                       </div>
                       <div className="text-[10px] text-slate-400 pt-1 border-t border-slate-100 dark:border-white/5">
-                        Velocity: &Delta;P4 {item?.velocityP} ng/d &bull; &Delta;E2 {item?.velocityE} pg/d
+                        Velocity: &Delta;P4 {item?.velocityP} ng/d &bull; &Delta;FT {item?.velocityFT} pg/d
                       </div>
                     </div>
                   );
@@ -371,12 +357,12 @@ export default function HormoneVelocityForecast({
                 activeDot={{ r: 7, fill: "#0EA5A4", stroke: "#FFFFFF", strokeWidth: 3 }}
               />
 
-              {/* Estrogen Projected Line */}
+              {/* Free Testosterone Projected Line */}
               <Line
-                yAxisId="estrogen"
+                yAxisId="freeTestosterone"
                 type="monotone"
-                dataKey="estrogen"
-                name="Estrogen (pg/mL)"
+                dataKey="freeTestosterone"
+                name="Free Testosterone (pg/mL)"
                 stroke="#7C3AED"
                 strokeWidth={3}
                 strokeDasharray="4 4"
@@ -416,7 +402,7 @@ export default function HormoneVelocityForecast({
             <span className="h-2 w-2 rounded-full bg-[#0EA5A4]" /> Progesterone Velocity (&Delta;P4)
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#7C3AED]" /> Estrogen Velocity (&Delta;E2)
+            <span className="h-2 w-2 rounded-full bg-[#7C3AED]" /> Free Testosterone Velocity (&Delta;FT)
           </span>
           <span className="flex items-center gap-1.5">
             <span className="h-2 w-4 rounded-xs bg-[#0EA5A4]/20" /> 95% Bayesian Confidence Corridor

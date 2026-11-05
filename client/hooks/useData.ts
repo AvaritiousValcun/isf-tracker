@@ -353,6 +353,25 @@ export const DEFAULT_CONSULTANTS: ConsultantSummary[] = [
     relationship_status: "active",
     started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
   },
+  {
+    id: "c8e23456-789a-4bcd-ef01-23456789abcd",
+    full_name: "Dr. Grace Wanjiku",
+    professional_type: "Gynecologist",
+    initials: "GW",
+    color: "#E06D53",
+    online: true,
+    status: "active",
+    consent_status: "granted",
+    consent_scope: {
+      current_readings: true,
+      historical_readings: true,
+      trend_alerts: true,
+      chat: true,
+    },
+    relationship_id: "rel-default-3",
+    relationship_status: "active",
+    started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+  },
 ];
 
 export function useConsultants() {
@@ -443,6 +462,14 @@ export const DEFAULT_CONVERSATIONS: Conversation[] = [
     id: "conv-default-david",
     patient_user_id: "00000000-0000-4000-a000-000000000001",
     consultant_id: "b4d81234-5678-4abc-9def-0123456789ab",
+    status: "active",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "conv-default-grace",
+    patient_user_id: "00000000-0000-4000-a000-000000000001",
+    consultant_id: "c8e23456-789a-4bcd-ef01-23456789abcd",
     status: "active",
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
