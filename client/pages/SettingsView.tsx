@@ -9,6 +9,7 @@ import {
   Plus,
   CheckCircle,
   Smartphone,
+  Crown,
 } from "lucide-react";
 import {
   Card,
@@ -34,6 +35,7 @@ import {
   type TranslationKey,
 } from "../lib/i18n";
 import { useAuth } from "../hooks/useAuth";
+import { DEFAULT_CONSULTANTS } from "../hooks/useData";
 
 type ThemeMode = "light" | "dark" | "system";
 
@@ -252,7 +254,7 @@ export default function SettingsView({
   const [sub, setSub] = useState<Subscription | null>(null);
   const [patch, setPatch] = useState<Patch | null>(null);
   const [passkeys, setPasskeys] = useState<Passkey[]>([]);
-  const [consultants, setConsultants] = useState<Consultant[]>([]);
+  const [consultants, setConsultants] = useState<any[]>(DEFAULT_CONSULTANTS);
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [addingPasskey, setAddingPasskey] = useState(false);
   const [loadingSettings, setLoadingSettings] = useState(false);
@@ -347,13 +349,20 @@ export default function SettingsView({
       if (cRes.status === "fulfilled" && cRes.value.ok) {
         const consultantData = await cRes.value.json();
 
-        setConsultants(
-          Array.isArray(consultantData)
-            ? consultantData
-            : Array.isArray(consultantData?.consultants)
-              ? consultantData.consultants
-              : []
-        );
+        const raw = Array.isArray(consultantData)
+          ? consultantData
+          : Array.isArray(consultantData?.consultants)
+            ? consultantData.consultants
+            : [];
+
+        const merged = [...raw];
+        for (const def of DEFAULT_CONSULTANTS) {
+          if (!merged.some((c: any) => c.id === def.id || c.full_name === def.full_name)) {
+            merged.push(def);
+          }
+        }
+
+        setConsultants(merged);
       } else if (cRes.status === "fulfilled") {
         console.error(
           "Consultants request failed:",
@@ -841,10 +850,14 @@ export default function SettingsView({
         </CardContent>
       </Card>
 
-      <Card className="shadow-sm">
+      <Card className={`shadow-sm transition-all duration-300 ${
+        sub?.plan === "premium"
+          ? "border-teal-200/80 dark:border-teal-800/50 bg-gradient-to-br from-white via-teal-50/20 to-emerald-50/25 dark:from-[#15232A] dark:via-[#13282E] dark:to-[#0F1E24] shadow-[0_8px_30px_rgba(14,165,164,0.06)]"
+          : "border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A]"
+      }`}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CreditCard className="w-5 h-5 text-primary" />
+            <CreditCard className={`w-5 h-5 ${sub?.plan === "premium" ? "text-teal-600 dark:text-teal-400" : "text-primary"}`} />
             {tr("settings.subscription.title")}
           </CardTitle>
 
@@ -856,7 +869,10 @@ export default function SettingsView({
         <CardContent className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <span className="text-xl font-bold capitalize text-foreground">
+              <span className="text-xl font-bold capitalize text-foreground flex items-center gap-2">
+                {sub?.plan === "premium" && (
+                  <Crown className="w-5 h-5 text-amber-500 drop-shadow-xs" />
+                )}
                 {sub?.plan === "premium"
                   ? tr(
                       "settings.subscription.premium_plan"
@@ -866,7 +882,11 @@ export default function SettingsView({
                     )}
               </span>
 
-              <Badge className="bg-emerald-600">
+              <Badge className={
+                sub?.plan === "premium"
+                  ? "bg-gradient-to-r from-emerald-600 to-[#0EA5A4] text-white border-0 shadow-xs"
+                  : "bg-slate-200 text-slate-700 dark:bg-[#1C2F38] dark:text-[#A0B4BE] border-0"
+              }>
                 {sub?.status
                   ? sub.status
                   : tr(
@@ -1028,15 +1048,29 @@ export default function SettingsView({
             {consultants.map((consultant) => (
               <div
                 key={consultant.id}
-                className="rounded-lg border p-3"
+                className="rounded-xl border border-slate-200 dark:border-white/10 p-3.5 flex items-center justify-between bg-slate-50/50 dark:bg-[#1C2F38]/50"
               >
-                <p className="font-medium">
-                  {consultant.full_name ||
-                    consultant.name ||
-                    tr(
-                      "settings.care_team.consultant"
-                    )}
-                </p>
+                <div className="flex items-center gap-3">
+                  <div
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white shadow-xs"
+                    style={{ background: consultant.color || "#0EA5A4" }}
+                  >
+                    {consultant.initials || consultant.full_name?.slice(0, 2).toUpperCase() || "DR"}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm text-foreground">
+                      {consultant.full_name ||
+                        consultant.name ||
+                        tr("settings.care_team.consultant")}
+                    </p>
+                    <p className="text-xs text-muted-foreground capitalize">
+                      {consultant.professional_type || "Clinical Specialist"}
+                    </p>
+                  </div>
+                </div>
+                <Badge variant="outline" className="text-xs text-emerald-600 border-emerald-200 dark:border-emerald-900/40 bg-emerald-50 dark:bg-emerald-950/20">
+                  Connected
+                </Badge>
               </div>
             ))}
           </CardContent>

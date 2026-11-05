@@ -22,6 +22,7 @@ import {
   BatteryMedium,
   CheckCircle2,
   ChevronRight,
+  Crown,
   LockKeyhole,
   MessageCircle,
   ShieldCheck,
@@ -805,8 +806,19 @@ export default function HomeView({
                 <Sparkles size={12} className="text-[#7A6600] dark:text-[#F3E308]" />
                 Micro-needle Telemetry Active
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-[#1C2F38] px-3 py-1 text-[11px] font-semibold text-slate-700 dark:text-[#E8F2F6]">
-                {isPremium ? "Premium Account" : "Free Version"}
+              <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold transition ${
+                isPremium
+                  ? "border border-amber-300/80 dark:border-amber-500/30 bg-gradient-to-r from-amber-50 via-teal-50/60 to-emerald-50 dark:from-amber-950/40 dark:via-teal-950/30 dark:to-emerald-950/40 text-amber-900 dark:text-amber-300 shadow-xs"
+                  : "border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-[#1C2F38] text-slate-700 dark:text-[#E8F2F6]"
+              }`}>
+                {isPremium ? (
+                  <>
+                    <Crown size={12} className="text-amber-500 dark:text-amber-400" />
+                    <span>Premium Account</span>
+                  </>
+                ) : (
+                  <span>Free Version</span>
+                )}
               </span>
               <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-[#738C98]">
                 {dateStr}

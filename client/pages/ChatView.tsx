@@ -24,6 +24,7 @@ import {
   Clock3,
   Copy,
   Check,
+  Crown,
   ExternalLink,
   HelpCircle,
   BookOpen,
@@ -85,8 +86,16 @@ export default function ChatView({ language }: ChatViewProps) {
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  const effectiveConsultants: ConsultantInfo[] =
-    consultants.length > 0 ? consultants : DEFAULT_CONSULTANTS;
+  // Guarantee all 3 core care team specialists (including Gynecologist) are always available
+  const effectiveConsultants: ConsultantInfo[] = (() => {
+    const list = consultants.length > 0 ? [...consultants] : [...DEFAULT_CONSULTANTS];
+    for (const def of DEFAULT_CONSULTANTS) {
+      if (!list.some((c) => c.id === def.id || c.full_name === def.full_name)) {
+        list.push(def);
+      }
+    }
+    return list;
+  })();
   const consultant =
     effectiveConsultants[activeConsultantIdx] || effectiveConsultants[0];
 
@@ -682,16 +691,23 @@ export default function ChatView({ language }: ChatViewProps) {
                     onKeyDown={(e) =>
                       e.key === "Enter" && !e.shiftKey && handleSendMessage()
                     }
-                    placeholder="Ask Dr. Amina or Dr. David about your hormones, cycle, or telemetry..."
+                    placeholder="Ask Dr. Amina, Dr. David, or Dr. Grace about your hormones, cycle, or telemetry..."
                     className="min-w-0 flex-1 bg-transparent py-2 text-[12px] text-[#2C4C5C] dark:text-[#E8F2F6] outline-none placeholder:text-slate-500 dark:placeholder:text-[#738C98]"
                   />
-                  <span className="hidden text-[10px] text-slate-500 dark:text-[#A0B4BE] sm:block">
-                    {isPremium
-                      ? t(language, "chat.unlimited")
-                      : `${Math.max(
+                  <span className="hidden text-[10px] sm:flex items-center gap-1">
+                    {isPremium ? (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-teal-300 dark:border-teal-700/50 bg-teal-50 dark:bg-teal-950/40 px-2 py-0.5 font-semibold text-teal-700 dark:text-teal-300">
+                        <Crown size={10} className="text-amber-500" />
+                        {t(language, "chat.unlimited")}
+                      </span>
+                    ) : (
+                      <span className="text-slate-500 dark:text-[#A0B4BE]">
+                        {`${Math.max(
                           0,
                           FREE_MESSAGE_LIMIT - messageCount
                         )} ${t(language, "chat.messagesLeft")}`}
+                      </span>
+                    )}
                   </span>
                   <button
                     onClick={() => handleSendMessage()}

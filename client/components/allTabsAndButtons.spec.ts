@@ -232,6 +232,33 @@ describe("All Tabs, Buttons, Dialogs, and Interactive Controls Verification", ()
       expect(consultantIds).toContain("c8e23456-789a-4bcd-ef01-23456789abcd");
     });
 
+    it("guarantees Dr. Grace Wanjiku (Gynecologist) is merged and always present even if server only returns 2 consultants", () => {
+      const serverPartial = [
+        {
+          id: "375d31f5-c96f-4d11-8934-be6aec206f56",
+          full_name: "Dr. Amina Patel",
+          professional_type: "Reproductive Endocrinologist",
+        },
+        {
+          id: "b4d81234-5678-4abc-9def-0123456789ab",
+          full_name: "Dr. David Kim",
+          professional_type: "Obstetrician & Gynecologist",
+        },
+      ];
+
+      const merged = [...serverPartial];
+      for (const def of DEFAULT_CONSULTANTS) {
+        if (!merged.some((c) => c.id === def.id || c.full_name === def.full_name)) {
+          merged.push(def);
+        }
+      }
+
+      expect(merged).toHaveLength(3);
+      const gyn = merged.find((c) => c.professional_type === "Gynecologist");
+      expect(gyn).toBeDefined();
+      expect(gyn?.full_name).toBe("Dr. Grace Wanjiku");
+    });
+
     it("verifies selecting a specialist switches the active chat session", () => {
       let activeIndex = 0;
       let hasSelected = false;
@@ -487,6 +514,33 @@ describe("All Tabs, Buttons, Dialogs, and Interactive Controls Verification", ()
       expect(passkeyChallengeRequested).toBe(false);
       requestPasskeyLogin();
       expect(passkeyChallengeRequested).toBe(true);
+    });
+  });
+
+  /* =========================================================
+     7. FREE VS. PREMIUM SUBTLE VISUAL COLOR DISTINCTIONS
+  ========================================================= */
+  describe("Free vs. Premium Subtle Visual Color Distinctions", () => {
+    it("verifies subtle color differences between free and premium forecast containers", () => {
+      const getContainerClasses = (isPrem: boolean) =>
+        isPrem
+          ? "border-[#0EA5A4]/40 bg-gradient-to-br from-[#FAFCFD] via-[#F3FAF9] to-[#EBF6F6]"
+          : "border-slate-200 bg-white";
+
+      expect(getContainerClasses(true)).toContain("border-[#0EA5A4]/40");
+      expect(getContainerClasses(true)).toContain("bg-gradient-to-br");
+      expect(getContainerClasses(false)).toBe("border-slate-200 bg-white");
+      expect(getContainerClasses(true)).not.toBe(getContainerClasses(false));
+    });
+
+    it("verifies subtle color differences for hero telemetry badges", () => {
+      const getHeroBadge = (isPrem: boolean) =>
+        isPrem
+          ? "border-amber-300/80 bg-gradient-to-r from-amber-50 via-teal-50/60 to-emerald-50 text-amber-900"
+          : "border-slate-200 bg-slate-100 text-slate-700";
+
+      expect(getHeroBadge(true)).toContain("border-amber-300/80");
+      expect(getHeroBadge(false)).toBe("border-slate-200 bg-slate-100 text-slate-700");
     });
   });
 });

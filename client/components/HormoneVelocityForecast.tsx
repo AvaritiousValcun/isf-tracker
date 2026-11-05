@@ -153,7 +153,11 @@ export default function HormoneVelocityForecast({
   const displayData = showPremium ? FORECAST_DATA : FORECAST_DATA.slice(0, 3);
 
   return (
-    <div className="rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5 sm:p-6 shadow-sm space-y-6">
+    <div className={`rounded-[24px] border p-5 sm:p-6 transition-all duration-300 space-y-6 ${
+      showPremium
+        ? "border-[#0EA5A4]/40 dark:border-[#0EA5A4]/35 bg-gradient-to-br from-[#FAFCFD] via-[#F3FAF9] to-[#EBF6F6] dark:from-[#15232A] dark:via-[#13272F] dark:to-[#0F2026] shadow-[0_12px_36px_rgba(14,165,164,0.08)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.45)]"
+        : "border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] shadow-sm"
+    }`}>
       
       {/* Header and Plan Selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -163,8 +167,8 @@ export default function HormoneVelocityForecast({
               <Sparkles size={12} /> 7-Day Velocity Model
             </span>
             {showPremium ? (
-              <Badge className="bg-[#0EA5A4] text-white hover:bg-[#0EA5A4] text-[10px] flex items-center gap-1">
-                <Crown size={11} /> Premium Forecast
+              <Badge className="bg-gradient-to-r from-[#0EA5A4] via-[#0D9488] to-[#14B8A6] text-white hover:opacity-95 text-[10px] flex items-center gap-1 border border-teal-300/30 shadow-xs">
+                <Crown size={11} className="text-amber-300" /> Premium Forecast
               </Badge>
             ) : (
               <Badge variant="outline" className="text-slate-500 border-slate-300 dark:border-white/10 text-[10px]">
@@ -187,7 +191,7 @@ export default function HormoneVelocityForecast({
               onClick={() => setTierOverride("free")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 !showPremium
-                  ? "bg-white dark:bg-[#15232A] text-slate-900 dark:text-white shadow-xs"
+                  ? "bg-white dark:bg-[#15232A] text-slate-800 dark:text-slate-100 shadow-xs border border-slate-200 dark:border-white/10"
                   : "text-slate-500 hover:text-slate-800 dark:text-[#A0B4BE]"
               }`}
             >
@@ -195,13 +199,14 @@ export default function HormoneVelocityForecast({
             </button>
             <button
               onClick={() => setTierOverride("premium")}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 showPremium
-                  ? "bg-[#0EA5A4] text-white shadow-xs"
+                  ? "bg-gradient-to-r from-[#0EA5A4] to-[#0D9488] text-white shadow-xs border border-teal-300/40"
                   : "text-slate-500 hover:text-[#0EA5A4] dark:text-[#A0B4BE]"
               }`}
             >
-              <Crown size={12} /> Premium (7-Day)
+              <Crown size={12} className={showPremium ? "text-amber-300 drop-shadow-xs" : "text-amber-500"} />
+              <span>Premium (7-Day)</span>
             </button>
           </div>
 
@@ -218,7 +223,11 @@ export default function HormoneVelocityForecast({
 
       {/* Velocity Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="rounded-2xl border border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23] p-4">
+        <div className={`rounded-2xl border p-4 transition ${
+          showPremium
+            ? "border-teal-200/70 dark:border-teal-900/40 bg-gradient-to-b from-teal-50/40 to-white dark:from-teal-950/25 dark:to-[#111D23] shadow-xs"
+            : "border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23]"
+        }`}>
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase text-slate-400">Progesterone Velocity</span>
             <span className="h-2 w-2 rounded-full bg-[#0EA5A4]" />
@@ -232,7 +241,11 @@ export default function HormoneVelocityForecast({
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23] p-4">
+        <div className={`rounded-2xl border p-4 transition ${
+          showPremium
+            ? "border-purple-200/70 dark:border-purple-900/40 bg-gradient-to-b from-purple-50/40 to-white dark:from-purple-950/25 dark:to-[#111D23] shadow-xs"
+            : "border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23]"
+        }`}>
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase text-slate-400">Free Testosterone Velocity</span>
             <span className="h-2 w-2 rounded-full bg-[#7C3AED]" />
@@ -246,7 +259,11 @@ export default function HormoneVelocityForecast({
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23] p-4">
+        <div className={`rounded-2xl border p-4 transition ${
+          showPremium
+            ? "border-amber-200/70 dark:border-amber-900/40 bg-gradient-to-b from-amber-50/40 to-white dark:from-amber-950/25 dark:to-[#111D23] shadow-xs"
+            : "border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23]"
+        }`}>
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase text-slate-400">Luteal Adequacy</span>
             <ShieldCheck size={14} className="text-emerald-500" />

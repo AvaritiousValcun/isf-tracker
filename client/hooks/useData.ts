@@ -417,7 +417,13 @@ export function useConsultants() {
           );
 
         if (Array.isArray(result) && result.length > 0) {
-          setConsultants(result);
+          const merged = [...result];
+          for (const def of DEFAULT_CONSULTANTS) {
+            if (!merged.some((c) => c.id === def.id || c.full_name === def.full_name)) {
+              merged.push(def);
+            }
+          }
+          setConsultants(merged);
         } else {
           setConsultants(DEFAULT_CONSULTANTS);
         }
