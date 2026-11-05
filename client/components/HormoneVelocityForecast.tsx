@@ -32,7 +32,7 @@ interface HormoneVelocityForecastProps {
 }
 
 // 7-day projected forward data starting from today (Cycle Day 21)
-const FORECAST_DATA = [
+export const FORECAST_DATA = [
   {
     dayLabel: "Today (D21)",
     dayOffset: 0,

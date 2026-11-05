@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Sparkles, Eye, RotateCw, Play, Pause, Layers } from "lucide-react";
 
-type HormoneType = "progesterone" | "freeTestosterone";
+export type HormoneType = "progesterone" | "freeTestosterone";
 
 interface Atom {
   x: number;
@@ -29,7 +29,7 @@ interface HormoneConfig {
   bonds: Bond[];
 }
 
-const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
+export const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
   progesterone: {
     name: "Progesterone (P4)",
     formula: "C₂₁H₃₀O₂",

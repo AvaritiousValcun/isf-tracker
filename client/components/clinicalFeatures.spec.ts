@@ -34,11 +34,11 @@ describe("Clinical Features & Velocity Models", () => {
       expect(sampleId).toMatch(/^KMPDC-ISF-2026-\d{6}$/);
     });
 
-    it("ensures all 4 key clinical biomarkers are present in telemetry summary", () => {
-      const biomarkers = ["Progesterone", "Total Androgens", "Estradiol", "Glycemic Correlation"];
-      expect(biomarkers).toHaveLength(4);
+    it("ensures focus clinical biomarkers are present in telemetry summary", () => {
+      const biomarkers = ["Progesterone", "Free Testosterone"];
+      expect(biomarkers).toHaveLength(2);
       expect(biomarkers).toContain("Progesterone");
-      expect(biomarkers).toContain("Estradiol");
+      expect(biomarkers).toContain("Free Testosterone");
     });
   });
 

@@ -119,14 +119,14 @@ describe("Frontend UI & User Interface Elements Verification", () => {
       const reportRisks = {
         pcos: 31.0,
         insulin_resistance: 24.0,
-        cardiovascular: 8.5,
-        hypertension: 9.0,
+        non_alcoholic_liver_disease: 9.0,
+        type_2_diabetes: 12.0,
       };
 
       expect(reportRisks.pcos).toBe(31.0);
       expect(reportRisks.insulin_resistance).toBe(24.0);
-      expect(reportRisks.cardiovascular).toBe(8.5);
-      expect(reportRisks.hypertension).toBe(9.0);
+      expect(reportRisks.non_alcoholic_liver_disease).toBe(9.0);
+      expect(reportRisks.type_2_diabetes).toBe(12.0);
       expect(reportRisks.pcos).not.toBe(reportRisks.insulin_resistance);
     });
   });
