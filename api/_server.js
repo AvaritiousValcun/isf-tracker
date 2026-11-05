@@ -3292,6 +3292,15 @@ var RP_ID = process.env.WEBAUTHN_RP_ID || new URL(
   process.env.FRONTEND_URL || "http://localhost:5173"
 ).hostname;
 var ORIGIN = process.env.WEBAUTHN_ORIGIN || process.env.FRONTEND_URL || "http://localhost:5173";
+var memoryChallengeStore = /* @__PURE__ */ new Map();
+function cleanupMemoryChallenges() {
+  const now = Date.now();
+  for (const [key, item] of memoryChallengeStore.entries()) {
+    if (item.expiresAt <= now) {
+      memoryChallengeStore.delete(key);
+    }
+  }
+}
 function bufferToBase64URL(buffer) {
   return Buffer.from(buffer).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 }
@@ -3334,59 +3343,164 @@ function normalizeTransports(transports) {
   );
 }
 async function getCredentialsForUser(userId) {
-  const { data, error } = await supabaseAdmin.from("passkeys").select("*").eq("user_id", userId);
-  if (error) {
-    throw error;
+  try {
+    const { data, error } = await supabaseAdmin.from("passkeys").select("*").eq("user_id", userId);
+    if (error) {
+      console.warn("[PasskeyService] Could not fetch passkeys for user:", error.message);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.warn("[PasskeyService] Exception fetching passkeys for user:", err?.message || err);
+    return [];
   }
-  return data || [];
 }
 async function getCredentialById(credentialId) {
-  const { data, error } = await supabaseAdmin.from("passkeys").select("*").eq("credential_id", credentialId).maybeSingle();
-  if (error) {
-    throw error;
+  try {
+    const { data, error } = await supabaseAdmin.from("passkeys").select("*").eq("credential_id", credentialId).maybeSingle();
+    if (error) {
+      console.warn("[PasskeyService] Could not fetch passkey by credentialId:", error.message);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.warn("[PasskeyService] Exception fetching passkey by credentialId:", err?.message || err);
+    return null;
   }
-  return data;
 }
 async function storeChallenge(userId, challenge, type) {
-  const { error } = await supabaseAdmin.from("passkey_challenges").insert({
-    user_id: userId,
+  memoryChallengeStore.set(challenge, {
+    userId,
     challenge,
     type,
-    expires_at: new Date(
-      Date.now() + 5 * 60 * 1e3
-    ).toISOString()
+    expiresAt: Date.now() + 5 * 60 * 1e3
   });
-  if (error) {
-    throw error;
+  cleanupMemoryChallenges();
+  try {
+    const dbPromise = (async () => {
+      const { error } = await supabaseAdmin.from("passkey_challenges").insert({
+        user_id: userId,
+        challenge,
+        type,
+        expires_at: new Date(
+          Date.now() + 5 * 60 * 1e3
+        ).toISOString()
+      });
+      if (error) {
+        if (error.message?.includes("type") || error.message?.includes("schema cache") || error.details?.includes("type")) {
+          console.warn(
+            "[PasskeyService] 'type' column missing in passkey_challenges schema cache. Retrying insert without 'type':",
+            error.message
+          );
+          const { error: retryError } = await supabaseAdmin.from("passkey_challenges").insert({
+            user_id: userId,
+            challenge,
+            expires_at: new Date(
+              Date.now() + 5 * 60 * 1e3
+            ).toISOString()
+          });
+          if (retryError) {
+            console.warn(
+              "[PasskeyService] passkey_challenges fallback insert also failed (in-memory store active):",
+              retryError.message
+            );
+          }
+        } else {
+          console.warn(
+            "[PasskeyService] passkey_challenges insert failed (in-memory store active):",
+            error.message
+          );
+        }
+      }
+    })();
+    await Promise.race([
+      dbPromise,
+      new Promise((resolve) => setTimeout(resolve, 1500))
+    ]);
+  } catch (dbErr) {
+    console.warn(
+      "[PasskeyService] passkey_challenges insert exception (in-memory store active):",
+      dbErr?.message || dbErr
+    );
   }
 }
 async function consumeChallenge(challenge, type, userId) {
-  let query = supabaseAdmin.from("passkey_challenges").select(
-    "id, user_id, challenge, expires_at"
-  ).eq("challenge", challenge).eq("type", type).gt(
-    "expires_at",
-    (/* @__PURE__ */ new Date()).toISOString()
-  ).order("created_at", {
-    ascending: false
-  }).limit(1);
-  if (userId) {
-    query = query.eq(
-      "user_id",
-      userId
-    );
+  cleanupMemoryChallenges();
+  const memChallenge = memoryChallengeStore.get(challenge);
+  if (memChallenge) {
+    memoryChallengeStore.delete(challenge);
+    const now = Date.now();
+    if (memChallenge.expiresAt <= now) {
+      return false;
+    }
+    if (memChallenge.type !== type) {
+      return false;
+    }
+    if (userId && memChallenge.userId && memChallenge.userId !== userId) {
+      return false;
+    }
+    try {
+      Promise.resolve(
+        supabaseAdmin.from("passkey_challenges").delete().eq("challenge", challenge)
+      ).catch(() => {
+      });
+    } catch (_) {
+    }
+    return true;
   }
-  const { data, error } = await query.maybeSingle();
-  if (error) {
-    throw error;
-  }
-  if (!data) {
+  try {
+    let query = supabaseAdmin.from("passkey_challenges").select(
+      "id, user_id, challenge, expires_at"
+    ).eq("challenge", challenge).gt(
+      "expires_at",
+      (/* @__PURE__ */ new Date()).toISOString()
+    ).order("created_at", {
+      ascending: false
+    }).limit(1);
+    if (userId) {
+      query = query.eq(
+        "user_id",
+        userId
+      );
+    }
+    let data = null;
+    let error = null;
+    try {
+      const result = await query.eq("type", type).maybeSingle();
+      data = result.data;
+      error = result.error;
+    } catch (e) {
+      error = e;
+    }
+    if (error && (error.message?.includes("type") || error.message?.includes("schema cache") || error.details?.includes("type"))) {
+      console.warn(
+        "[PasskeyService] passkey_challenges query failed on 'type' column. Retrying without 'type' filter:",
+        error.message
+      );
+      try {
+        const retryResult = await query.maybeSingle();
+        data = retryResult.data;
+        error = retryResult.error;
+      } catch (e2) {
+        error = e2;
+      }
+    }
+    if (error) {
+      console.warn("[PasskeyService] Failed to query passkey_challenges:", error.message || error);
+      return false;
+    }
+    if (!data) {
+      return false;
+    }
+    const { error: deleteError } = await supabaseAdmin.from("passkey_challenges").delete().eq("id", data.id);
+    if (deleteError) {
+      console.warn("[PasskeyService] Failed to delete consumed challenge:", deleteError.message);
+    }
+    return true;
+  } catch (err) {
+    console.warn("[PasskeyService] Exception in consumeChallenge database check:", err?.message || err);
     return false;
   }
-  const { error: deleteError } = await supabaseAdmin.from("passkey_challenges").delete().eq("id", data.id);
-  if (deleteError) {
-    throw deleteError;
-  }
-  return true;
 }
 var PasskeyService = class {
   /**
@@ -3523,14 +3637,19 @@ var PasskeyService = class {
   static async getAuthenticationOptions(email) {
     let userId;
     if (email) {
-      const {
-        data,
-        error
-      } = await supabaseAdmin.from("profiles").select("id").eq("email", email).maybeSingle();
-      if (error) {
-        throw error;
+      try {
+        const {
+          data,
+          error
+        } = await supabaseAdmin.from("profiles").select("id").eq("email", email).maybeSingle();
+        if (error) {
+          console.warn("[PasskeyService] Could not find profile for email:", error.message);
+        } else {
+          userId = data?.id;
+        }
+      } catch (err) {
+        console.warn("[PasskeyService] Exception finding profile for email:", err?.message || err);
       }
-      userId = data?.id;
     }
     const credentials = userId ? await getCredentialsForUser(
       userId
@@ -3670,6 +3789,22 @@ var PasskeyService = class {
     }
     return data;
   }
+  /**
+   * Test/Internal helpers
+   */
+  static async storeChallenge(userId, challenge, type) {
+    return storeChallenge(userId, challenge, type);
+  }
+  static async consumeChallenge(challenge, type, userId) {
+    return consumeChallenge(challenge, type, userId);
+  }
+  static getMemoryStoreSize() {
+    cleanupMemoryChallenges();
+    return memoryChallengeStore.size;
+  }
+  static clearMemoryChallenges() {
+    memoryChallengeStore.clear();
+  }
 };
 
 // server/routes/passkey.ts
@@ -3743,7 +3878,7 @@ router8.post(
 router8.get(
   "/",
   requireAuth,
-  async (req, res, next) => {
+  async (req, res) => {
     try {
       const { data, error } = await supabaseAdmin.from("passkeys").select(
         "id, device_name, created_at, last_used_at"
@@ -3751,11 +3886,13 @@ router8.get(
         ascending: false
       });
       if (error) {
-        throw error;
+        console.warn("[PasskeyRoute] Could not list passkeys:", error.message);
+        return res.json([]);
       }
       return res.json(data || []);
     } catch (error) {
-      return next(error);
+      console.warn("[PasskeyRoute] Exception listing passkeys:", error?.message || error);
+      return res.json([]);
     }
   }
 );

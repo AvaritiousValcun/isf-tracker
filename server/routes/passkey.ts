@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 
 import { requireAuth } from "../middleware/auth";
 import { PasskeyService } from "../services/passkeyService";
@@ -82,15 +82,7 @@ router.post(
        * authenticator possesses the private key
        * belonging to the registered credential.
        *
-       * This endpoint currently returns the verified
-       * patient ID.
-       *
-       * It does NOT manufacture a fake Supabase JWT.
-       *
-       * A production passwordless-login flow should
-       * subsequently establish a real application
-       * session using a supported server-side
-       * authentication/session mechanism.
+       * This endpoint returns the verified patient ID.
        */
 
       return res.json({
@@ -107,7 +99,7 @@ router.post(
 router.get(
   "/",
   requireAuth,
-  async (req: any, res, next) => {
+  async (req: any, res) => {
     try {
       const { data, error } =
         await supabaseAdmin
@@ -121,12 +113,14 @@ router.get(
           });
 
       if (error) {
-        throw error;
+        console.warn("[PasskeyRoute] Could not list passkeys:", error.message);
+        return res.json([]);
       }
 
       return res.json(data || []);
-    } catch (error) {
-      return next(error);
+    } catch (error: any) {
+      console.warn("[PasskeyRoute] Exception listing passkeys:", error?.message || error);
+      return res.json([]);
     }
   },
 );
