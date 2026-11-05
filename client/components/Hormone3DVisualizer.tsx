@@ -39,30 +39,30 @@ const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
     description: "Primary biological estrogen regulating follicular growth and endometrial proliferation in ISF.",
     atoms: [
       // Ring A (Aromatic)
-      { x: -110, y: -25, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -145, y: 15, z: 8, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -120, y: 60, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -70, y: 60, z: -8, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -40, y: 20, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -65, y: -25, z: 8, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: -110, y: -25, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: -145, y: 15, z: 8, element: "C", color: "#9333EA", radius: 9 },
+      { x: -120, y: 60, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: -70, y: 60, z: -8, element: "C", color: "#9333EA", radius: 9 },
+      { x: -40, y: 20, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: -65, y: -25, z: 8, element: "C", color: "#9333EA", radius: 9 },
       // Ring B
-      { x: -35, y: 65, z: 20, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 15, y: 65, z: 12, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 40, y: 20, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 10, y: -25, z: -10, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: -35, y: 65, z: 20, element: "C", color: "#9333EA", radius: 9 },
+      { x: 15, y: 65, z: 12, element: "C", color: "#9333EA", radius: 9 },
+      { x: 40, y: 20, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: 10, y: -25, z: -10, element: "C", color: "#9333EA", radius: 9 },
       // Ring C
-      { x: 15, y: -70, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 65, y: -70, z: 15, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 90, y: -25, z: 5, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 60, y: 20, z: -10, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: 15, y: -70, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: 65, y: -70, z: 15, element: "C", color: "#9333EA", radius: 9 },
+      { x: 90, y: -25, z: 5, element: "C", color: "#9333EA", radius: 9 },
+      { x: 60, y: 20, z: -10, element: "C", color: "#9333EA", radius: 9 },
       // Ring D (5-carbon)
-      { x: 105, y: 60, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 145, y: 35, z: 12, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 135, y: -20, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: 105, y: 60, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: 145, y: 35, z: 12, element: "C", color: "#9333EA", radius: 9 },
+      { x: 135, y: -20, z: 0, element: "C", color: "#9333EA", radius: 9 },
       // Functional groups
-      { x: -160, y: 95, z: 0, element: "O", color: "#E06D53", radius: 11 },   // 3-OH Oxygen
-      { x: 175, y: -45, z: 12, element: "O", color: "#E06D53", radius: 11 },  // 17-OH Oxygen
-      { x: 90, y: -30, z: 50, element: "C", color: "#2C4C5C", radius: 8 },   // C18 methyl
+      { x: -160, y: 95, z: 0, element: "O", color: "#FB923C", radius: 11 },   // 3-OH Oxygen
+      { x: 175, y: -45, z: 12, element: "O", color: "#FB923C", radius: 11 },  // 17-OH Oxygen
+      { x: 90, y: -30, z: 50, element: "C", color: "#9333EA", radius: 8 },   // C18 methyl
     ],
     bonds: [
       { a: 0, b: 1, order: 2 }, { a: 1, b: 2, order: 1 }, { a: 2, b: 3, order: 2 },
@@ -87,33 +87,33 @@ const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
     description: "Pregnane steroid critical for secretory endometrium; spikes 48h post-ovulation.",
     atoms: [
       // Ring A
-      { x: -110, y: -25, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -145, y: 15, z: 8, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -120, y: 60, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -70, y: 60, z: -8, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -40, y: 20, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -65, y: -25, z: 8, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: -110, y: -25, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: -145, y: 15, z: 8, element: "C", color: "#9333EA", radius: 9 },
+      { x: -120, y: 60, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: -70, y: 60, z: -8, element: "C", color: "#9333EA", radius: 9 },
+      { x: -40, y: 20, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: -65, y: -25, z: 8, element: "C", color: "#9333EA", radius: 9 },
       // Ring B
-      { x: -35, y: 65, z: 20, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 15, y: 65, z: 12, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 40, y: 20, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 10, y: -25, z: -10, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: -35, y: 65, z: 20, element: "C", color: "#9333EA", radius: 9 },
+      { x: 15, y: 65, z: 12, element: "C", color: "#9333EA", radius: 9 },
+      { x: 40, y: 20, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: 10, y: -25, z: -10, element: "C", color: "#9333EA", radius: 9 },
       // Ring C
-      { x: 15, y: -70, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 65, y: -70, z: 15, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 90, y: -25, z: 5, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 60, y: 20, z: -10, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: 15, y: -70, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: 65, y: -70, z: 15, element: "C", color: "#9333EA", radius: 9 },
+      { x: 90, y: -25, z: 5, element: "C", color: "#9333EA", radius: 9 },
+      { x: 60, y: 20, z: -10, element: "C", color: "#9333EA", radius: 9 },
       // Ring D
-      { x: 105, y: 60, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 145, y: 35, z: 12, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 135, y: -20, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: 105, y: 60, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: 145, y: 35, z: 12, element: "C", color: "#9333EA", radius: 9 },
+      { x: 135, y: -20, z: 0, element: "C", color: "#9333EA", radius: 9 },
       // Functional groups
-      { x: -155, y: 95, z: 0, element: "O", color: "#F59E0B", radius: 11 },   // 3-Keto =O
-      { x: 175, y: -45, z: 12, element: "C", color: "#2C4C5C", radius: 9 },   // C20
-      { x: 195, y: -25, z: 25, element: "O", color: "#F59E0B", radius: 11 },  // 20-Keto =O
-      { x: 195, y: -80, z: 5, element: "C", color: "#2C4C5C", radius: 8 },    // C21 methyl
-      { x: -65, y: -30, z: 48, element: "C", color: "#2C4C5C", radius: 8 },   // C19 methyl
-      { x: 90, y: -30, z: 48, element: "C", color: "#2C4C5C", radius: 8 },    // C18 methyl
+      { x: -155, y: 95, z: 0, element: "O", color: "#FB923C", radius: 11 },   // 3-Keto =O
+      { x: 175, y: -45, z: 12, element: "C", color: "#9333EA", radius: 9 },   // C20
+      { x: 195, y: -25, z: 25, element: "O", color: "#FB923C", radius: 11 },  // 20-Keto =O
+      { x: 195, y: -80, z: 5, element: "C", color: "#9333EA", radius: 8 },    // C21 methyl
+      { x: -65, y: -30, z: 48, element: "C", color: "#9333EA", radius: 8 },   // C19 methyl
+      { x: 90, y: -30, z: 48, element: "C", color: "#9333EA", radius: 8 },    // C18 methyl
     ],
     bonds: [
       { a: 0, b: 1, order: 1 }, { a: 1, b: 2, order: 1 }, { a: 2, b: 3, order: 1 },
@@ -139,34 +139,34 @@ const HORMONE_DATA: Record<HormoneType, HormoneConfig> = {
     description: "Glucocorticoid tracking systemic physiological stress, adrenal balance, and metabolic dynamics in ISF.",
     atoms: [
       // Ring A
-      { x: -110, y: -25, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -145, y: 15, z: 8, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -120, y: 60, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -70, y: 60, z: -8, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -40, y: 20, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: -65, y: -25, z: 8, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: -110, y: -25, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: -145, y: 15, z: 8, element: "C", color: "#9333EA", radius: 9 },
+      { x: -120, y: 60, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: -70, y: 60, z: -8, element: "C", color: "#9333EA", radius: 9 },
+      { x: -40, y: 20, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: -65, y: -25, z: 8, element: "C", color: "#9333EA", radius: 9 },
       // Ring B
-      { x: -35, y: 65, z: 20, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 15, y: 65, z: 12, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 40, y: 20, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 10, y: -25, z: -10, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: -35, y: 65, z: 20, element: "C", color: "#9333EA", radius: 9 },
+      { x: 15, y: 65, z: 12, element: "C", color: "#9333EA", radius: 9 },
+      { x: 40, y: 20, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: 10, y: -25, z: -10, element: "C", color: "#9333EA", radius: 9 },
       // Ring C
-      { x: 15, y: -70, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 65, y: -70, z: 15, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 90, y: -25, z: 5, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 60, y: 20, z: -10, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: 15, y: -70, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: 65, y: -70, z: 15, element: "C", color: "#9333EA", radius: 9 },
+      { x: 90, y: -25, z: 5, element: "C", color: "#9333EA", radius: 9 },
+      { x: 60, y: 20, z: -10, element: "C", color: "#9333EA", radius: 9 },
       // Ring D
-      { x: 105, y: 60, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 145, y: 35, z: 12, element: "C", color: "#2C4C5C", radius: 9 },
-      { x: 135, y: -20, z: 0, element: "C", color: "#2C4C5C", radius: 9 },
+      { x: 105, y: 60, z: 0, element: "C", color: "#9333EA", radius: 9 },
+      { x: 145, y: 35, z: 12, element: "C", color: "#9333EA", radius: 9 },
+      { x: 135, y: -20, z: 0, element: "C", color: "#9333EA", radius: 9 },
       // Functional groups
-      { x: -155, y: 95, z: 0, element: "O", color: "#F59E0B", radius: 11 },   // 3-Keto =O
-      { x: 25, y: -100, z: -10, element: "O", color: "#10B981", radius: 11 }, // 11β-OH
-      { x: 140, y: 15, z: -35, element: "O", color: "#10B981", radius: 11 },  // 17α-OH
-      { x: 175, y: -45, z: 12, element: "C", color: "#2C4C5C", radius: 9 },   // C20
-      { x: 195, y: -25, z: 25, element: "O", color: "#F59E0B", radius: 11 },  // 20-Keto =O
-      { x: 205, y: -80, z: 5, element: "C", color: "#2C4C5C", radius: 8 },    // C21
-      { x: 240, y: -90, z: 15, element: "O", color: "#10B981", radius: 11 },  // 21-OH
+      { x: -155, y: 95, z: 0, element: "O", color: "#FB923C", radius: 11 },   // 3-Keto =O
+      { x: 25, y: -100, z: -10, element: "O", color: "#FB923C", radius: 11 }, // 11β-OH
+      { x: 140, y: 15, z: -35, element: "O", color: "#FB923C", radius: 11 },  // 17α-OH
+      { x: 175, y: -45, z: 12, element: "C", color: "#9333EA", radius: 9 },   // C20
+      { x: 195, y: -25, z: 25, element: "O", color: "#FB923C", radius: 11 },  // 20-Keto =O
+      { x: 205, y: -80, z: 5, element: "C", color: "#9333EA", radius: 8 },    // C21
+      { x: 240, y: -90, z: 15, element: "O", color: "#FB923C", radius: 11 },  // 21-OH
     ],
     bonds: [
       { a: 0, b: 1, order: 1 }, { a: 1, b: 2, order: 1 }, { a: 2, b: 3, order: 1 },
@@ -209,9 +209,9 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
   const particlesRef = useRef<FluidParticle[]>([]);
 
   useEffect(() => {
-    // Generate 45 ambient fluid particles
+    // Generate 45 ambient fluid particles matching login page molecular palette
     const particles: FluidParticle[] = [];
-    const colors = ["#2C4C5C", "#7A6600", "#5B8DEF", "#10B981", "#E06D53"];
+    const colors = ["#9333EA", "#FB923C", "#2DD4BF", "#8FAAB5", "#A855F7"];
     for (let i = 0; i < 45; i++) {
       particles.push({
         x: (Math.random() - 0.5) * 350,
@@ -310,8 +310,8 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
         };
       });
 
-      // 3. Draw Chemical Bonds with depth
-      // Sort bonds by average Z
+      // 3. Draw Chemical Bonds (Linking Tissue) with depth
+      // In AuthPage, linking tissue is styled with 0x8faab5 (slate blue/cyan #8FAAB5)
       const sortedBonds = [...currentHormone.bonds].map((b) => {
         const atomA = projectedAtoms[b.a];
         const atomB = projectedAtoms[b.b];
@@ -325,7 +325,7 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
         const alpha = Math.min(1, Math.max(0.3, (atomA.scale + atomB.scale) / 2));
 
         ctx.save();
-        ctx.strokeStyle = `rgba(100, 116, 139, ${alpha * 0.75})`;
+        ctx.strokeStyle = `rgba(143, 170, 181, ${alpha * 0.85})`;
         ctx.lineWidth = Math.max(1.8, 2.8 * ((atomA.scale + atomB.scale) / 2));
         ctx.lineCap = "round";
 
@@ -369,19 +369,23 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
           r
         );
 
-        // Realistic lighting gradients
+        // Realistic lighting gradients matching login page floating hormone (C: 0x9333ea, O: 0xfb923c, H: 0x2dd4bf)
         if (atom.element === "C") {
-          grad.addColorStop(0, "#52798e");
-          grad.addColorStop(0.65, "#2C4C5C");
-          grad.addColorStop(1, "#182a33");
+          grad.addColorStop(0, "#e9d5ff");     // Highlight: specular lavender glow
+          grad.addColorStop(0.65, "#9333ea");   // Core: vibrant purple
+          grad.addColorStop(1, "#3b0764");      // Deep shadow: dark purple emissive
         } else if (atom.element === "O") {
-          grad.addColorStop(0, "#fed7aa");
-          grad.addColorStop(0.65, atom.color);
-          grad.addColorStop(1, "#991b1b");
+          grad.addColorStop(0, "#ffedd5");     // Highlight: warm amber specular glow
+          grad.addColorStop(0.65, "#fb923c");   // Core: vibrant orange
+          grad.addColorStop(1, "#9a3412");      // Deep shadow: dark amber emissive
+        } else if (atom.element === "H") {
+          grad.addColorStop(0, "#ccfbf1");     // Highlight: cyan-teal specular glow
+          grad.addColorStop(0.65, "#2dd4bf");   // Core: vibrant teal
+          grad.addColorStop(1, "#115e59");      // Deep shadow: dark teal emissive
         } else {
-          grad.addColorStop(0, "#94A3B8");
+          grad.addColorStop(0, "#f1f5f9");
           grad.addColorStop(0.7, atom.color);
-          grad.addColorStop(1, "#475569");
+          grad.addColorStop(1, "#334155");
         }
 
         ctx.save();
@@ -389,12 +393,12 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
         ctx.arc(atom.px, atom.py, Math.max(1, r), 0, Math.PI * 2);
         ctx.fillStyle = grad;
         ctx.shadowColor = atom.color;
-        ctx.shadowBlur = r * 0.6;
+        ctx.shadowBlur = r * 0.55;
         ctx.fill();
 
         // Optional Element symbol on larger spheres
         if (r > 6 && !compact) {
-          ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+          ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
           ctx.font = `bold ${Math.max(8, Math.round(r * 0.85))}px sans-serif`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
