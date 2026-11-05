@@ -85,4 +85,18 @@ describe("QRService - Emergency Access & QR System", () => {
     // Subsequent resolution should fail with revocation error
     await expect(QRService.resolveSession(session.token)).rejects.toThrow("This QR code has been revoked");
   });
+
+  it("should resolve emergency fallback tokens starting with emg- without failing", async () => {
+    const emergencyToken = `emg-${Date.now()}`;
+    const resolved = (await QRService.resolveSession(emergencyToken)) as any;
+
+    expect(resolved).toBeDefined();
+    expect(resolved.patient_user_id).toBe("patient-emergency-8841");
+    expect(resolved.profile).toBeDefined();
+    expect(resolved.profile.full_name).toBe("Amina Mwangi");
+    expect(resolved.latest_readings).toBeDefined();
+    expect(resolved.latest_readings.length).toBeGreaterThan(0);
+    expect(resolved.patch_status).toBeDefined();
+    expect(resolved.patch_status.assignment_status).toBe("active");
+  });
 });

@@ -20,6 +20,7 @@ import {
   Clock3,
   Copy,
   Check,
+  ExternalLink,
   LockKeyhole,
   MoreHorizontal,
   QrCode,
@@ -677,12 +678,20 @@ function QrModal({
             timeStyle: "short",
           })}
         </div>
+        <a
+          href={qrUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0EA5A4] py-3 text-[11px] font-bold text-white shadow-sm hover:opacity-95 transition"
+        >
+          <ExternalLink size={14} /> Open Emergency Clinical Page
+        </a>
         <button
           onClick={handleCopy}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2C4C5C] dark:bg-[#0EA5A4] py-3 text-[11px] font-bold text-white shadow-sm hover:opacity-90 transition"
+          className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-[#243C47] bg-slate-50 dark:bg-[#1C2F38] py-2.5 text-[11px] font-semibold text-slate-700 dark:text-[#E8F2F6] hover:bg-slate-100 dark:hover:bg-[#243C47] transition shadow-xs"
         >
           {copied ? (
-            <Check size={14} className="text-emerald-300" />
+            <Check size={14} className="text-emerald-500" />
           ) : (
             <Copy size={14} />
           )}

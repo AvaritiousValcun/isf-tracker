@@ -60,7 +60,17 @@ function AppRoutes() {
       />
 
       <Route
+        path="/emergency"
+        element={<EmergencyAccessPage />}
+      />
+
+      <Route
         path="/emergency/:token"
+        element={<EmergencyAccessPage />}
+      />
+
+      <Route
+        path="/provider/view"
         element={<EmergencyAccessPage />}
       />
 
