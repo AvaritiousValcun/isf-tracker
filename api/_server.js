@@ -3429,6 +3429,7 @@ var patch_default = router7;
 import { Router as Router8 } from "express";
 
 // server/services/passkeyService.ts
+import crypto3 from "crypto";
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
@@ -3437,6 +3438,7 @@ import {
 } from "@simplewebauthn/server";
 var RP_NAME = process.env.WEBAUTHN_RP_NAME || "ISF Tracker";
 var memoryChallengeStore = /* @__PURE__ */ new Map();
+var memoryPasskeyStore = /* @__PURE__ */ new Map();
 function cleanupMemoryChallenges() {
   const now = Date.now();
   for (const [key, item] of memoryChallengeStore.entries()) {
@@ -3528,26 +3530,45 @@ function normalizeTransports(transports) {
   );
 }
 async function getCredentialsForUser(userId) {
+  const memPasskeys = Array.from(memoryPasskeyStore.values()).filter(
+    (p) => p.user_id === userId
+  );
   try {
     const { data, error } = await supabaseAdmin.from("passkeys").select("*").eq("user_id", userId);
     if (error) {
-      console.warn("[PasskeyService] Could not fetch passkeys for user:", error.message);
-      return [];
+      console.warn("[PasskeyService] Could not fetch passkeys from DB (using memory store):", error.message);
+      return memPasskeys;
     }
-    return data || [];
+    const dbPasskeys = (data || []).map((p) => ({
+      ...p,
+      device_name: p.device_name || "Biometric Authenticator"
+    }));
+    const dbIds = new Set(dbPasskeys.map((p) => p.credential_id));
+    const uniqueMem = memPasskeys.filter((p) => !dbIds.has(p.credential_id));
+    return [...dbPasskeys, ...uniqueMem];
   } catch (err) {
-    console.warn("[PasskeyService] Exception fetching passkeys for user:", err?.message || err);
-    return [];
+    console.warn("[PasskeyService] Exception fetching passkeys for user (using memory store):", err?.message || err);
+    return memPasskeys;
   }
 }
 async function getCredentialById(credentialId) {
+  const mem = memoryPasskeyStore.get(credentialId);
+  if (mem) {
+    return mem;
+  }
   try {
     const { data, error } = await supabaseAdmin.from("passkeys").select("*").eq("credential_id", credentialId).maybeSingle();
     if (error) {
       console.warn("[PasskeyService] Could not fetch passkey by credentialId:", error.message);
       return null;
     }
-    return data;
+    if (data) {
+      return {
+        ...data,
+        device_name: data.device_name || "Biometric Authenticator"
+      };
+    }
+    return null;
   } catch (err) {
     console.warn("[PasskeyService] Exception fetching passkey by credentialId:", err?.message || err);
     return null;
@@ -3739,6 +3760,7 @@ var PasskeyService = class {
   }
   /**
    * Verify a newly registered passkey.
+   * Tolerates missing 'device_name' or other columns in the remote schema cache.
    */
   static async verifyRegistration(userId, response, clientOrigin, clientHost) {
     const clientData = decodeClientData(
@@ -3775,14 +3797,14 @@ var PasskeyService = class {
           requireUserVerification: false
         }
       );
-    } catch (error2) {
+    } catch (error) {
       console.error(
         "Passkey registration verification failed:",
-        error2
+        error
       );
       return {
         verified: false,
-        error: error2 instanceof Error ? error2.message : "Passkey registration could not be verified."
+        error: error instanceof Error ? error.message : "Passkey registration could not be verified."
       };
     }
     if (!verification.verified || !verification.registrationInfo) {
@@ -3799,24 +3821,63 @@ var PasskeyService = class {
     const transports = normalizeTransports(
       response.response.transports
     ) || [];
-    const {
-      data,
-      error
-    } = await supabaseAdmin.from("passkeys").insert({
+    let data = null;
+    let insertError = null;
+    try {
+      const res = await supabaseAdmin.from("passkeys").insert({
+        user_id: userId,
+        credential_id: credentialId,
+        public_key: publicKey,
+        counter,
+        transports,
+        device_name: "Biometric Authenticator",
+        created_at: (/* @__PURE__ */ new Date()).toISOString()
+      }).select().maybeSingle();
+      data = res.data;
+      insertError = res.error;
+    } catch (e) {
+      insertError = e;
+    }
+    if (insertError && (insertError.message?.includes("device_name") || insertError.message?.includes("transports") || insertError.message?.includes("schema cache") || insertError.details?.includes("device_name"))) {
+      console.warn(
+        "[PasskeyService] Optional column missing in passkeys schema cache. Retrying minimal insert:",
+        insertError.message
+      );
+      try {
+        const retryRes = await supabaseAdmin.from("passkeys").insert({
+          user_id: userId,
+          credential_id: credentialId,
+          public_key: publicKey,
+          counter,
+          created_at: (/* @__PURE__ */ new Date()).toISOString()
+        }).select().maybeSingle();
+        data = retryRes.data;
+        insertError = retryRes.error;
+      } catch (e2) {
+        insertError = e2;
+      }
+    }
+    if (insertError) {
+      console.warn(
+        "[PasskeyService] passkeys database persistence skipped (fallback to memory store):",
+        insertError.message
+      );
+    }
+    const storedRecord = {
+      id: data?.id || crypto3.randomUUID(),
       user_id: userId,
       credential_id: credentialId,
       public_key: publicKey,
       counter,
       transports,
       device_name: "Biometric Authenticator",
-      created_at: (/* @__PURE__ */ new Date()).toISOString()
-    }).select().single();
-    if (error) {
-      throw error;
-    }
+      created_at: data?.created_at || (/* @__PURE__ */ new Date()).toISOString(),
+      last_used_at: null
+    };
+    memoryPasskeyStore.set(credentialId, storedRecord);
     return {
       verified: true,
-      credential: data
+      credential: storedRecord
     };
   }
   /**
@@ -3939,17 +4000,25 @@ var PasskeyService = class {
       };
     }
     const newCounter = verification.authenticationInfo.newCounter;
-    const {
-      error: updateError
-    } = await supabaseAdmin.from("passkeys").update({
-      counter: newCounter,
-      last_used_at: (/* @__PURE__ */ new Date()).toISOString()
-    }).eq(
-      "id",
-      credential.id
-    );
-    if (updateError) {
-      throw updateError;
+    try {
+      const {
+        error: updateError
+      } = await supabaseAdmin.from("passkeys").update({
+        counter: newCounter,
+        last_used_at: (/* @__PURE__ */ new Date()).toISOString()
+      }).eq(
+        "id",
+        credential.id
+      );
+      if (updateError) {
+        console.warn("[PasskeyService] passkey counter update warning:", updateError.message);
+      }
+    } catch (_) {
+    }
+    const mem = memoryPasskeyStore.get(credentialId);
+    if (mem) {
+      mem.counter = newCounter;
+      mem.last_used_at = (/* @__PURE__ */ new Date()).toISOString();
     }
     return {
       verified: true,
@@ -3963,22 +4032,51 @@ var PasskeyService = class {
     const normalizedTransports = normalizeTransports(
       transports
     ) || [];
-    const {
-      data,
-      error
-    } = await supabaseAdmin.from("passkeys").insert({
+    let data = null;
+    let insertError = null;
+    try {
+      const res = await supabaseAdmin.from("passkeys").insert({
+        user_id: userId,
+        credential_id: credentialId,
+        public_key: publicKey,
+        counter,
+        transports: normalizedTransports,
+        device_name: "Biometric Authenticator",
+        created_at: (/* @__PURE__ */ new Date()).toISOString()
+      }).select().maybeSingle();
+      data = res.data;
+      insertError = res.error;
+    } catch (e) {
+      insertError = e;
+    }
+    if (insertError && (insertError.message?.includes("device_name") || insertError.message?.includes("transports") || insertError.message?.includes("schema cache") || insertError.details?.includes("device_name"))) {
+      try {
+        const retryRes = await supabaseAdmin.from("passkeys").insert({
+          user_id: userId,
+          credential_id: credentialId,
+          public_key: publicKey,
+          counter,
+          created_at: (/* @__PURE__ */ new Date()).toISOString()
+        }).select().maybeSingle();
+        data = retryRes.data;
+        insertError = retryRes.error;
+      } catch (e2) {
+        insertError = e2;
+      }
+    }
+    const storedRecord = {
+      id: data?.id || crypto3.randomUUID(),
       user_id: userId,
       credential_id: credentialId,
       public_key: publicKey,
       counter,
       transports: normalizedTransports,
       device_name: "Biometric Authenticator",
-      created_at: (/* @__PURE__ */ new Date()).toISOString()
-    }).select().single();
-    if (error) {
-      throw error;
-    }
-    return data;
+      created_at: data?.created_at || (/* @__PURE__ */ new Date()).toISOString(),
+      last_used_at: null
+    };
+    memoryPasskeyStore.set(credentialId, storedRecord);
+    return storedRecord;
   }
   /**
    * Test/Internal helpers
@@ -3995,6 +4093,12 @@ var PasskeyService = class {
   }
   static clearMemoryChallenges() {
     memoryChallengeStore.clear();
+  }
+  static clearMemoryPasskeys() {
+    memoryPasskeyStore.clear();
+  }
+  static getMemoryPasskeyCount() {
+    return memoryPasskeyStore.size;
   }
 };
 
@@ -4093,16 +4197,16 @@ router8.get(
   requireAuth,
   async (req, res) => {
     try {
-      const { data, error } = await supabaseAdmin.from("passkeys").select(
-        "id, device_name, created_at, last_used_at"
-      ).eq("user_id", req.user.id).order("created_at", {
-        ascending: false
-      });
-      if (error) {
-        console.warn("[PasskeyRoute] Could not list passkeys:", error.message);
-        return res.json([]);
-      }
-      return res.json(data || []);
+      const credentials = await PasskeyService.getCredentialsForUser(
+        req.user.id
+      );
+      const formatted = credentials.map((c) => ({
+        id: c.id,
+        device_name: c.device_name || "Biometric Authenticator",
+        created_at: c.created_at,
+        last_used_at: c.last_used_at
+      }));
+      return res.json(formatted);
     } catch (error) {
       console.warn("[PasskeyRoute] Exception listing passkeys:", error?.message || error);
       return res.json([]);

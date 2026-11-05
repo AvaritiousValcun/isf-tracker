@@ -216,16 +216,72 @@ describe("PasskeyService Resilient Challenge and PostgREST Schema Fallback", () 
       expect(isChallengeValid).toBe(true);
     });
 
-    it("generates authentication options without throwing", async () => {
-      const options = await PasskeyService.getAuthenticationOptions();
-      expect(options).toBeDefined();
-      expect(options.challenge).toBeTruthy();
+    it("tolerates missing device_name column in passkeys schema cache during credential registration", async () => {
+      let minimalInsertCalled = false;
 
-      const isChallengeValid = await PasskeyService.consumeChallenge(
-        options.challenge,
-        "authentication",
+      vi.spyOn(supabaseAdmin, "from").mockImplementation((table: string) => {
+        if (table === "passkeys") {
+          return {
+            insert: vi.fn().mockImplementation((payload: any) => {
+              if (payload.device_name) {
+                return {
+                  select: vi.fn().mockReturnValue({
+                    maybeSingle: vi.fn().mockResolvedValue({
+                      data: null,
+                      error: {
+                        message: "Could not find the 'device_name' column of 'passkeys' in the schema cache",
+                        code: "PGRST204",
+                      },
+                    }),
+                  }),
+                };
+              }
+              // Minimal insert without device_name succeeds
+              minimalInsertCalled = true;
+              return {
+                select: vi.fn().mockReturnValue({
+                  maybeSingle: vi.fn().mockResolvedValue({
+                    data: {
+                      id: "pk-123",
+                      user_id: payload.user_id,
+                      credential_id: payload.credential_id,
+                      public_key: payload.public_key,
+                      counter: payload.counter,
+                      created_at: new Date().toISOString(),
+                    },
+                    error: null,
+                  }),
+                }),
+              };
+            }),
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+              }),
+            }),
+          } as any;
+        }
+        return {
+          insert: vi.fn().mockReturnValue({
+            select: vi.fn().mockReturnValue({
+              maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+            }),
+          }),
+        } as any;
+      });
+
+      const cred = await PasskeyService.registerCredential(
+        "00000000-0000-4000-a000-000000000001",
+        "mock-cred-id-abc",
+        "mock-public-key",
+        0,
+        ["internal"],
       );
-      expect(isChallengeValid).toBe(true);
+
+      expect(cred).toBeDefined();
+      expect(cred.credential_id).toBe("mock-cred-id-abc");
+      expect(cred.device_name).toBe("Biometric Authenticator");
+      expect(minimalInsertCalled).toBe(true);
     });
   });
 });

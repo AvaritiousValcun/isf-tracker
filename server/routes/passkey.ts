@@ -129,23 +129,19 @@ router.get(
   requireAuth,
   async (req: any, res) => {
     try {
-      const { data, error } =
-        await supabaseAdmin
-          .from("passkeys")
-          .select(
-            "id, device_name, created_at, last_used_at",
-          )
-          .eq("user_id", req.user.id)
-          .order("created_at", {
-            ascending: false,
-          });
+      const credentials =
+        await PasskeyService.getCredentialsForUser(
+          req.user.id,
+        );
 
-      if (error) {
-        console.warn("[PasskeyRoute] Could not list passkeys:", error.message);
-        return res.json([]);
-      }
+      const formatted = credentials.map((c) => ({
+        id: c.id,
+        device_name: c.device_name || "Biometric Authenticator",
+        created_at: c.created_at,
+        last_used_at: c.last_used_at,
+      }));
 
-      return res.json(data || []);
+      return res.json(formatted);
     } catch (error: any) {
       console.warn("[PasskeyRoute] Exception listing passkeys:", error?.message || error);
       return res.json([]);
