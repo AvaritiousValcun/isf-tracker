@@ -35,6 +35,10 @@ import {
   X,
   Sparkles,
   FileText,
+  ArrowRight,
+  ArrowLeftRight,
+  Stethoscope,
+  MessageCircle,
 } from "lucide-react";
 
 interface ChatViewProps {
@@ -61,6 +65,7 @@ export default function ChatView({ language }: ChatViewProps) {
   const { messageCount, refetch: refetchMessageCount } = useMessageCount();
 
   const [activeConsultantIdx, setActiveConsultantIdx] = useState(0);
+  const [hasSelectedConsultant, setHasSelectedConsultant] = useState(false);
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [sending, setSending] = useState(false);
@@ -212,6 +217,9 @@ export default function ChatView({ language }: ChatViewProps) {
       ...prev,
       [consultant.id]: [...(prev[consultant.id] || []), tempPatientMsg],
     }));
+
+    // Realistic bot texting simulation delay so user sees doctor actively texting back
+    await new Promise((resolve) => setTimeout(resolve, 1100));
 
     try {
       const response = await apiRequest<{
@@ -386,9 +394,12 @@ export default function ChatView({ language }: ChatViewProps) {
             {effectiveConsultants.map((item, index) => (
               <button
                 key={item.id}
-                onClick={() => setActiveConsultantIdx(index)}
+                onClick={() => {
+                  setActiveConsultantIdx(index);
+                  setHasSelectedConsultant(true);
+                }}
                 className={`flex w-full items-center gap-3 rounded-xl p-3 text-left transition ${
-                  activeConsultantIdx === index
+                  hasSelectedConsultant && activeConsultantIdx === index
                     ? "bg-[#2C4C5C]/[0.07] dark:bg-[#F3E308]/15"
                     : "hover:bg-slate-50 dark:hover:bg-[#1C2F38]"
                 }`}
@@ -410,7 +421,7 @@ export default function ChatView({ language }: ChatViewProps) {
                     {item.professional_type}
                   </p>
                 </div>
-                {activeConsultantIdx === index && (
+                {hasSelectedConsultant && activeConsultantIdx === index && (
                   <ChevronRight
                     className="ml-auto text-[#2C4C5C] dark:text-[#F3E308]"
                     size={14}
@@ -436,23 +447,100 @@ export default function ChatView({ language }: ChatViewProps) {
           </div>
         </div>
 
-        {/* Right Column: Chat Window */}
+        {/* Right Column: Chat Window or Specialist Selection */}
         <div className="flex min-h-[520px] flex-col">
-          {consultant && (
+          {!hasSelectedConsultant ? (
+            <div className="flex flex-1 flex-col items-center justify-center p-6 sm:p-10 text-center my-auto">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0EA5A4]/15 text-[#0EA5A4] mb-3">
+                <Stethoscope size={28} />
+              </div>
+              <h3 className="font-display text-[22px] font-bold text-[#2C4C5C] dark:text-[#E8F2F6]">
+                Select Your Care Team Specialist
+              </h3>
+              <p className="mt-1.5 max-w-[480px] text-[12px] text-slate-500 dark:text-[#A0B4BE] leading-relaxed">
+                Choose a specialist below to begin your personalized consultation regarding continuous ISF hormone readings, luteal velocity, and cycle patterns.
+              </p>
+
+              <div className="mt-7 grid w-full max-w-[700px] gap-4 sm:grid-cols-2 text-left">
+                {effectiveConsultants.map((item, idx) => (
+                  <div
+                    key={item.id}
+                    onClick={() => {
+                      setActiveConsultantIdx(idx);
+                      setHasSelectedConsultant(true);
+                    }}
+                    className="group relative flex flex-col justify-between rounded-2xl border-2 border-slate-200/90 dark:border-white/10 bg-white dark:bg-[#15232A] p-5 shadow-xs hover:border-[#0EA5A4] hover:shadow-md transition cursor-pointer"
+                  >
+                    <div>
+                      <div className="flex items-center gap-3 mb-3">
+                        <div
+                          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-white shadow-xs"
+                          style={{ background: item.color }}
+                        >
+                          {item.initials || item.full_name.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                          <h4 className="font-display text-[15px] font-bold text-slate-900 dark:text-[#E8F2F6] group-hover:text-[#0EA5A4] transition">
+                            {item.full_name}
+                          </h4>
+                          <p className="text-[11px] font-semibold text-[#0EA5A4]">
+                            {item.professional_type}
+                          </p>
+                        </div>
+                      </div>
+
+                      <p className="text-[11px] text-slate-600 dark:text-[#A0B4BE] leading-relaxed mb-3">
+                        {item.id.includes("375d31f5")
+                          ? "Specializes in continuous hormone telemetry, progesterone velocity curves, and hyperandrogenic patterns."
+                          : "Specializes in luteal phase stability, cycle kinematics, ovulation support, and clinical symptom review."}
+                      </p>
+
+                      <div className="flex flex-wrap gap-1.5 mb-4">
+                        {(item.id.includes("375d31f5")
+                          ? ["ISF Biomarkers", "Progesterone", "Androgens"]
+                          : ["Cycle Forecast", "Luteal Phase", "Symptom Review"]
+                        ).map((badge) => (
+                          <span
+                            key={badge}
+                            className="rounded-md bg-slate-100 dark:bg-white/10 px-2 py-0.5 text-[9px] font-medium text-slate-600 dark:text-[#E8F2F6]"
+                          >
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="mt-auto flex w-full items-center justify-center gap-2 rounded-xl bg-[#2C4C5C] dark:bg-[#1C2F38] group-hover:bg-[#0EA5A4] py-2 text-[11px] font-bold text-white transition shadow-xs"
+                    >
+                      <span>Consult with {item.full_name}</span>
+                      <ArrowRight size={13} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : consultant ? (
             <>
               {/* Chat Top Status Header */}
               <div className="flex items-center gap-3 border-b border-slate-200 dark:border-[#243C47] px-5 py-4">
                 <div
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-[10px] font-bold"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-[10px] font-bold text-white shadow-xs"
                   style={{ background: consultant.color, color: "#FFFFFF" }}
                 >
                   {consultant.initials ||
                     consultant.full_name.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">
-                    {consultant.full_name}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">
+                      {consultant.full_name}
+                    </p>
+                    <span className="hidden sm:inline-block rounded-full bg-[#0EA5A4]/15 px-2 py-0.5 text-[9px] font-bold text-[#0EA5A4]">
+                      {consultant.professional_type}
+                    </span>
+                  </div>
                   <p className="mt-0.5 flex items-center gap-1.5 text-[10px] text-slate-500 dark:text-[#A0B4BE]">
                     <span
                       className={`h-1.5 w-1.5 rounded-full ${
@@ -464,12 +552,23 @@ export default function ChatView({ language }: ChatViewProps) {
                       : t(language, "chat.repliesSoon")}
                   </p>
                 </div>
-                <button
-                  onClick={() => setReportModalOpen(true)}
-                  className="ml-auto flex items-center gap-1 text-[11px] font-semibold text-[#0EA5A4] hover:underline"
-                >
-                  <FileText size={13} /> Clinical Summary
-                </button>
+
+                <div className="ml-auto flex items-center gap-2">
+                  <button
+                    onClick={() => setHasSelectedConsultant(false)}
+                    className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#1C2F38] px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 dark:text-[#E8F2F6] hover:bg-slate-100 dark:hover:bg-[#243C47] transition shadow-2xs cursor-pointer"
+                  >
+                    <ArrowLeftRight size={12} className="text-[#0EA5A4]" />
+                    <span className="hidden sm:inline">Change Specialist</span>
+                  </button>
+
+                  <button
+                    onClick={() => setReportModalOpen(true)}
+                    className="flex items-center gap-1 text-[11px] font-semibold text-[#0EA5A4] hover:underline"
+                  >
+                    <FileText size={13} /> Clinical Summary
+                  </button>
+                </div>
               </div>
 
               {/* Message History Feed */}
@@ -504,117 +603,67 @@ export default function ChatView({ language }: ChatViewProps) {
                   />
                 ))}
 
-                {/* Animated Typing Indicator */}
+                {/* Animated Bot Typing Simulation Indicator */}
                 {isTyping && (
                   <div className="chat-message-row flex w-full gap-3 animate-pulse">
                     <div
-                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[8px] font-bold"
+                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[8px] font-bold text-white shadow-xs"
                       style={{ background: consultant.color, color: "#FFFFFF" }}
                     >
                       {consultant.initials}
                     </div>
-                    <div className="chat-message chat-message-incoming bg-[#B8BFC1]/30 dark:bg-[#1C2F38] px-4 py-2.5 text-[12px] leading-relaxed text-slate-600 dark:text-[#A0B4BE] rounded-2xl flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#0EA5A4] animate-bounce" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#0EA5A4] animate-bounce [animation-delay:0.2s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#0EA5A4] animate-bounce [animation-delay:0.4s]" />
-                      <span className="ml-1 text-[11px] font-medium">
-                        {consultant.full_name} is evaluating your readings...
+                    <div className="chat-message chat-message-incoming bg-slate-100 dark:bg-[#1C2F38] border border-slate-200/60 dark:border-white/5 px-4 py-2.5 text-[12px] leading-relaxed text-slate-700 dark:text-[#A0B4BE] rounded-2xl flex items-center gap-2 shadow-xs">
+                      <div className="flex items-center gap-1">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#0EA5A4] animate-bounce" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#0EA5A4] animate-bounce [animation-delay:0.2s]" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#0EA5A4] animate-bounce [animation-delay:0.4s]" />
+                      </div>
+                      <span className="text-[11px] font-medium text-slate-600 dark:text-[#E8F2F6]">
+                        {consultant.full_name} is typing...
                       </span>
                     </div>
                   </div>
                 )}
 
-                {/* Common Clinical Questions & Instant Answers Section */}
-                <div className="pt-3 border-t border-slate-200/60 dark:border-white/5 space-y-2.5">
+                {/* Commonly Asked Questions Palette — Bot Simulation Trigger */}
+                <div className="pt-3 border-t border-slate-200/60 dark:border-white/5 space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#2C4C5C] dark:text-[#E8F2F6]">
+                    <p className="text-[11px] font-bold text-[#2C4C5C] dark:text-[#E8F2F6] flex items-center gap-1.5">
                       <Sparkles size={13} className="text-[#0EA5A4]" />
-                      <span>Frequently Asked Clinical Questions</span>
-                    </div>
+                      <span>Select a question to ask {consultant.full_name}:</span>
+                    </p>
                     <button
                       onClick={() => setFaqModalOpen(true)}
                       className="text-[10px] font-semibold text-[#0EA5A4] hover:underline flex items-center gap-1 cursor-pointer"
                     >
-                      <BookOpen size={11} /> Browse All Verified Answers
+                      <BookOpen size={11} /> Browse All ({CLINICAL_FAQ_ITEMS.length})
                     </button>
                   </div>
 
-                  {/* Interactive Cards with Instant Answer Toggle */}
                   <div className="grid gap-2 sm:grid-cols-2">
-                    {CLINICAL_FAQ_ITEMS.slice(0, 4).map((item) => {
-                      const isExpanded = expandedFaqId === item.id;
-                      const type = consultant.professional_type.toLowerCase();
-                      const answerText = type.includes("endocrinologist")
-                        ? item.answers.endocrinologist
-                        : type.includes("gynecologist") || type.includes("ob/gyn")
-                        ? item.answers.obgyn
-                        : item.answers.default;
-
-                      return (
-                        <div
-                          key={item.id}
-                          className={`rounded-xl border p-2.5 transition text-left ${
-                            isExpanded
-                              ? "border-[#0EA5A4] bg-[#0EA5A4]/[0.03] dark:border-[#0EA5A4]/50 shadow-xs"
-                              : "border-slate-200/80 dark:border-white/10 bg-slate-50/70 dark:bg-[#1C2F38]/60 hover:border-[#0EA5A4]/50"
-                          }`}
-                        >
-                          <div className="flex items-start justify-between gap-1.5">
-                            <div className="flex-1 min-w-0">
-                              <span className="inline-block rounded-md bg-[#2C4C5C]/5 dark:bg-white/10 px-1.5 py-0.5 text-[9px] font-bold text-[#2C4C5C] dark:text-[#A0B4BE] mb-1">
-                                {item.category}
-                              </span>
-                              <p className="text-[11px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6] leading-tight">
-                                {item.question}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Expanded Instant Answer */}
-                          {isExpanded && (
-                            <div className="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-white/10 text-[11px] leading-relaxed text-slate-700 dark:text-[#E8F2F6]/90 animate-in fade-in duration-150">
-                              <div className="flex items-center gap-1 text-[10px] font-bold text-[#0EA5A4] mb-1">
-                                <span>{consultant.full_name}'s Verified Answer:</span>
-                              </div>
-                              <p>{answerText}</p>
-                            </div>
-                          )}
-
-                          {/* Action Buttons */}
-                          <div className="mt-2 flex items-center justify-between gap-1.5 pt-1">
-                            <button
-                              onClick={() =>
-                                setExpandedFaqId(isExpanded ? null : item.id)
-                              }
-                              className="text-[10px] font-medium text-slate-500 hover:text-[#0EA5A4] dark:text-[#A0B4BE] flex items-center gap-1 cursor-pointer"
-                            >
-                              {isExpanded ? (
-                                <>
-                                  <ChevronUp size={12} /> Hide Answer
-                                </>
-                              ) : (
-                                <>
-                                  <ChevronDown size={12} /> Instant Answer
-                                </>
-                              )}
-                            </button>
-
-                            <button
-                              onClick={() => handleSendMessage(item.question)}
-                              disabled={sending}
-                              className="flex items-center gap-1 rounded-lg bg-[#2C4C5C] dark:bg-[#0EA5A4] px-2 py-1 text-[10px] font-bold text-white shadow-xs hover:opacity-90 disabled:opacity-50 transition cursor-pointer"
-                            >
-                              <Send size={10} />
-                              <span>Ask Doctor</span>
-                            </button>
-                          </div>
+                    {CLINICAL_FAQ_ITEMS.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => handleSendMessage(item.question)}
+                        disabled={sending}
+                        className="group flex items-start gap-2.5 rounded-xl border border-slate-200/90 dark:border-white/10 bg-slate-50/80 dark:bg-[#1C2F38]/70 p-2.5 text-left transition hover:border-[#0EA5A4] hover:bg-white dark:hover:bg-[#243C47] shadow-2xs cursor-pointer disabled:opacity-50"
+                      >
+                        <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#0EA5A4]/10 text-[#0EA5A4] group-hover:bg-[#0EA5A4] group-hover:text-white transition">
+                          <MessageCircle size={12} />
                         </div>
-                      );
-                    })}
+                        <div className="min-w-0 flex-1">
+                          <span className="inline-block rounded-md bg-[#2C4C5C]/5 dark:bg-white/10 px-1.5 py-0.5 text-[9px] font-bold text-[#2C4C5C] dark:text-[#A0B4BE] mb-0.5">
+                            {item.category}
+                          </span>
+                          <p className="text-[11px] font-medium text-slate-800 dark:text-[#E8F2F6] leading-snug group-hover:text-[#0EA5A4] transition">
+                            {item.question}
+                          </p>
+                        </div>
+                        <Send size={12} className="text-slate-400 group-hover:text-[#0EA5A4] shrink-0 mt-1" />
+                      </button>
+                    ))}
                   </div>
                 </div>
-
-
               </div>
 
               {/* Chat Input Bar */}
@@ -648,7 +697,7 @@ export default function ChatView({ language }: ChatViewProps) {
                 </div>
               </div>
             </>
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -674,7 +723,10 @@ export default function ChatView({ language }: ChatViewProps) {
         isOpen={faqModalOpen}
         onClose={() => setFaqModalOpen(false)}
         consultant={consultant}
-        onSelectQuestion={(q) => handleSendMessage(q)}
+        onSelectQuestion={(q) => {
+          setHasSelectedConsultant(true);
+          handleSendMessage(q);
+        }}
       />
     </div>
   );
