@@ -67,7 +67,7 @@ export default function ChatView({ language }: ChatViewProps) {
     Record<string, MessageInfo[]>
   >({});
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const effectiveConsultants: ConsultantInfo[] =
     consultants.length > 0 ? consultants : DEFAULT_CONSULTANTS;
@@ -130,9 +130,12 @@ export default function ChatView({ language }: ChatViewProps) {
     });
   }, [consultant?.id, serverMessages, conversation?.id]);
 
-  // Scroll to bottom on message updates
+  // Scroll to bottom of message container only (do NOT scroll the window or page down to predictive analysis)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
   }, [localMessagesByConsultant, isTyping, activeConsultantIdx]);
 
   const activeMessages = consultant
@@ -452,7 +455,10 @@ export default function ChatView({ language }: ChatViewProps) {
               </div>
 
               {/* Message History Feed */}
-              <div className="flex-1 space-y-4 p-5 overflow-y-auto max-h-[560px]">
+              <div
+                ref={messagesContainerRef}
+                className="flex-1 space-y-4 p-5 overflow-y-auto max-h-[560px]"
+              >
                 <div className="mx-auto flex max-w-[340px] items-center gap-2 rounded-lg bg-[#F3E308]/[0.08] dark:bg-[#F3E308]/15 px-3 py-2 text-[12px] font-medium leading-relaxed text-[#2C4C5C] dark:text-[#E8F2F6]">
                   <ShieldCheck
                     size={14}
@@ -524,7 +530,7 @@ export default function ChatView({ language }: ChatViewProps) {
                   </div>
                 </div>
 
-                <div ref={messagesEndRef} />
+
               </div>
 
               {/* Chat Input Bar */}
