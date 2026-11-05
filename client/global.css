@@ -471,3 +471,24 @@ body {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
 }
+
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  .app-shell aside,
+  .app-shell header,
+  .bottom-nav,
+  .print\:hidden {
+    display: none !important;
+  }
+  .fixed {
+    position: static !important;
+  }
+  @page {
+    margin: 1.2cm;
+    size: portrait;
+  }
+}
+

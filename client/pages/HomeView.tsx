@@ -27,6 +27,7 @@ import {
   Sparkles,
   Wifi,
   X,
+  FileText,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -41,6 +42,8 @@ import {
 } from "recharts";
 import Hormone3DVisualizer from "@/components/Hormone3DVisualizer";
 import ISFPatch3DHero from "@/components/ISFPatch3DHero";
+import HormoneVelocityForecast from "@/components/HormoneVelocityForecast";
+import ClinicalReportExportModal from "@/components/ClinicalReportExportModal";
 
 interface HomeViewProps {
   language: Language;
@@ -636,6 +639,9 @@ export default function HomeView({
     setNudgeDismissed,
   ] = useState(false);
 
+  const [chartMode, setChartMode] = useState<"velocity" | "realtime">("velocity");
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+
   const androgenRange =
     useMemo(() => {
       const range =
@@ -861,6 +867,15 @@ export default function HomeView({
 
               <button
                 type="button"
+                onClick={() => setReportModalOpen(true)}
+                className="flex items-center gap-2 rounded-full border border-[#0EA5A4]/40 bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 px-5 py-3 text-[12px] font-bold text-[#0EA5A4] transition hover:-translate-y-0.5 hover:bg-[#0EA5A4]/25 shadow-xs"
+              >
+                <FileText size={15} />
+                <span>Doctor Report (PDF)</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => setView("chat")}
                 className="flex items-center gap-2 rounded-full border border-[#B8BFC1] dark:border-[#243C47] bg-white dark:bg-[#1C2F38] px-5 py-3 text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6] transition hover:-translate-y-0.5 hover:border-[#F3E308]/40"
               >
@@ -962,81 +977,98 @@ export default function HomeView({
 
       <div id="hormone-metrics" className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_280px]">
         <div className="flex min-w-0 flex-col gap-5">
-          <section className="min-w-0 rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-4 shadow-[0_14px_45px_rgba(44,76,92,0.06)] dark:shadow-[0_14px_45px_rgba(0,0,0,0.4)] sm:p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-[#738C98]">
-                {t(
-                  language,
-                  "home.snapshot"
-                )}
-              </p>
-
-              <h3 className="mt-1 font-display text-[17px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">
-                {t(
-                  language,
-                  "home.hormoneLevels"
-                )}
-              </h3>
-            </div>
-
-            <div className="hidden items-center gap-2 rounded-xl border border-teal-100 dark:border-teal-500/30 bg-teal-50 dark:bg-teal-950/40 px-3 py-2 text-[12px] font-medium text-teal-700 dark:text-teal-300 sm:flex">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-500 dark:bg-teal-400" />
-
-              {t(
-                language,
-                "home.monitoring"
-              )}
-            </div>
-          </div>
-
-          <div className="chart-wrap mt-5 h-[350px] min-h-[300px] w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-[#243C47] bg-gradient-to-br from-white via-slate-50 to-teal-50/40 dark:from-[#111D23] dark:via-[#0F191E] dark:to-[#0A1216] p-4 shadow-inner sm:h-[390px] sm:p-6">
-            <div className="mb-2 flex items-center justify-between">
+          <section className="min-w-0 rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-4 shadow-[0_14px_45px_rgba(44,76,92,0.06)] dark:shadow-[0_14px_45px_rgba(0,0,0,0.4)] sm:p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-slate-500 dark:text-[#A0B4BE]">
-                  Live hormone
-                  telemetry
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-[#738C98]">
+                  {t(
+                    language,
+                    "home.snapshot"
+                  )}
                 </p>
 
-                <p className="mt-1 text-[12px] text-slate-400 dark:text-[#738C98]">
-                  Hover over any
-                  point to inspect
-                  the reading.
-                </p>
+                <h3 className="mt-1 font-display text-[18px] font-bold text-[#2C4C5C] dark:text-[#E8F2F6]">
+                  {chartMode === "velocity"
+                    ? "7-Day Forward Hormone Velocity Forecast"
+                    : t(language, "home.hormoneLevels")}
+                </h3>
               </div>
 
-              <span className="rounded-full border border-teal-100 dark:border-teal-500/30 bg-white dark:bg-[#15232A] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-teal-700 dark:text-teal-300 shadow-sm">
-                Interactive
-              </span>
+              {/* Mode Toggle & Doctor Report Button */}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center rounded-xl bg-slate-100 dark:bg-[#1C2F38] p-1 border border-slate-200 dark:border-white/5">
+                  <button
+                    type="button"
+                    onClick={() => setChartMode("velocity")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                      chartMode === "velocity"
+                        ? "bg-[#0EA5A4] text-white shadow-xs"
+                        : "text-slate-500 hover:text-slate-900 dark:text-[#A0B4BE]"
+                    }`}
+                  >
+                    <Sparkles size={12} /> 7-Day Velocity
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setChartMode("realtime")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                      chartMode === "realtime"
+                        ? "bg-white dark:bg-[#15232A] text-slate-900 dark:text-white shadow-xs"
+                        : "text-slate-500 hover:text-slate-900 dark:text-[#A0B4BE]"
+                    }`}
+                  >
+                    Real-Time Telemetry
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setReportModalOpen(true)}
+                  className="flex items-center gap-1.5 rounded-xl border border-[#0EA5A4]/30 bg-[#0EA5A4]/10 hover:bg-[#0EA5A4]/20 px-3 py-1.5 text-xs font-bold text-[#0EA5A4] transition shadow-xs"
+                >
+                  <FileText size={13} />
+                  <span>Doctor PDF</span>
+                </button>
+              </div>
             </div>
 
-            <div className="h-[275px] sm:h-[310px]">
-              {loading ? (
-                <div className="flex h-full items-center justify-center">
-                  <div className="flex items-center gap-3 text-sm text-slate-500">
-                    <Activity className="h-5 w-5 animate-pulse" />
-                    Loading hormone
-                    telemetry...
+            {chartMode === "velocity" ? (
+              <HormoneVelocityForecast onOpenReport={() => setReportModalOpen(true)} />
+            ) : (
+              <div className="chart-wrap h-[350px] min-h-[300px] w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-[#243C47] bg-gradient-to-br from-white via-slate-50 to-teal-50/40 dark:from-[#111D23] dark:via-[#0F191E] dark:to-[#0A1216] p-4 shadow-inner sm:h-[390px] sm:p-6">
+                <div className="mb-2 flex items-center justify-between">
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-slate-500 dark:text-[#A0B4BE]">
+                      Live hormone telemetry
+                    </p>
+                    <p className="mt-1 text-[12px] text-slate-400 dark:text-[#738C98]">
+                      Hover over any point to inspect the reading.
+                    </p>
                   </div>
+                  <span className="rounded-full border border-teal-100 dark:border-teal-500/30 bg-white dark:bg-[#15232A] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-teal-700 dark:text-teal-300 shadow-sm">
+                    Interactive
+                  </span>
                 </div>
-              ) : (
-                <HormoneChart
-                  readings={
-                    readings
-                  }
-                  androgenRange={
-                    androgenRange
-                  }
-                  progesteroneRange={
-                    progesteroneRange
-                  }
-                  language={
-                    language
-                  }
-                />
-              )}
-            </div>
-          </div>
+                <div className="h-[275px] sm:h-[310px]">
+                  {loading ? (
+                    <div className="flex h-full items-center justify-center">
+                      <div className="flex items-center gap-3 text-sm text-slate-500">
+                        <Activity className="h-5 w-5 animate-pulse" />
+                        Loading hormone telemetry...
+                      </div>
+                    </div>
+                  ) : (
+                    <HormoneChart
+                      readings={readings}
+                      androgenRange={androgenRange}
+                      progesteroneRange={progesteroneRange}
+                      language={language}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
 
           <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_1fr_1.2fr]">
             <ReadingCard
@@ -1385,6 +1417,13 @@ export default function HomeView({
           </div>
         </div>
       </div>
+
+      <ClinicalReportExportModal
+        isOpen={reportModalOpen}
+        onClose={() => setReportModalOpen(false)}
+        patientName={profile?.full_name || "Amina Mwangi"}
+        patientRef={profile?.patient_reference || "ISF-PT-2026-8841"}
+      />
     </div>
   );
 }

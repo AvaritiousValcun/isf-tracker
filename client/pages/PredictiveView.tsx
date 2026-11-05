@@ -14,7 +14,9 @@ import {
   Crown,
   ChevronRight,
   Gauge,
+  FileText,
 } from "lucide-react";
+import ClinicalReportExportModal from "../components/ClinicalReportExportModal";
 
 import {
   Card,
@@ -67,6 +69,7 @@ export default function PredictiveView() {
 
   const [generating, setGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
+  const [reportOpen, setReportOpen] = useState(false);
 
   const isActuallyPremium =
     subscription?.plan === "premium" &&
@@ -354,6 +357,16 @@ export default function PredictiveView() {
               <Crown size={13} /> Premium Version
             </button>
           </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setReportOpen(true)}
+            className="border-[#0EA5A4]/40 bg-[#0EA5A4]/10 text-[#0EA5A4] hover:bg-[#0EA5A4]/20 font-semibold"
+          >
+            <FileText className="mr-1.5 h-3.5 w-3.5" />
+            Doctor Report (PDF)
+          </Button>
 
           <Button
             variant="outline"
@@ -656,6 +669,11 @@ export default function PredictiveView() {
           </CardContent>
         </Card>
       )}
+
+      <ClinicalReportExportModal
+        isOpen={reportOpen}
+        onClose={() => setReportOpen(false)}
+      />
     </div>
   );
 }
