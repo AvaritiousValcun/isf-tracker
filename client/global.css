@@ -598,6 +598,8 @@ body {
 .nudge-card { animation: float-nudge 5s ease-in-out infinite; border: 1px solid rgba(243, 227, 8, .3) !important; background: linear-gradient(145deg, var(--surface), rgba(243, 227, 8, .1)) !important; box-shadow: var(--shadow-float) !important; }
 .nudge-card::after { display: block; background: linear-gradient(90deg, var(--blue), var(--yellow), var(--muted-blue)); }
 
+#chat .chat-main-card > div:first-child,
+#chat .chat-main-card-header,
 #chat .chat-thread-pane,
 #chat .chat-thread-pane > div:not(.chat-message-row) {
   background: transparent !important;

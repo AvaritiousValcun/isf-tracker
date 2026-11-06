@@ -392,7 +392,7 @@ export default function ChatView({ language }: ChatViewProps) {
       {/* Attached Main Card: Header + (Consultant Selector + Chat Thread) */}
       <div className="chat-main-card overflow-hidden rounded-[24px] border border-slate-300 dark:border-[#243C47] dark:bg-[#15232A] shadow-2xl">
         {/* Attached Top Header Bar */}
-        <div className="border-b border-slate-200/90 dark:border-[#243C47] bg-white/70 dark:bg-black/20 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="chat-main-card-header border-b border-slate-200/90 dark:border-[#243C47] bg-transparent p-5 sm:p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <p className="text-[12px] font-medium text-[#2C4C5C] dark:text-[#A0B4BE]">
