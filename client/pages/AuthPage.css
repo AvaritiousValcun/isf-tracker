@@ -4,8 +4,6 @@
   --mut: #6C8494;
   --gray: #B8BFC1;
   --y: #F3E308;
-  --y-light: #FAF290;
-  --y-hover: #F7EB55;
   --ink: #F4F7F8;
   color-scheme: dark;
 }
@@ -217,7 +215,7 @@
 }
 
 .auth-root .cta {
-  background: var(--y-light, #FAF290);
+  background: var(--y);
   color: #142229;
   border: 0;
   border-radius: 999px;
@@ -229,9 +227,9 @@
 }
 
 .auth-root .cta:hover {
-  background: var(--y-hover, #F7EB55);
+  background: #E5D507;
   transform: translateY(-2px);
-  box-shadow: 0 14px 34px -8px rgba(243, 227, 8, 0.4);
+  box-shadow: 0 14px 34px -8px rgba(243, 227, 8, 0.5);
 }
 
 .auth-root .ghost.lg {
@@ -754,9 +752,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid rgba(243, 227, 8, 0.75);
-  background: rgba(243, 227, 8, 0.22);
-  color: #F3E308;
+  border: 1px solid #D8C907;
+  background: #F3E308;
+  color: #142229;
   border-radius: 999px;
   padding: 5px 12px;
   font-size: 12px;
