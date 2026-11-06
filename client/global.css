@@ -376,14 +376,19 @@ body {
 #dashboard section,
 #dashboard .rounded-\[24px\],
 #dashboard .rounded-2xl,
-#chat .chat-main-card,
-#chat > .page-enter > div.grid,
 #predictive section,
 .settings-card {
   border: 1px solid var(--border-light) !important;
   background: var(--surface) !important;
   background-image: none !important;
   box-shadow: var(--shadow-soft) !important;
+}
+
+#chat .chat-main-card,
+#chat > .page-enter > div:last-child {
+  background: linear-gradient(145deg, rgba(243, 227, 8, .10), rgba(184, 191, 193, .82)) !important;
+  border: 1px solid rgba(184, 191, 193, .9) !important;
+  box-shadow: 0 14px 40px rgba(44, 76, 92, .055), 0 1px 0 rgba(184, 191, 193, .95) inset !important;
 }
 
 #chat .consultants-grid {

@@ -441,7 +441,7 @@ export default function ChatView({ language }: ChatViewProps) {
       )}
 
       {/* Main Grid: Consultant Selector + Chat Thread */}
-      <div className="chat-main-card grid overflow-hidden rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] lg:grid-cols-[280px_minmax(0,1fr)] shadow-sm">
+      <div className="chat-main-card grid overflow-hidden rounded-[24px] border border-slate-200 dark:border-[#243C47] dark:bg-[#15232A] lg:grid-cols-[280px_minmax(0,1fr)] shadow-sm">
         
         {/* Left Column: Consultant List */}
         <div className="border-b border-slate-200 dark:border-[#243C47] p-3 lg:border-b-0 lg:border-r">
