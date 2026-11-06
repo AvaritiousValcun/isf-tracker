@@ -803,12 +803,12 @@ export default function HomeView({
             {/* Top telemetry badges */}
             <div className="mb-3 flex flex-wrap items-center gap-2.5">
               {/* Telemetry Sensor Status Tag */}
-              <div className="inline-flex items-center gap-2 rounded-lg border border-yellow-400/90 dark:border-[#F3E308]/70 bg-[#FEE868] dark:bg-[#F3E308]/30 px-3 py-1 text-[11px] font-bold text-[#523600] dark:text-[#F3E308] shadow-xs cursor-default select-none">
+              <div className="inline-flex items-center gap-2 rounded-lg border border-[#E5D507] dark:border-[#F3E308]/70 bg-[#FAF290] dark:bg-[#F3E308]/20 px-3 py-1 text-[11px] font-bold text-[#484200] dark:text-[#F3E308] shadow-xs cursor-default select-none">
                 <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-500 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-600 dark:bg-[#F3E308]" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E5D507] opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#B3A400] dark:bg-[#F3E308]" />
                 </span>
-                <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#78350F] dark:text-[#F3E308]/80">Sensor:</span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#6B6000] dark:text-[#F3E308]/80">Sensor:</span>
                 Micro-needle Telemetry Active
               </div>
 
@@ -895,7 +895,7 @@ export default function HomeView({
                     el.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="group flex items-center gap-2 rounded-full bg-[#2C4C5C] hover:bg-[#203743] dark:bg-[#F3E308] dark:hover:bg-[#d8c907] px-6 py-3.5 text-[13px] font-bold text-white dark:text-[#142229] shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                className="group flex items-center gap-2 rounded-full bg-[#2C4C5C] hover:bg-[#203743] dark:bg-[#F8EE6B] dark:hover:bg-[#FAF290] px-6 py-3.5 text-[13px] font-bold text-white dark:text-[#2C4C5C] shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 <span>{language === "en" ? "Open dashboard" : "Fungua dashibodi"}</span>
                 <ArrowUpRight size={16} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -904,9 +904,9 @@ export default function HomeView({
               <button
                 type="button"
                 onClick={() => setReportModalOpen(true)}
-                className="group flex items-center gap-2 rounded-full border border-yellow-400 dark:border-[#F3E308]/70 bg-[#FEE868] hover:bg-[#FDD835] dark:bg-[#F3E308]/30 dark:hover:bg-[#F3E308]/40 px-5 py-3.5 text-[13px] font-extrabold text-[#523600] dark:text-[#F3E308] shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                className="group flex items-center gap-2 rounded-full border border-[#E5D507] dark:border-[#F3E308]/70 bg-[#FAF290] hover:bg-[#F7EB55] dark:bg-[#F3E308]/20 dark:hover:bg-[#F3E308]/30 px-5 py-3.5 text-[13px] font-extrabold text-[#484200] dark:text-[#F3E308] shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
-                <FileText size={16} className="text-[#854D0E] dark:text-[#F3E308]" />
+                <FileText size={16} className="text-[#6B6000] dark:text-[#F3E308]" />
                 <span>Doctor Report (PDF)</span>
               </button>
 
@@ -1061,9 +1061,9 @@ export default function HomeView({
                 <button
                   type="button"
                   onClick={() => setReportModalOpen(true)}
-                  className="flex items-center gap-1.5 rounded-xl border border-yellow-400 dark:border-[#F3E308]/70 bg-[#FEE868] hover:bg-[#FDD835] dark:bg-[#F3E308]/30 dark:hover:bg-[#F3E308]/40 px-3.5 py-1.5 text-xs font-bold text-[#523600] dark:text-[#F3E308] transition shadow-xs cursor-pointer"
+                  className="flex items-center gap-1.5 rounded-xl border border-[#E5D507] dark:border-[#F3E308]/70 bg-[#FAF290] hover:bg-[#F7EB55] dark:bg-[#F3E308]/20 dark:hover:bg-[#F3E308]/30 px-3.5 py-1.5 text-xs font-bold text-[#484200] dark:text-[#F3E308] transition shadow-xs cursor-pointer"
                 >
-                  <FileText size={13} className="text-[#854D0E] dark:text-[#F3E308]" />
+                  <FileText size={13} className="text-[#6B6000] dark:text-[#F3E308]" />
                   <span>Doctor PDF</span>
                 </button>
               </div>

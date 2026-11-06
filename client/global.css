@@ -43,15 +43,15 @@
 @layer components {
   .font-display { font-family: "Space Grotesk", sans-serif; }
   .app-shell { background: #B8BFC1; }
-  .brand-mark { @apply flex h-8 w-8 items-center justify-center rounded-[10px] bg-[#F3E308] text-[#2C4C5C]; }
+  .brand-mark { @apply flex h-8 w-8 items-center justify-center rounded-[10px] bg-[#FAF290] text-[#2C4C5C]; }
   .user-avatar { @apply flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#2C4C5C] bg-[#6C8494] text-[10px] font-bold text-[#B8BFC1]; }
   .user-avatar-sm { @apply h-8 w-8 text-[9px]; }
   .nav-item { @apply flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-[12px] font-medium text-[#2C4C5C] transition-all hover:bg-[#6C8494] hover:text-white; }
-  .nav-item-active { @apply bg-[#F3E308] text-[#2C4C5C]; }
+  .nav-item-active { @apply bg-[#FAF290] text-[#2C4C5C]; }
   .status-pill { @apply inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[10px] font-semibold; }
   .status-teal { @apply border-[#6C8494] bg-[#6C8494] text-white; }
   .status-purple { @apply border-[#B8BFC1] bg-[#B8BFC1] text-[#2C4C5C]; }
-  .status-coral { @apply border-[#F3E308] bg-[#F3E308] text-[#2C4C5C]; }
+  .status-coral { @apply border-[#E5D507] bg-[#FAF290] text-[#484200]; }
   .settings-card { @apply rounded-[22px] border-2 border-[#2C4C5C] bg-[#B8BFC1] p-5 sm:p-6; }
   .bottom-nav { @apply fixed bottom-0 left-0 right-0 z-30 flex justify-around border-t-2 border-[#2C4C5C] bg-[#2C4C5C] px-2 pb-[max(10px,env(safe-area-inset-bottom))] pt-2; }
   .bottom-nav button { @apply relative flex min-w-0 flex-1 flex-col items-center gap-1.5 py-1 text-[9px] font-medium text-slate-500; }
@@ -279,7 +279,10 @@
   --muted-blue: #6C8494;
   --gray: #B8BFC1;
   --yellow: #F3E308;
-  --yellow-deep: #7A6600;
+  --yellow-light: #FAF290;
+  --yellow-hover: #F7EB55;
+  --yellow-border: #E5D507;
+  --yellow-deep: #484200;
   --shadow-soft: 0 2px 5px -1px rgba(28, 48, 60, 0.10), 0 8px 22px -3px rgba(28, 48, 60, 0.14), 0 18px 36px -5px rgba(28, 48, 60, 0.12);
   --shadow-float: 0 3px 6px -1px rgba(28, 48, 60, 0.10), 0 12px 28px -4px rgba(28, 48, 60, 0.18), 0 24px 52px -6px rgba(28, 48, 60, 0.20), 0 36px 72px -10px rgba(28, 48, 60, 0.14);
 }
@@ -457,9 +460,9 @@ body {
 }
 .app-shell header p, .app-shell header h1, .app-shell header .font-display { color: var(--text) !important; }
 .app-shell header button { border-color: var(--border-light) !important; background: var(--surface-alt) !important; color: var(--text) !important; box-shadow: 0 1px 3px 0 rgba(44, 76, 92, 0.08) !important; }
-.app-shell header button:hover { border-color: var(--yellow) !important; background: var(--surface-elevated) !important; color: var(--yellow-deep) !important; box-shadow: 0 2px 6px 0 rgba(44, 76, 92, 0.12) !important; }
-.app-shell header button > span { background: var(--yellow) !important; }
-.app-shell header .brand-mark { background: var(--yellow) !important; color: var(--blue) !important; }
+.app-shell header button:hover { border-color: var(--yellow-border) !important; background: var(--surface-elevated) !important; color: var(--yellow-deep) !important; box-shadow: 0 2px 6px 0 rgba(44, 76, 92, 0.12) !important; }
+.app-shell header button > span { background: var(--yellow-light) !important; }
+.app-shell header .brand-mark { background: var(--yellow-light) !important; color: var(--blue) !important; }
 
 .welcome-brand-art .text-white { color: #FFFFFF !important; }
 .welcome-brand-art .text-\[\#F3E308\] { color: #F3E308 !important; }
@@ -469,7 +472,7 @@ body {
 .dashboard-rail-trigger { background: var(--blue) !important; color: #FFFFFF !important; box-shadow: 0 6px 16px rgba(44, 76, 92, .24) !important; }
 .dashboard-rail-trigger:hover { background: var(--muted-blue) !important; }
 .dashboard-rail-item:hover, .dashboard-rail-item-active { background: rgba(255, 255, 255, .14) !important; color: #FFFFFF !important; }
-.dashboard-rail-badge { background: var(--yellow) !important; color: var(--blue) !important; }
+.dashboard-rail-badge { background: var(--yellow-light) !important; color: var(--yellow-deep) !important; }
 
 .welcome-section { background: var(--page) !important; }
 
