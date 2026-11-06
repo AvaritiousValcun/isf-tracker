@@ -1217,8 +1217,6 @@ export default function HomeView({
             </div>
           </div>
         </section>
-
-          <Hormone3DVisualizer />
         </div>
 
         <div className="flex flex-col gap-5">
@@ -1435,6 +1433,11 @@ export default function HomeView({
             </button>
           </div>
         </div>
+      </div>
+
+      {/* 3D ISF Molecular Biosensing - Matches Chat Section Size (max-w-6xl mx-auto) */}
+      <div className="mt-8 w-full max-w-6xl mx-auto">
+        <Hormone3DVisualizer />
       </div>
 
       <ClinicalReportExportModal

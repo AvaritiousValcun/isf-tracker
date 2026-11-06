@@ -311,7 +311,7 @@ function SingleHormoneCanvas({
       0.1,
       60
     );
-    camera.position.set(0, 0, 7.8);
+    camera.position.set(0, 0, 7.2);
     camera.lookAt(0, 0, 0);
 
     /* Scene Lighting Matching AuthPage */
@@ -710,7 +710,7 @@ function SingleHormoneCanvas({
       {/* 3D WebGL Canvas Area */}
       <div
         ref={containerRef}
-        className="relative my-2.5 flex h-[250px] w-full cursor-grab items-center justify-center active:cursor-grabbing touch-none select-none overflow-hidden rounded-2xl bg-gradient-to-b from-slate-50/70 via-white to-slate-100/50 dark:from-[#111D23] dark:via-[#132026] dark:to-[#0D161A]"
+        className="relative my-3 flex h-[280px] w-full cursor-grab items-center justify-center active:cursor-grabbing touch-none select-none overflow-hidden rounded-2xl bg-gradient-to-b from-slate-50/80 via-white to-slate-100/60 dark:from-[#111D23] dark:via-[#132026] dark:to-[#0D161A]"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -797,8 +797,8 @@ export default function Hormone3DVisualizer({ compact = false }: { compact?: boo
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[28px] border border-slate-200/80 dark:border-[#243C47] bg-gradient-to-br from-white via-slate-50 to-[#F2F7F9] dark:from-[#15232A] dark:via-[#111D23] dark:to-[#0D161A] shadow-md dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] ${
-        compact ? "p-4" : "p-5 sm:p-6"
+      className={`w-full max-w-6xl mx-auto relative overflow-hidden rounded-[24px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] shadow-2xl ${
+        compact ? "p-4" : "p-5 sm:p-7"
       }`}
     >
       {/* Global Section Header */}
