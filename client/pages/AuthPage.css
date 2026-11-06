@@ -479,21 +479,34 @@
 
 .auth-root #done {
   justify-content: center;
+  align-items: center;
   text-align: center;
   transform: scale(0.9);
   filter: blur(10px);
 }
 
+.auth-root #done > div {
+  position: relative;
+  z-index: 10;
+  max-width: min(720px, 92vw);
+  margin-top: max(20px, env(safe-area-inset-top, 0px));
+  margin-bottom: clamp(130px, 24vh, 230px);
+}
+
 .auth-root #done h2 {
-  font: 400 clamp(48px, 8vw, 120px)/1 'Fraunces', Georgia, serif;
-  letter-spacing: -0.04em;
-  margin: 0 0 14px;
+  font: 400 clamp(32px, 5.2vw, 64px)/1.1 'Fraunces', Georgia, serif;
+  letter-spacing: -0.035em;
+  margin: 0 0 16px;
+  color: #FFFFFF;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.85);
 }
 
 .auth-root #done p {
   color: var(--gray);
-  margin: 0 auto 26px;
-  max-width: 40ch;
+  margin: 0 auto 24px;
+  font-size: clamp(14px, 1.8vw, 17px);
+  max-width: 44ch;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
 }
 
 .auth-root .bar {

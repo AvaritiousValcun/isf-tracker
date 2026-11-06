@@ -409,8 +409,8 @@ export default function AuthPage({ onOpenDashboard }: AuthPageProps) {
     const cx = cv.getContext("2d");
     if (cx) {
       const gr = cx.createRadialGradient(32, 32, 0, 32, 32, 32);
-      gr.addColorStop(0, "#fff");
-      gr.addColorStop(0.35, "rgba(255,255,255,.55)");
+      gr.addColorStop(0, "rgba(255,255,255,0.85)");
+      gr.addColorStop(0.35, "rgba(255,255,255,0.4)");
       gr.addColorStop(1, "rgba(255,255,255,0)");
       cx.fillStyle = gr;
       cx.fillRect(0, 0, 64, 64);
@@ -429,8 +429,6 @@ export default function AuthPage({ onOpenDashboard }: AuthPageProps) {
     );
     pts.frustumCulled = false;
     tilt.add(pts);
-    const pts2 = pts.clone();
-    tilt2.add(pts2);
 
     const m = { x: 0, y: 0, tx: 0, ty: 0 };
     const cur2 = { x: 0, y: 0, s: 0 };
@@ -486,14 +484,14 @@ export default function AuthPage({ onOpenDashboard }: AuthPageProps) {
         welcome: { rx: 0.12, spin: 0.3, cam: [0, 0.4, 8], x: 2.5, y: 0, s: 0.7, ex: 0, st: 0, sk: 0 },
         signin: { rx: 0.05, spin: 0.22, cam: [0, 0.2, 7], x: -2.6, y: 0, s: 0.78, ex: 0, st: 1, sk: 0 },
         signup: { rx: 0.15, spin: 0.14, cam: [0, 0.5, 8.6], x: -2.7, y: 0, s: 0.68, ex: 1, st: 0, sk: 0 },
-        done: { rx: 0, spin: 1.1, cam: [0, 0, 9], x: 0, y: 0.1, s: 0.95, ex: 0, st: 0, sk: 0 },
+        done: { rx: 0.08, spin: 0.65, cam: [0, 0, 9], x: 0, y: -1.35, s: 0.50, ex: 0, st: 0, sk: 0 },
       };
       const c = cfgs[s] || cfgs.welcome;
       if (mob()) {
         const o = Object.assign({}, c);
         o.x = 0;
-        o.y = s === "done" ? 0.1 : 1.5;
-        o.s = c.s * (s === "done" ? 0.8 : 0.9);
+        o.y = s === "done" ? -1.05 : 1.5;
+        o.s = c.s * (s === "done" ? 0.75 : 0.9);
         return o;
       }
       return c;
@@ -571,6 +569,7 @@ export default function AuthPage({ onOpenDashboard }: AuthPageProps) {
 
       root2.position.set(cur2.x, cur2.y + (reduceMotion ? 0 : Math.sin(t * 1.4 + 1.7) * 0.07), 0);
       root2.scale.setScalar(Math.max(0.001, cur2.s));
+      root2.visible = cur2.s > 0.03;
       tilt2.rotation.x = cur.rx - m.y * 0.14;
       tilt2.rotation.z = -m.x * 0.14;
       spin2.rotation.y = Math.sin(sph * 1.1 + 1.3) * 0.85 + spinK;
