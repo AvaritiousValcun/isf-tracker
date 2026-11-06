@@ -15,6 +15,9 @@ import {
   ChevronRight,
   Gauge,
   FileText,
+  Droplets,
+  Flame,
+  ShieldCheck,
 } from "lucide-react";
 import ClinicalReportExportModal from "../components/ClinicalReportExportModal";
 
@@ -368,9 +371,9 @@ export default function PredictiveView() {
             variant="outline"
             size="sm"
             onClick={() => setReportOpen(true)}
-            className="border-amber-400/90 dark:border-amber-400/60 bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-amber-500/20 dark:from-amber-500/25 dark:via-orange-500/20 dark:to-amber-500/25 hover:from-amber-500/30 text-amber-950 dark:text-amber-200 font-bold shadow-xs"
+            className="border-[#F3E308]/40 dark:border-[#F3E308]/40 bg-[#F3E308]/15 dark:bg-[#F3E308]/15 hover:bg-[#F3E308]/25 text-[#7A6600] dark:text-[#F3E308] font-bold shadow-xs"
           >
-            <FileText className="mr-1.5 h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+            <FileText className="mr-1.5 h-3.5 w-3.5 text-[#7A6600] dark:text-[#F3E308]" />
             Doctor Report (PDF)
           </Button>
 
@@ -479,103 +482,118 @@ export default function PredictiveView() {
           <section className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-foreground">
-                  {t("predictive.section1_title", "Future PMOS / PCOS Risk")}
-                </h2>
-                <p className="text-xs text-muted-foreground">Continuous free testosterone-to-progesterone ratio correlation</p>
+                <div className="flex items-center gap-2">
+                  <span className="flex h-2.5 w-2.5 rounded-full bg-teal-500 animate-pulse" />
+                  <h2 className="text-lg font-bold tracking-tight text-[#2C4C5C] dark:text-[#E8F2F6] sm:text-xl">
+                    {t("predictive.section1_title", "Future PMOS / PCOS Risk")}
+                  </h2>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-[#A0B4BE] mt-0.5">
+                  Continuous free testosterone-to-progesterone ratio correlation & interstitial fluid kinetics
+                </p>
               </div>
               {showPremiumFeatures && (
-                <span className="text-xs font-semibold text-[#0EA5A4] flex items-center gap-1">
-                  <Gauge size={14} /> Individual Calibration
+                <span className="text-xs font-bold text-teal-700 dark:text-teal-300 flex items-center gap-1.5 bg-teal-50 dark:bg-teal-950/40 border border-teal-200/90 dark:border-teal-500/30 px-3.5 py-1 rounded-full shadow-2xs">
+                  <Gauge size={13} /> Individual Calibration Active
                 </span>
               )}
             </div>
 
-            <Card className="border-t-4 border-t-[#0EA5A4] shadow-sm dark:bg-[#15232A] dark:border-[#243C47]">
-              <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-lg font-bold text-foreground">PMOS / PCOS</h3>
-                      <Badge variant="outline" className="text-[10px] uppercase dark:border-white/10">
-                        Primary Predictive Model
-                      </Badge>
-                    </div>
-
-                    {pmosRisk.model_version && (
-                      <p className="text-xs text-muted-foreground">
-                        {t("predictive.model_version", "Model version")}: {pmosRisk.model_version}
-                      </p>
-                    )}
-
-                    <p className="text-xs text-muted-foreground">
-                      Updated: {pmosRisk.calculated_at ? new Date(pmosRisk.calculated_at).toLocaleDateString([], { dateStyle: "medium" }) : "Recent"}
-                    </p>
+            <div className="relative overflow-hidden rounded-[24px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-6 shadow-xs hover:shadow-md transition">
+              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-teal-500 via-[#0EA5A4] to-teal-400" />
+              
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2.5">
+                    <h3 className="font-display text-xl font-bold tracking-tight text-[#2C4C5C] dark:text-[#E8F2F6]">
+                      PMOS / PCOS Trajectory
+                    </h3>
+                    <Badge variant="outline" className="border-teal-300/90 dark:border-teal-500/40 bg-teal-50 dark:bg-teal-950/40 text-teal-800 dark:text-teal-300 text-[10px] uppercase font-bold tracking-wider">
+                      Primary Predictive Model
+                    </Badge>
                   </div>
 
-                  {/* Free vs Premium Representation for PMOS */}
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    {showPremiumFeatures ? (
-                      <div className="flex items-center gap-5 bg-slate-50 dark:bg-[#1C2F38] px-5 py-3 rounded-2xl border border-slate-200/60 dark:border-white/5">
-                        <div className="text-right">
-                          <div className={`text-3xl font-extrabold tracking-tight ${getPercentageColor(pmosPct)}`}>
-                            {pmosPct.toFixed(1)}%
-                          </div>
-                          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-                            Estimated Risk
-                          </div>
-                        </div>
-
-                        <div className="w-28 space-y-1.5">
-                          <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                            <div
-                              className={`h-full ${getProgressColor(pmosPct)} transition-all duration-500`}
-                              style={{ width: `${Math.min(100, Math.max(5, pmosPct))}%` }}
-                            />
-                          </div>
-                          <p className="text-[10px] text-muted-foreground text-center">90-day trajectory</p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-[#1C2F38] text-slate-500 dark:text-[#A0B4BE] border border-slate-200 dark:border-white/5 text-xs font-medium">
-                        <Lock size={13} className="text-slate-400" />
-                        <span>Exact % locked (Free)</span>
-                      </div>
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-[#A0B4BE]">
+                    {pmosRisk.model_version && (
+                      <span className="flex items-center gap-1">
+                        <span className="font-semibold text-slate-700 dark:text-slate-300">{t("predictive.model_version", "Model version")}:</span> {pmosRisk.model_version}
+                      </span>
                     )}
-
-                    <Badge
-                      className={`px-4 py-2 text-xs font-semibold capitalize ${
-                        pmosRisk.risk_category === "monitoring"
-                          ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-[#F3E308]"
-                          : "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
-                      }`}
-                    >
-                      {pmosRisk.risk_category}
-                    </Badge>
+                    <span className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+                    <span>Updated: {pmosRisk.calculated_at ? new Date(pmosRisk.calculated_at).toLocaleDateString([], { dateStyle: "medium" }) : "Recent"}</span>
                   </div>
                 </div>
 
-                {showPremiumFeatures && (
-                  <div className="mt-4 pt-4 border-t border-slate-100 dark:border-[#243C47] flex flex-wrap items-center justify-between text-xs text-muted-foreground gap-2">
-                    <span>Biomarker weights: Free Testosterone (58%), Progesterone (27%), Cortisol (15%)</span>
-                    <span className="text-[#0EA5A4] font-medium">Confidence Interval: 94.2%</span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                {/* Free vs Premium Representation for PMOS */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3.5">
+                  {showPremiumFeatures ? (
+                    <div className="flex items-center gap-5 bg-slate-50 dark:bg-[#1C2F38] px-5 py-3 rounded-2xl border border-slate-300/90 dark:border-white/10 shadow-xs">
+                      <div className="text-right">
+                        <div className={`text-3xl font-extrabold tracking-tight ${getPercentageColor(pmosPct)}`}>
+                          {pmosPct.toFixed(1)}%
+                        </div>
+                        <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                          Estimated Risk
+                        </div>
+                      </div>
+
+                      <div className="w-28 space-y-1.5">
+                        <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full ${getProgressColor(pmosPct)} transition-all duration-500`}
+                            style={{ width: `${Math.min(100, Math.max(5, pmosPct))}%` }}
+                          />
+                        </div>
+                        <p className="text-[10px] text-slate-500 text-center">90-day trajectory</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-[#1C2F38] text-slate-700 dark:text-[#E8F2F6] border border-slate-300 dark:border-white/10 text-xs font-bold shadow-xs">
+                      <Lock size={13} className="text-amber-500" />
+                      <span>Exact % locked (Free)</span>
+                    </div>
+                  )}
+
+                  <Badge
+                    className={`px-4 py-2 text-xs font-bold capitalize rounded-xl shadow-xs ${
+                      pmosRisk.risk_category === "monitoring"
+                        ? "bg-amber-100 text-amber-950 dark:bg-amber-950/60 dark:text-amber-200 border border-amber-300/80 dark:border-amber-500/40"
+                        : pmosRisk.risk_category === "elevated"
+                        ? "bg-rose-100 text-rose-950 dark:bg-rose-950/60 dark:text-rose-200 border border-rose-300/80 dark:border-rose-500/40"
+                        : "bg-emerald-100 text-emerald-950 dark:bg-emerald-950/60 dark:text-emerald-200 border border-emerald-300/80 dark:border-emerald-500/40"
+                    }`}
+                  >
+                    <span className={`mr-1.5 h-2 w-2 rounded-full ${
+                      pmosRisk.risk_category === "monitoring" ? "bg-amber-500" : pmosRisk.risk_category === "elevated" ? "bg-rose-500" : "bg-emerald-500"
+                    }`} />
+                    {pmosRisk.risk_category}
+                  </Badge>
+                </div>
+              </div>
+
+              {showPremiumFeatures && (
+                <div className="mt-5 pt-4 border-t border-slate-200 dark:border-[#243C47] flex flex-wrap items-center justify-between text-xs text-slate-500 dark:text-[#A0B4BE] gap-2">
+                  <span>Biomarker weights: Free Testosterone (58%), Progesterone (27%), Cortisol (15%)</span>
+                  <span className="text-teal-600 dark:text-teal-300 font-bold">Confidence Interval: 94.2%</span>
+                </div>
+              )}
+            </div>
           </section>
         );
       })()}
 
-      {/* Section 2: Long-Term Health Conditions (Each with its own percentage in Premium) */}
+      {/* Section 2: Long-Term Health Conditions */}
       {longTermRisks.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-foreground">
-                {t("predictive.section2_title", "Long-Term Health Conditions")}
-              </h2>
-              <p className="text-xs text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <span className="flex h-2.5 w-2.5 rounded-full bg-violet-500" />
+                <h2 className="text-lg font-bold tracking-tight text-[#2C4C5C] dark:text-[#E8F2F6] sm:text-xl">
+                  {t("predictive.section2_title", "Long-Term Health Conditions")}
+                </h2>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-[#A0B4BE] mt-0.5">
                 {showPremiumFeatures
                   ? "Premium View: Each long-term analysis displays its own calibrated percentage and longitudinal gauge."
                   : "Free View: Qualitative status categories and trend indicators."}
@@ -583,31 +601,59 @@ export default function PredictiveView() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {longTermRisks.map((risk) => {
               const pct = getConditionPercentage(risk);
+              
+              // Distinctive medical icon and subtitle per condition
+              const isDiabetes = risk.condition === "type_2_diabetes";
+              const isInsulin = risk.condition === "insulin_resistance";
+
               return (
-                <Card
+                <div
                   key={risk.condition}
-                  className="shadow-sm hover:shadow-md transition dark:bg-[#15232A] dark:border-[#243C47]"
+                  className="rounded-[22px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between space-y-4"
                 >
-                  <CardContent className="p-5 flex flex-col justify-between h-full space-y-4">
+                  <div className="space-y-4">
                     <div className="flex justify-between items-start gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#2C4C5C]/10 dark:bg-[#0EA5A4]/15 text-[#2C4C5C] dark:text-[#0EA5A4]">
-                          <Activity className="w-5 h-5" />
+                        <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${
+                          isDiabetes
+                            ? "bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-300 border border-teal-200/80 dark:border-teal-500/30"
+                            : isInsulin
+                            ? "bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 border border-amber-200/80 dark:border-amber-500/30"
+                            : "bg-violet-50 dark:bg-violet-950/50 text-violet-600 dark:text-violet-300 border border-violet-200/80 dark:border-violet-500/30"
+                        }`}>
+                          {isDiabetes ? (
+                            <Droplets className="w-5 h-5" />
+                          ) : isInsulin ? (
+                            <Flame className="w-5 h-5" />
+                          ) : (
+                            <ShieldCheck className="w-5 h-5" />
+                          )}
                         </div>
                         <div>
-                          <span className="font-semibold text-foreground text-sm">
+                          <span className="font-bold text-[#2C4C5C] dark:text-[#E8F2F6] text-sm">
                             {getConditionTitle(risk.condition)}
                           </span>
-                          <p className="text-[11px] text-muted-foreground">Continuous sensor modeling</p>
+                          <p className="text-[11px] text-slate-500 dark:text-[#A0B4BE] mt-0.5">
+                            {isDiabetes
+                              ? "Continuous sensor modeling (Glycemic velocity)"
+                              : isInsulin
+                              ? "Receptor sensitivity & metabolic dynamics"
+                              : "Hepatic lipid biomarker & metabolic balance"}
+                          </p>
                         </div>
                       </div>
 
                       <Badge
-                        variant="secondary"
-                        className="capitalize text-xs font-medium dark:bg-[#1C2F38] dark:text-[#E8F2F6]"
+                        className={`capitalize text-xs font-bold px-3 py-1 rounded-xl shadow-2xs ${
+                          risk.risk_category === "monitoring"
+                            ? "bg-amber-100 text-amber-950 dark:bg-amber-950/60 dark:text-amber-200 border border-amber-300/80 dark:border-amber-500/30"
+                            : risk.risk_category === "elevated"
+                            ? "bg-rose-100 text-rose-950 dark:bg-rose-950/60 dark:text-rose-200 border border-rose-300/80 dark:border-rose-500/30"
+                            : "bg-emerald-100 text-emerald-950 dark:bg-emerald-950/60 dark:text-emerald-200 border border-emerald-300/80 dark:border-emerald-500/30"
+                        }`}
                       >
                         {risk.risk_category}
                       </Badge>
@@ -615,9 +661,9 @@ export default function PredictiveView() {
 
                     {/* Free vs Premium Distinction for each condition */}
                     {showPremiumFeatures ? (
-                      <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-[#243C47]">
+                      <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-[#243C47]">
                         <div className="flex items-baseline justify-between">
-                          <span className="text-xs text-muted-foreground font-medium">Calibrated Risk</span>
+                          <span className="text-xs text-slate-500 dark:text-[#A0B4BE] font-medium">Calibrated Risk</span>
                           <span className={`text-xl font-extrabold tracking-tight ${getPercentageColor(pct)}`}>
                             {pct.toFixed(1)}%
                           </span>
@@ -628,25 +674,30 @@ export default function PredictiveView() {
                             style={{ width: `${Math.min(100, Math.max(5, pct))}%` }}
                           />
                         </div>
-                        <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-1">
+                        <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-[#738C98] pt-1">
                           <span>Low (&lt;15%)</span>
                           <span>Moderate (15-30%)</span>
                           <span>Elevated (&gt;30%)</span>
                         </div>
                       </div>
                     ) : (
-                      <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-[#243C47] text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1.5 text-slate-500 dark:text-[#A0B4BE]">
-                          <Lock size={12} className="text-slate-400" />
+                      <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-[#243C47] text-xs">
+                        <span className="flex items-center gap-1.5 text-slate-600 dark:text-[#A0B4BE] font-medium text-[11px]">
+                          <Lock size={12} className="text-amber-500" />
                           <span>Percentage locked</span>
                         </span>
-                        <span className="text-[11px] font-medium text-slate-400 dark:text-[#738C98]">
-                          Upgrade to Premium
-                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setActiveMode("premium")}
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-teal-700 dark:text-teal-300 hover:text-teal-900 dark:hover:text-teal-100 transition"
+                        >
+                          <span>Upgrade to Premium</span>
+                          <ChevronRight size={12} />
+                        </button>
                       </div>
                     )}
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               );
             })}
           </div>

@@ -978,8 +978,8 @@
   font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #F59E0B;
-  font-weight: 700;
+  color: #F3E308;
+  font-weight: 600;
   margin: 16px 0 0;
 }
 
@@ -1014,20 +1014,20 @@
 }
 
 .auth-root .bf svg {
-  color: #F59E0B;
+  color: #F3E308;
 }
 
 .auth-root .sg {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid rgba(245, 158, 11, 0.5);
-  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(243, 227, 8, 0.4);
+  background: rgba(243, 227, 8, 0.12);
   display: grid;
   place-items: center;
   font-size: 10px;
   font-weight: 700;
-  color: #F59E0B;
+  color: #F3E308;
 }
 
 .auth-root #toast {
