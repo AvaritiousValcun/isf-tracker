@@ -40,6 +40,28 @@ describe("Clinical Features & Velocity Models", () => {
       expect(biomarkers).toContain("Progesterone");
       expect(biomarkers).toContain("Free Testosterone");
     });
+
+    it("generates a valid, standards-compliant PDF blob for summary downloads", async () => {
+      const { generateClinicalSummaryPdf } = await import("../lib/pdfGenerator");
+      const blob = generateClinicalSummaryPdf({
+        patientName: "Amina Mwangi",
+        patientRef: "ISF-PT-2026-8841",
+        documentId: "KMPDC-ISF-2026-849201",
+        reportDate: "November 6, 2026",
+        reportTime: "07:30 AM",
+      });
+
+      expect(blob).toBeDefined();
+      expect(blob.type).toBe("application/pdf");
+      expect(blob.size).toBeGreaterThan(1500);
+
+      const text = await blob.text();
+      expect(text.startsWith("%PDF-1.4")).toBe(true);
+      expect(text.includes("%%EOF")).toBe(true);
+      expect(text.includes("ISF TRACKER")).toBe(true);
+      expect(text.includes("Progesterone (P4)")).toBe(true);
+      expect(text.includes("Free Testosterone")).toBe(true);
+    });
   });
 
   describe("Consultant AI Bot Resilience", () => {

@@ -15,6 +15,7 @@ import {
   Clock,
   Sparkles,
 } from "lucide-react";
+import { downloadClinicalSummaryPdf } from "@/lib/pdfGenerator";
 
 interface ClinicalReportExportModalProps {
   isOpen: boolean;
@@ -48,68 +49,15 @@ export default function ClinicalReportExportModal({
   };
 
   const handleDownloadSummary = () => {
-    const summaryText = `
-================================================================================
-           ISF TRACKER — CONTINUOUS DERMAL TELEMETRY CLINICAL SUMMARY
-               Kenya Medical Practitioners & Dentists Council Standard
-================================================================================
-Document ID:     ${documentId}
-Generated At:    ${reportDate} at ${reportTime}
-Patient Name:    ${patientName}
-Patient Ref ID:  ${patientRef}
-Device:          ISF Microneedle Biosensor Patch (Firmware v2.4.1)
-Sensor Location: Dermal Interstitial Fluid (Upper Outer Arm)
-Monitoring Time: 14 Consecutive Days Continuous Sampling (15-min intervals)
-
-1. BIOMARKER & TELEMETRY SUMMARY (LAST 14 DAYS)
---------------------------------------------------------------------------------
-Progesterone:
-  - 14-Day Mean:       16.4 ng/mL
-  - Peak Concentration: 24.8 ng/mL (Mid-luteal surge)
-  - Current Reading:   18.2 ng/mL
-  - Time-in-Target:    88.5%
-  - Velocity Trend:    -1.8 ng/mL/day (Expected late-luteal descent)
-  - Interpretation:    Robust secretory transformation. Ovulatory biphasic shift confirmed.
-
-Free Testosterone:
-  - 14-Day Mean:       38.2 ng/dL
-  - Reference Upper:   < 45.0 ng/dL
-  - Peak:              41.6 ng/dL
-  - Velocity Trend:    +0.2 ng/dL/day (Stable basal profile)
-  - Interpretation:    Within clinical safety margins; no acute hyperandrogenic surge.
-
-2. 7-DAY FORWARD HORMONE VELOCITY FORECAST
---------------------------------------------------------------------------------
-  - Current Cycle Phase: Mid-to-Late Luteal (Cycle Day 21)
-  - Progesterone Velocity: -1.8 ng/mL/day (Secretory descent)
-  - Free Testosterone Velocity: +0.2 ng/dL/day (Stable physiological baseline)
-  - Luteal Phase Adequacy: 13.1 total days (Adequate, no luteal phase defect)
-
-3. PREDICTIVE HEALTH RISK STRATIFICATION
---------------------------------------------------------------------------------
-  - PCOS / Free Testosterone Balance: 31.0% (Moderate monitoring recommended)
-  - Insulin Resistance Risk Index:    24.0% (Mild-moderate metabolic correlation)
-  - Non-Alcoholic Liver Disease (NAFLD): 9.0% (Low risk baseline)
-  - Type 2 Diabetes:                  12.0% (Low risk baseline)
-
-ATTENDING CLINICIAN SIGN-OFF
---------------------------------------------------------------------------------
-Doctor Name:    ______________________________________
-KMPDC Reg No:   ______________________________________
-Signature:      ______________________________________
-Date:           ______________________________________
-================================================================================
-`;
-
-    const blob = new Blob([summaryText], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `ISF_Clinical_Health_Report_${patientRef}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    downloadClinicalSummaryPdf({
+      patientName,
+      patientRef,
+      documentId,
+      reportDate,
+      reportTime,
+      attendingDoctor: "Dr. Grace Wanjiku",
+      doctorSpecialty: "Gynecologist & Reproductive Health",
+    });
     setDownloaded(true);
     setTimeout(() => setDownloaded(false), 2500);
   };
@@ -138,10 +86,14 @@ Date:           ______________________________________
           <div className="flex items-center gap-2">
             <button
               onClick={handleDownloadSummary}
-              className="flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1C2F38] px-3 py-2 text-xs font-semibold text-slate-700 dark:text-[#E8F2F6] hover:bg-slate-100 dark:hover:bg-[#243C47] transition shadow-xs"
+              className="flex items-center gap-1.5 rounded-xl border border-amber-400/40 bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/15 hover:bg-amber-500/20 px-3.5 py-2 text-xs font-bold text-amber-800 dark:text-amber-300 transition shadow-xs cursor-pointer"
             >
-              {downloaded ? <Check size={14} className="text-emerald-500" /> : <Download size={14} />}
-              <span>{downloaded ? "Downloaded" : "Download Summary"}</span>
+              {downloaded ? (
+                <Check size={14} className="text-emerald-500" />
+              ) : (
+                <Download size={14} className="text-amber-600 dark:text-amber-400" />
+              )}
+              <span>{downloaded ? "PDF Downloaded" : "Download PDF"}</span>
             </button>
 
             <button
