@@ -217,7 +217,7 @@ function HormoneTooltip({
   const date = new Date(label);
 
   return (
-    <div className="rounded-xl border border-slate-300 dark:border-[#2F4C59] bg-white/95 dark:bg-[#1B2E37]/95 p-3 shadow-lg backdrop-blur-sm">
+    <div className="rounded-xl border border-slate-300 dark:border-[#243C47] bg-white/95 dark:bg-[#15232A]/95 p-3 shadow-lg backdrop-blur-sm">
       <p className="mb-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
         {new Intl.DateTimeFormat(
           language === "sw"
@@ -417,7 +417,7 @@ function HormoneChart({
 
   if (chartData.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center rounded-2xl border border-slate-300 dark:border-[#2F4C59] bg-slate-50 dark:bg-[#111D23] p-6 text-center">
+      <div className="flex h-full items-center justify-center rounded-2xl border border-slate-300 dark:border-[#243C47] bg-slate-50 dark:bg-[#15232A] p-6 text-center">
         <div>
           <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
             No hormone readings yet

@@ -65,7 +65,7 @@ export default function ClinicalReportExportModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-5 overflow-y-auto print:p-0 print:bg-white print:static">
       {/* Modal Container */}
-      <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0E181D] shadow-2xl overflow-hidden print:border-none print:shadow-none print:max-h-none print:w-full print:rounded-none">
+      <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] shadow-2xl overflow-hidden print:border-none print:shadow-none print:max-h-none print:w-full print:rounded-none">
         
         {/* Modal Top Bar (Hidden in Print) */}
         <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#243C47] px-6 py-4 bg-slate-50 dark:bg-[#15232A] print:hidden">

@@ -165,7 +165,7 @@ function Header({
   );
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] px-5 py-5 backdrop-blur-sm sm:px-8 lg:px-10">
+    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0D161A]/95 px-5 py-5 backdrop-blur-sm sm:px-8 lg:px-10">
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -901,7 +901,7 @@ export default function Index({ onReturnToHome }: IndexProps = {}) {
 
         <section
           id="home"
-          className="scroll-mt-20"
+          className="scroll-mt-20 bg-white dark:bg-[#0D161A]"
         >
           <HomeView
             language={
@@ -915,7 +915,7 @@ export default function Index({ onReturnToHome }: IndexProps = {}) {
 
         <section
           id="chat"
-          className="scroll-mt-20 border-t border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0E181D]"
+          className="scroll-mt-20 border-t border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0D161A]"
         >
           <ChatView
             language={
@@ -926,14 +926,14 @@ export default function Index({ onReturnToHome }: IndexProps = {}) {
 
         <section
           id="predictive"
-          className="scroll-mt-20 border-t border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0E181D]"
+          className="scroll-mt-20 border-t border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0D161A]"
         >
           <PredictiveView />
         </section>
 
         <section
           id="settings"
-          className="scroll-mt-20 border-t border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0E181D]"
+          className="scroll-mt-20 border-t border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#0D161A]"
         >
           <SettingsView
             language={

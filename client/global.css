@@ -286,22 +286,22 @@
 
 :root[data-theme="dark"],
 :root.dark {
-  --page: #142229;
-  --surface: #1B2E37;
-  --surface-alt: #223B46;
-  --surface-elevated: #2C4C5C;
+  --page: #0D161A;
+  --surface: #15232A;
+  --surface-alt: #1C2F38;
+  --surface-elevated: #243C47;
   --text: #FFFFFF;
   --text-secondary: #C7CDCF;
   --text-muted: #94A5AC;
-  --border-light: #2F4C59;
+  --border-light: #243C47;
   --yellow-deep: #F3E308;
-  --shadow-soft: 0 14px 34px rgba(0, 0, 0, .3);
-  --shadow-float: 0 18px 46px rgba(243, 227, 8, .12);
-  --background: 199 30% 11%;
+  --shadow-soft: 0 4px 16px -2px rgba(0, 0, 0, 0.45), 0 14px 38px -4px rgba(0, 0, 0, 0.55);
+  --shadow-float: 0 8px 24px -2px rgba(0, 0, 0, 0.5), 0 24px 56px -6px rgba(0, 0, 0, 0.65);
+  --background: 200 40% 7%;
   --foreground: 0 0% 100%;
-  --card: 199 30% 15%;
+  --card: 201 33% 12%;
   --card-foreground: 0 0% 100%;
-  --popover: 199 30% 15%;
+  --popover: 201 33% 12%;
   --popover-foreground: 0 0% 100%;
   --primary: 58 90% 49%;
   --primary-foreground: 199 35% 20%;
@@ -313,8 +313,8 @@
   --accent-foreground: 199 35% 20%;
   --destructive: 0 82% 71%;
   --destructive-foreground: 0 0% 100%;
-  --border: 199 20% 27%;
-  --input: 199 20% 27%;
+  --border: 200 33% 21%;
+  --input: 200 33% 21%;
   --ring: 58 90% 49%;
 }
 
@@ -327,6 +327,7 @@ body {
 }
 
 .app-shell,
+[id="home"],
 [id="chat"],
 [id="predictive"],
 [id="settings"] {
@@ -441,6 +442,19 @@ body {
   color: var(--text) !important;
   box-shadow: 0 4px 20px -2px rgba(44, 76, 92, .08) !important;
 }
+:root[data-theme="dark"] .app-shell header,
+:root.dark .app-shell header {
+  background: var(--page) !important;
+  border-bottom: 1px solid var(--border-light) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45) !important;
+}
+:root[data-theme="dark"] .app-shell header button,
+:root.dark .app-shell header button {
+  background: var(--surface) !important;
+  border: 1px solid var(--border-light) !important;
+  color: var(--text) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
+}
 .app-shell header p, .app-shell header h1, .app-shell header .font-display { color: var(--text) !important; }
 .app-shell header button { border-color: var(--border-light) !important; background: var(--surface-alt) !important; color: var(--text) !important; box-shadow: 0 1px 3px 0 rgba(44, 76, 92, 0.08) !important; }
 .app-shell header button:hover { border-color: var(--yellow) !important; background: var(--surface-elevated) !important; color: var(--yellow-deep) !important; box-shadow: 0 2px 6px 0 rgba(44, 76, 92, 0.12) !important; }
@@ -548,16 +562,47 @@ body {
 :root.dark #dashboard .rounded-\[24px\],
 :root[data-theme="dark"] #dashboard .rounded-2xl,
 :root.dark #dashboard .rounded-2xl,
+:root[data-theme="dark"] #hormone-metrics section,
+:root.dark #hormone-metrics section,
 :root[data-theme="dark"] #chat .chat-main-card,
 :root.dark #chat .chat-main-card,
 :root[data-theme="dark"] #chat > .page-enter > div.grid,
 :root.dark #chat > .page-enter > div.grid,
+:root[data-theme="dark"] #predictive [class*="rounded-2xl"],
+:root.dark #predictive [class*="rounded-2xl"],
+:root[data-theme="dark"] #predictive .rounded-2xl,
+:root.dark #predictive .rounded-2xl,
+:root[data-theme="dark"] #settings .settings-card,
+:root.dark #settings .settings-card,
+:root[data-theme="dark"] #settings [class*="rounded-2xl"],
+:root.dark #settings [class*="rounded-2xl"],
 :root[data-theme="dark"] .settings-card,
-:root.dark .settings-card { background: var(--surface) !important; border-color: var(--border-light) !important; }
+:root.dark .settings-card {
+  background: var(--surface) !important;
+  border: 1px solid var(--border-light) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45), 0 14px 38px -4px rgba(0, 0, 0, 0.6) !important;
+}
+
 :root[data-theme="dark"] .welcome-section .welcome-value,
-:root.dark .welcome-section .welcome-value { background: var(--surface-alt) !important; }
+:root.dark .welcome-section .welcome-value {
+  background: var(--surface-alt) !important;
+  border-color: var(--border-light) !important;
+}
+
+:root[data-theme="dark"] #chat .consultants-grid > div,
+:root.dark #chat .consultants-grid > div,
+:root[data-theme="dark"] #chat .chat-message-incoming,
+:root.dark #chat .chat-message-incoming,
+:root[data-theme="dark"] #chat input,
+:root.dark #chat input {
+  background: var(--surface-alt) !important;
+  border: 1px solid var(--border-light) !important;
+}
+
 :root[data-theme="dark"] .app-shell [class*="bg-white"],
-:root.dark .app-shell [class*="bg-white"] { background: var(--surface) !important; }
+:root.dark .app-shell [class*="bg-white"] {
+  background: var(--surface) !important;
+}
 :root[data-theme="dark"] .app-shell .qr-pattern,
 :root.dark .app-shell .qr-pattern { background: #FFFFFF !important; }
 :root[data-theme="dark"] .dashboard-rail-badge,
