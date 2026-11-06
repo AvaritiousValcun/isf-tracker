@@ -326,11 +326,11 @@ export default function PredictiveView() {
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#0EA5A4]">Endocrine Analytics</span>
             <span className="text-slate-300 dark:text-slate-700">•</span>
             {showPremiumFeatures ? (
-              <Badge className="bg-[#0EA5A4] text-white hover:bg-[#0EA5A4] flex items-center gap-1 text-[10px] font-bold">
+              <Badge className="bg-[#0EA5A4] text-white hover:bg-[#0EA5A4] flex items-center gap-1 text-[10px] font-bold rounded-full">
                 <Crown size={11} /> Premium Active
               </Badge>
             ) : (
-              <Badge variant="outline" className="text-slate-600 dark:text-[#A0B4BE] border-slate-200 dark:border-white/10 text-[10px] font-semibold">
+              <Badge variant="outline" className="text-slate-600 dark:text-[#A0B4BE] border-slate-200 dark:border-white/10 text-[10px] font-semibold rounded-full">
                 Free Plan
               </Badge>
             )}
@@ -346,10 +346,10 @@ export default function PredictiveView() {
         <div className="flex flex-col sm:items-end gap-2 shrink-0">
           <div className="flex flex-wrap items-center gap-2.5">
             {/* Plan View Switcher Toggle */}
-            <div className="flex items-center rounded-xl bg-slate-100 dark:bg-[#15232A] border border-slate-200 dark:border-[#243C47] p-1 shadow-2xs">
+            <div className="flex items-center rounded-full bg-slate-100 dark:bg-[#15232A] border border-slate-200 dark:border-[#243C47] p-1 shadow-2xs">
               <button
                 onClick={() => setActiveMode("free")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
                   activeMode === "free"
                     ? "bg-white dark:bg-[#1C2F38] text-slate-900 dark:text-[#E8F2F6] shadow-2xs"
                     : "text-slate-500 dark:text-[#A0B4BE] hover:text-slate-900"
@@ -359,7 +359,7 @@ export default function PredictiveView() {
               </button>
               <button
                 onClick={() => setActiveMode("premium")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
                   activeMode === "premium"
                     ? "bg-[#0EA5A4] text-white shadow-2xs"
                     : "text-slate-500 dark:text-[#A0B4BE] hover:text-[#0EA5A4]"
@@ -373,7 +373,7 @@ export default function PredictiveView() {
               variant="outline"
               size="sm"
               onClick={() => setReportOpen(true)}
-              className="border-[#F3E308]/40 dark:border-[#F3E308]/40 bg-[#F3E308]/15 dark:bg-[#F3E308]/15 hover:bg-[#F3E308]/25 text-[#7A6600] dark:text-[#F3E308] font-bold shadow-2xs rounded-xl"
+              className="border-[#F3E308]/40 dark:border-[#F3E308]/40 bg-[#F3E308]/15 dark:bg-[#F3E308]/15 hover:bg-[#F3E308]/25 text-[#7A6600] dark:text-[#F3E308] font-bold shadow-2xs rounded-full px-4"
             >
               <FileText className="mr-1.5 h-3.5 w-3.5 text-[#7A6600] dark:text-[#F3E308]" />
               Doctor Report (PDF)
@@ -384,7 +384,7 @@ export default function PredictiveView() {
               size="sm"
               onClick={generatePredictions}
               disabled={generating}
-              className="rounded-xl border-slate-200 dark:border-[#243C47] dark:hover:bg-[#1C2F38] text-xs font-semibold"
+              className="rounded-full border-slate-200 dark:border-[#243C47] dark:hover:bg-[#1C2F38] text-xs font-semibold px-4"
             >
               <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${generating ? "animate-spin" : ""}`} />
               {t("common.refresh", "Refresh")}
@@ -601,120 +601,134 @@ export default function PredictiveView() {
           ];
 
           return (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {conditionsList.map((c) => {
-                const match = safePredictions.find(
-                  (p) =>
-                    p.condition === c.conditionKey ||
-                    (c.conditionKey === "nafld" &&
-                      (p.condition === "non_alcoholic_fatty_liver" ||
-                        p.condition === "high_blood_pressure" ||
-                        p.condition === "hypertension" ||
-                        p.condition === "nafld"))
-                );
+            <div className="overflow-hidden rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white dark:bg-[#15232A] shadow-xs">
+              {/* Table Column Headers */}
+              <div className="hidden md:grid grid-cols-12 items-center px-6 py-3.5 border-b border-slate-100 dark:border-white/5 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 bg-slate-50/50 dark:bg-white/[0.02]">
+                <div className="col-span-4">Condition</div>
+                <div className="col-span-4">Basis</div>
+                <div className="col-span-2">Status</div>
+                <div className="col-span-2 text-right">Risk Percentage</div>
+              </div>
 
-                const category = match?.risk_category || c.defaultCategory;
-                const pct = match ? getConditionPercentage(match) : c.defaultPct;
+              {/* Table Rows */}
+              <div className="divide-y divide-slate-100 dark:divide-white/5">
+                {conditionsList.map((c) => {
+                  const match = safePredictions.find(
+                    (p) =>
+                      p.condition === c.conditionKey ||
+                      (c.conditionKey === "nafld" &&
+                        (p.condition === "non_alcoholic_fatty_liver" ||
+                          p.condition === "high_blood_pressure" ||
+                          p.condition === "hypertension" ||
+                          p.condition === "nafld"))
+                  );
 
-                return (
-                  <div
-                    key={c.conditionKey}
-                    className="rounded-2xl border border-slate-200/90 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5 shadow-xs hover:border-slate-300 dark:hover:border-[#325260] transition-all duration-200 flex flex-col justify-between"
-                  >
-                    <div>
-                      {/* Card Top Row: Icon + Title on left, Status Badge on right */}
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
-                              c.iconType === "diabetes"
-                                ? "bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-800/30"
-                                : c.iconType === "insulin"
-                                ? "bg-amber-50 dark:bg-amber-950/40 text-amber-500 dark:text-amber-400 border border-amber-100 dark:border-amber-800/30"
-                                : "bg-violet-50 dark:bg-violet-950/40 text-violet-500 dark:text-violet-400 border border-violet-100 dark:border-violet-800/30"
-                            }`}
-                          >
-                            {c.iconType === "diabetes" ? (
-                              <Droplets className="w-4 h-4" />
-                            ) : c.iconType === "insulin" ? (
-                              <Flame className="w-4 h-4" />
-                            ) : (
-                              <ShieldCheck className="w-4 h-4" />
-                            )}
-                          </div>
-                          <span className="font-bold text-slate-900 dark:text-[#E8F2F6] text-sm leading-snug">
-                            {c.title}
-                          </span>
-                        </div>
+                  const category = match?.risk_category || c.defaultCategory;
+                  const pct = match ? getConditionPercentage(match) : c.defaultPct;
 
-                        <span
-                          className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold capitalize shrink-0 ${
-                            category === "moderate"
-                              ? "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/30"
-                              : category === "elevated"
-                              ? "bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/30"
-                              : "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/30"
+                  return (
+                    <div
+                      key={c.conditionKey}
+                      className="flex flex-col md:grid md:grid-cols-12 items-start md:items-center px-6 py-4.5 gap-3 md:gap-0 hover:bg-slate-50/50 dark:hover:bg-white/[0.015] transition"
+                    >
+                      {/* Condition */}
+                      <div className="col-span-4 flex items-center gap-3">
+                        <div
+                          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
+                            c.iconType === "diabetes"
+                              ? "bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border border-teal-200/60 dark:border-teal-800/40"
+                              : c.iconType === "insulin"
+                              ? "bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200/60 dark:border-amber-800/40"
+                              : "bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 border border-violet-200/60 dark:border-violet-800/40"
                           }`}
                         >
-                          {category}
+                          {c.iconType === "diabetes" ? (
+                            <Droplets className="w-4 h-4" />
+                          ) : c.iconType === "insulin" ? (
+                            <Flame className="w-4 h-4" />
+                          ) : (
+                            <ShieldCheck className="w-4 h-4" />
+                          )}
+                        </div>
+                        <span className="font-bold text-slate-900 dark:text-[#E8F2F6] text-sm leading-snug">
+                          {c.title}
                         </span>
                       </div>
 
-                      {/* Subtitle */}
-                      <p className="text-[12px] text-slate-500 dark:text-[#A0B4BE] leading-relaxed mt-3">
+                      {/* Basis */}
+                      <div className="col-span-4 text-xs text-slate-500 dark:text-[#A0B4BE] pr-4">
                         {c.subtitle}
-                      </p>
-                    </div>
+                      </div>
 
-                    {/* Card Bottom Row */}
-                    {showPremiumFeatures ? (
-                      <div className="space-y-2 mt-5 pt-3.5 border-t border-slate-100 dark:border-white/5">
-                        <div className="flex items-baseline justify-between">
-                          <span className="text-[11px] text-slate-400 dark:text-[#A0B4BE] font-medium">
-                            Calibrated Risk
-                          </span>
-                          <span
-                            className={`text-lg font-bold tracking-tight ${getPercentageColor(
-                              pct
-                            )}`}
-                          >
-                            {pct.toFixed(1)}%
-                          </span>
-                        </div>
-                        <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full ${getProgressColor(
-                              pct
-                            )} transition-all duration-500`}
-                            style={{
-                              width: `${Math.min(100, Math.max(5, pct))}%`,
-                            }}
-                          />
-                        </div>
-                        <div className="flex items-center justify-between text-[10px] text-slate-400 dark:text-[#738C98]">
-                          <span>Low (&lt;15%)</span>
-                          <span>Moderate (15-30%)</span>
-                          <span>Elevated (&gt;30%)</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
-                        <span className="text-[11px] text-slate-400 dark:text-slate-500 font-normal">
-                          Percentage locked
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => setActiveMode("premium")}
-                          className="text-[11px] font-semibold text-[#2C4C5C] hover:text-[#0EA5A4] dark:text-[#0EA5A4] dark:hover:text-[#5EEAD4] transition flex items-center gap-0.5"
+                      {/* Status */}
+                      <div className="col-span-2 flex items-center">
+                        <span
+                          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold capitalize ${
+                            category === "moderate"
+                              ? "bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/40 text-amber-700 dark:text-amber-300"
+                              : category === "elevated"
+                              ? "bg-rose-50 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-800/40 text-rose-700 dark:text-rose-300"
+                              : "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/40 text-emerald-700 dark:text-emerald-300"
+                          }`}
                         >
-                          <span>Upgrade to Premium</span>
-                          <span className="text-xs">›</span>
-                        </button>
+                          <span
+                            className={`h-1.5 w-1.5 rounded-full ${
+                              category === "moderate"
+                                ? "bg-amber-500"
+                                : category === "elevated"
+                                ? "bg-rose-500"
+                                : "bg-emerald-500"
+                            }`}
+                          />
+                          <span>{category}</span>
+                        </span>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
+
+                      {/* Risk Percentage */}
+                      <div className="col-span-2 flex items-center md:justify-end gap-3 w-full md:w-auto">
+                        {showPremiumFeatures ? (
+                          <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+                            <div className="w-20 hidden lg:block">
+                              <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                <div
+                                  className={`h-full ${getProgressColor(
+                                    pct
+                                  )} transition-all duration-500`}
+                                  style={{
+                                    width: `${Math.min(100, Math.max(5, pct))}%`,
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <span
+                              className={`text-sm font-extrabold tracking-tight ${getPercentageColor(
+                                pct
+                              )}`}
+                            >
+                              {pct.toFixed(1)}%
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end text-xs">
+                            <span className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 font-medium">
+                              <Lock size={12} className="text-amber-500 dark:text-[#F3E308]" />
+                              <span>Locked</span>
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setActiveMode("premium")}
+                              className="font-semibold text-[#0EA5A4] hover:text-[#0C8F8E] dark:text-[#0EA5A4] dark:hover:text-[#5EEAD4] transition flex items-center gap-0.5 text-xs"
+                            >
+                              <span>Upgrade to Premium</span>
+                              <span className="text-sm leading-none">›</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           );
         })()}
