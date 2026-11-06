@@ -796,7 +796,7 @@ export default function HomeView({
   return (
     <div className="mx-auto max-w-[1250px] px-5 pb-12 pt-6 sm:px-8 lg:px-10">
       {/* Merged 3D Telemetry & Welcome Hero Section */}
-      <div className="relative mb-10 overflow-hidden rounded-[36px] border border-slate-300 dark:border-[#243C47] bg-gradient-to-br from-white via-[#F8FAFC] to-[#EFF6F8] dark:from-[#15232A] dark:via-[#111D23] dark:to-[#0D161A] p-6 shadow-[0_24px_60px_rgba(44,76,92,0.08)] dark:shadow-[0_24px_60px_rgba(0,0,0,0.45)] sm:p-10">
+      <div className="relative mb-10 overflow-hidden rounded-[36px] border border-slate-300 dark:border-[#243C47] bg-gradient-to-br from-white via-[#F8FAFC] to-[#EFF6F8] dark:from-[#15232A] dark:via-[#111D23] dark:to-[#0D161A] p-6 shadow-2xl dark:shadow-[0_24px_60px_rgba(0,0,0,0.45)] sm:p-10">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(340px,430px)] lg:gap-14">
           {/* Left Column: Telemetry Badges, Greeting, Narrative & Value Grid */}
           <div className="max-w-[650px]">
@@ -996,7 +996,7 @@ export default function HomeView({
 
       <div id="hormone-metrics" className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_280px]">
         <div className="flex min-w-0 flex-col gap-5">
-          <section className="min-w-0 rounded-[24px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-4 shadow-[0_14px_45px_rgba(44,76,92,0.06)] dark:shadow-[0_14px_45px_rgba(0,0,0,0.4)] sm:p-6 space-y-4">
+          <section className="min-w-0 rounded-[24px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-4 shadow-2xl dark:shadow-[0_14px_45px_rgba(0,0,0,0.4)] sm:p-6 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-[#738C98]">
@@ -1223,7 +1223,7 @@ export default function HomeView({
 
         <div className="flex flex-col gap-5">
           {!nudgeDismissed && (
-            <div className="relative overflow-hidden rounded-[24px] border border-teal-200/90 dark:border-[#243C47] bg-gradient-to-br from-teal-50/60 via-white to-violet-50/60 dark:from-[#15232A] dark:via-[#111D23] dark:to-[#0D161A] p-5 shadow-[0_10px_28px_rgba(86,47,84,0.08)] dark:shadow-[0_10px_28px_rgba(0,0,0,0.4)]">
+            <div className="relative overflow-hidden rounded-[24px] border border-teal-200/90 dark:border-[#243C47] bg-gradient-to-br from-teal-50/60 via-white to-violet-50/60 dark:from-[#15232A] dark:via-[#111D23] dark:to-[#0D161A] p-5 shadow-2xl dark:shadow-[0_10px_28px_rgba(0,0,0,0.4)]">
               <div className="absolute -right-10 -top-12 h-36 w-36 rounded-full bg-teal-100/60 dark:bg-teal-900/20 blur-2xl" />
 
               <div className="relative">
@@ -1288,7 +1288,7 @@ export default function HomeView({
            * or insights card.
            */}
           {patchReminder && (
-            <div className="rounded-[24px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5 shadow-xs">
+            <div className="rounded-[24px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5 shadow-xl">
               <div className="flex items-start gap-3">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-300">
                   <BatteryMedium
@@ -1330,7 +1330,7 @@ export default function HomeView({
             </div>
           )}
 
-          <div className="rounded-[24px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5 shadow-xs">
+          <div className="rounded-[24px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5 shadow-xl">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-[#738C98]">

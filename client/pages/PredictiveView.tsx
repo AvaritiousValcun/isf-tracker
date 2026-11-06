@@ -452,7 +452,7 @@ export default function PredictiveView() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200/90 dark:border-[#243C47] border-t-2 border-t-[#0D9488] bg-white dark:bg-[#15232A] p-6 shadow-xs hover:border-slate-300 dark:hover:border-[#325260] transition-all">
+            <div className="rounded-2xl border border-slate-300 dark:border-[#243C47] border-t-2 border-t-[#0D9488] bg-white dark:bg-[#15232A] p-6 shadow-xl hover:border-slate-400 dark:hover:border-[#325260] transition-all">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-2.5">
@@ -601,7 +601,7 @@ export default function PredictiveView() {
           ];
 
           return (
-            <div className="overflow-hidden rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white dark:bg-[#15232A] shadow-xs">
+            <div className="overflow-hidden rounded-2xl border border-slate-300 dark:border-white/10 bg-white dark:bg-[#15232A] shadow-xl">
               {/* Table Column Headers */}
               <div className="hidden md:grid grid-cols-12 items-center px-6 py-3.5 border-b border-slate-200 dark:border-white/5 text-[11px] font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300 bg-slate-100/90 dark:bg-white/[0.02]">
                 <div className="col-span-4">Condition</div>
@@ -736,7 +736,7 @@ export default function PredictiveView() {
 
       {/* Upgrade callout if on Free mode */}
       {!showPremiumFeatures && (
-        <div className="rounded-2xl border border-teal-300 dark:border-teal-500/30 bg-[#E6F8F5] dark:bg-teal-950/25 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-2xs">
+        <div className="rounded-2xl border border-teal-300 dark:border-teal-500/30 bg-[#E6F8F5] dark:bg-teal-950/25 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
           <div className="space-y-1">
             <h3 className="font-extrabold text-[#0D5251] dark:text-[#E8F2F6] text-sm">
               Want individual percentages for every predictive marker?

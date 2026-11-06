@@ -441,7 +441,7 @@ export default function ChatView({ language }: ChatViewProps) {
       )}
 
       {/* Main Grid: Consultant Selector + Chat Thread */}
-      <div className="chat-main-card grid overflow-hidden rounded-[24px] border border-slate-200 dark:border-[#243C47] dark:bg-[#15232A] lg:grid-cols-[280px_minmax(0,1fr)] shadow-sm">
+      <div className="chat-main-card grid overflow-hidden rounded-[24px] border border-slate-300 dark:border-[#243C47] dark:bg-[#15232A] lg:grid-cols-[280px_minmax(0,1fr)] shadow-2xl">
         
         {/* Left Column: Consultant List */}
         <div className="border-b border-slate-200 dark:border-[#243C47] p-3 lg:border-b-0 lg:border-r">
@@ -528,7 +528,7 @@ export default function ChatView({ language }: ChatViewProps) {
                       setActiveConsultantIdx(idx);
                       setHasSelectedConsultant(true);
                     }}
-                    className="group relative flex flex-col justify-between rounded-2xl border-2 border-slate-200/90 dark:border-white/10 bg-white dark:bg-[#15232A] p-5 shadow-xs hover:border-[#0EA5A4] hover:shadow-md transition cursor-pointer"
+                    className="group relative flex flex-col justify-between rounded-2xl border-2 border-slate-300 dark:border-white/10 bg-white dark:bg-[#15232A] p-5 shadow-lg hover:border-[#0EA5A4] hover:shadow-2xl transition cursor-pointer"
                   >
                     <div>
                       <div className="flex items-center gap-3 mb-3">

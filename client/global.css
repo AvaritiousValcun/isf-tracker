@@ -274,14 +274,14 @@
   --text: #2C4C5C;
   --text-secondary: #5A6E78;
   --text-muted: #8B9AA2;
-  --border-light: #B8BFC1;
+  --border-light: #94A6B0;
   --blue: #2C4C5C;
   --muted-blue: #6C8494;
   --gray: #B8BFC1;
   --yellow: #F3E308;
   --yellow-deep: #7A6600;
-  --shadow-soft: 0 1px 3px 0 rgba(44, 76, 92, 0.10), 0 6px 18px -2px rgba(44, 76, 92, 0.12), 0 12px 28px -4px rgba(44, 76, 92, 0.08);
-  --shadow-float: 0 2px 6px -1px rgba(44, 76, 92, 0.12), 0 12px 28px -3px rgba(44, 76, 92, 0.16), 0 24px 48px -6px rgba(44, 76, 92, 0.18);
+  --shadow-soft: 0 2px 5px -1px rgba(28, 48, 60, 0.10), 0 8px 22px -3px rgba(28, 48, 60, 0.14), 0 18px 36px -5px rgba(28, 48, 60, 0.12);
+  --shadow-float: 0 3px 6px -1px rgba(28, 48, 60, 0.10), 0 12px 28px -4px rgba(28, 48, 60, 0.18), 0 24px 52px -6px rgba(28, 48, 60, 0.20), 0 36px 72px -10px rgba(28, 48, 60, 0.14);
 }
 
 :root[data-theme="dark"],
@@ -343,44 +343,44 @@ body {
 /* Tiered shadow intensity for light mode - gives rich depth and crisp border definition */
 .app-shell [class*="shadow-2xs"],
 .app-shell [class*="shadow-xs"] {
-  box-shadow: 0 1px 3px 0 rgba(44, 76, 92, 0.10), 0 2px 6px -1px rgba(44, 76, 92, 0.08) !important;
+  box-shadow: 0 1px 3px 0 rgba(28, 48, 60, 0.12), 0 3px 8px -1px rgba(28, 48, 60, 0.14) !important;
 }
 
 .app-shell [class*="shadow-sm"] {
-  box-shadow: 0 1px 3px 0 rgba(44, 76, 92, 0.10), 0 4px 14px -1px rgba(44, 76, 92, 0.11) !important;
+  box-shadow: 0 2px 6px -1px rgba(28, 48, 60, 0.12), 0 8px 22px -3px rgba(28, 48, 60, 0.16) !important;
 }
 
 .app-shell [class*="shadow-md"] {
-  box-shadow: 0 2px 6px -1px rgba(44, 76, 92, 0.09), 0 8px 22px -2px rgba(44, 76, 92, 0.13) !important;
+  box-shadow: 0 3px 8px -1px rgba(28, 48, 60, 0.12), 0 14px 32px -4px rgba(28, 48, 60, 0.18) !important;
 }
 
 .app-shell [class*="shadow-lg"],
 .app-shell [class*="shadow-xl"],
 .app-shell [class*="shadow-2xl"],
 .app-shell [class*="shadow-\["] {
-  box-shadow: 0 4px 10px -2px rgba(44, 76, 92, 0.10), 0 16px 38px -4px rgba(44, 76, 92, 0.15) !important;
+  box-shadow: 0 4px 12px -2px rgba(28, 48, 60, 0.12), 0 18px 42px -4px rgba(28, 48, 60, 0.20), 0 32px 68px -8px rgba(28, 48, 60, 0.16) !important;
 }
 
 /* Tab containers and active tab buttons */
 .app-shell button[class*="bg-white"]:not(header button),
 .app-shell [class*="rounded-full"] > button[class*="bg-white"],
 .app-shell [class*="rounded-xl"] > button[class*="bg-white"] {
-  border: 1px solid var(--border-light) !important;
-  box-shadow: 0 1px 3px 0 rgba(44, 76, 92, 0.12), 0 3px 8px -1px rgba(44, 76, 92, 0.10) !important;
+  border: 1.5px solid rgba(44, 76, 92, 0.25) !important;
+  box-shadow: 0 2px 5px -1px rgba(44, 76, 92, 0.14), 0 4px 12px -2px rgba(44, 76, 92, 0.12) !important;
 }
 
 /* Care Team Consultant item tabs */
 #chat .space-y-1 > button {
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   transition: all 0.2s ease;
 }
 #chat .space-y-1 > button:hover {
-  border-color: var(--border-light);
-  box-shadow: 0 1px 3px rgba(44, 76, 92, 0.08);
+  border-color: rgba(44, 76, 92, 0.28);
+  box-shadow: 0 3px 10px rgba(44, 76, 92, 0.12);
 }
 #chat .space-y-1 > button[class*="bg-[#2C4C5C]/[0.07]"] {
-  border: 1px solid rgba(44, 76, 92, 0.28) !important;
-  box-shadow: 0 2px 6px 0 rgba(44, 76, 92, 0.10), 0 1px 2px 0 rgba(44, 76, 92, 0.08) !important;
+  border: 1.5px solid rgba(44, 76, 92, 0.35) !important;
+  box-shadow: 0 3px 8px 0 rgba(44, 76, 92, 0.14), 0 1px 3px 0 rgba(44, 76, 92, 0.10) !important;
 }
 
 /* Dark mode overrides to maintain deep dark shadows */
@@ -472,24 +472,50 @@ body {
 .dashboard-rail-badge { background: var(--yellow) !important; color: var(--blue) !important; }
 
 .welcome-section { background: var(--page) !important; }
-.welcome-section .welcome-value,
-.welcome-section .welcome-brand-art > div:last-child,
-#dashboard section,
-#dashboard .rounded-\[24px\],
-#dashboard .rounded-2xl,
-#hormone-metrics section,
-.settings-card {
-  border: 1px solid var(--border-light) !important;
+
+/* Light mode eye-catching borders and intense floating elevation on white background */
+:root:not([data-theme="dark"]):not(.dark) #dashboard section,
+:root:not([data-theme="dark"]):not(.dark) #dashboard .rounded-\[36px\],
+:root:not([data-theme="dark"]):not(.dark) #dashboard .rounded-\[24px\],
+:root:not([data-theme="dark"]):not(.dark) #dashboard .rounded-2xl:not(.welcome-value):not([class*="bg-white/"]),
+:root:not([data-theme="dark"]):not(.dark) #hormone-metrics section,
+:root:not([data-theme="dark"]):not(.dark) #hormone-metrics .rounded-\[24px\],
+:root:not([data-theme="dark"]):not(.dark) #hormone-metrics .rounded-2xl,
+:root:not([data-theme="dark"]):not(.dark) .chart-wrap,
+:root:not([data-theme="dark"]):not(.dark) #chat .consultants-grid > div,
+:root:not([data-theme="dark"]):not(.dark) #predictive [class*="rounded-2xl"],
+:root:not([data-theme="dark"]):not(.dark) #predictive .rounded-2xl,
+:root:not([data-theme="dark"]):not(.dark) #settings .settings-card,
+:root:not([data-theme="dark"]):not(.dark) #settings [class*="rounded-2xl"],
+:root:not([data-theme="dark"]):not(.dark) #settings [class*="rounded-xl"],
+:root:not([data-theme="dark"]):not(.dark) #settings [data-slot="card"],
+:root:not([data-theme="dark"]):not(.dark) #settings .rounded-lg,
+:root:not([data-theme="dark"]):not(.dark) .settings-card {
+  border: 1.5px solid rgba(44, 76, 92, 0.22) !important;
   background: var(--surface) !important;
   background-image: none !important;
-  box-shadow: var(--shadow-soft) !important;
+  box-shadow: 
+    0 2px 5px -1px rgba(28, 48, 60, 0.08),
+    0 8px 24px -3px rgba(28, 48, 60, 0.16),
+    0 20px 48px -6px rgba(28, 48, 60, 0.18),
+    0 36px 72px -12px rgba(28, 48, 60, 0.12) !important;
+}
+
+:root:not([data-theme="dark"]):not(.dark) .welcome-section .welcome-value {
+  border: 1.5px solid rgba(44, 76, 92, 0.20) !important;
+  box-shadow: 0 2px 6px -1px rgba(44, 76, 92, 0.12), 0 8px 20px -2px rgba(44, 76, 92, 0.14) !important;
 }
 
 #chat .chat-main-card,
 #chat > .page-enter > div:last-child {
   background: linear-gradient(145deg, rgba(243, 227, 8, .10), rgba(184, 191, 193, .82)) !important;
-  border: 1px solid rgba(184, 191, 193, .95) !important;
-  box-shadow: 0 2px 6px -1px rgba(44, 76, 92, 0.08), 0 14px 36px -4px rgba(44, 76, 92, 0.13), 0 1px 0 rgba(184, 191, 193, .95) inset !important;
+  border: 1.5px solid rgba(44, 76, 92, 0.24) !important;
+  box-shadow: 
+    0 2px 5px -1px rgba(28, 48, 60, 0.08),
+    0 8px 24px -3px rgba(28, 48, 60, 0.16),
+    0 20px 48px -6px rgba(28, 48, 60, 0.18),
+    0 36px 72px -12px rgba(28, 48, 60, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.8) inset !important;
 }
 
 #chat .consultants-grid {
