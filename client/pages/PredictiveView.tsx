@@ -320,82 +320,84 @@ export default function PredictiveView() {
   return (
     <div className="w-full max-w-7xl mx-auto p-4 md:p-6 space-y-8 page-enter">
       {/* Header with Plan Switcher */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[12px] font-semibold text-[#2C4C5C] dark:text-[#A0B4BE]">Endocrine Analytics</span>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-1">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#0EA5A4]">Endocrine Analytics</span>
+            <span className="text-slate-300 dark:text-slate-700">•</span>
             {showPremiumFeatures ? (
-              <Badge className="bg-[#0EA5A4] text-white hover:bg-[#0EA5A4] flex items-center gap-1 text-[10px]">
-                <Crown size={12} /> Premium Active
+              <Badge className="bg-[#0EA5A4] text-white hover:bg-[#0EA5A4] flex items-center gap-1 text-[10px] font-bold">
+                <Crown size={11} /> Premium Active
               </Badge>
             ) : (
-              <Badge variant="outline" className="text-slate-600 dark:text-[#A0B4BE] border-slate-300 dark:border-white/10 text-[10px]">
+              <Badge variant="outline" className="text-slate-600 dark:text-[#A0B4BE] border-slate-200 dark:border-white/10 text-[10px] font-semibold">
                 Free Plan
               </Badge>
             )}
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-[#E8F2F6]">
             {t("predictive.title", "Predictive Analysis")}
           </h1>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-slate-500 dark:text-[#A0B4BE] text-xs sm:text-sm max-w-2xl leading-relaxed">
             {t("predictive.subtitle", "Longitudinal risk projection models derived from continuous interstitial fluid tracking.")}
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Plan View Switcher Toggle */}
-          <div className="flex items-center rounded-xl bg-slate-100 dark:bg-[#15232A] border border-slate-200 dark:border-[#243C47] p-1">
-            <button
-              onClick={() => setActiveMode("free")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                activeMode === "free"
-                  ? "bg-white dark:bg-[#1C2F38] text-slate-900 dark:text-[#E8F2F6] shadow-sm"
-                  : "text-slate-500 dark:text-[#A0B4BE] hover:text-slate-900"
-              }`}
+        <div className="flex flex-col sm:items-end gap-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Plan View Switcher Toggle */}
+            <div className="flex items-center rounded-xl bg-slate-100 dark:bg-[#15232A] border border-slate-200 dark:border-[#243C47] p-1 shadow-2xs">
+              <button
+                onClick={() => setActiveMode("free")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  activeMode === "free"
+                    ? "bg-white dark:bg-[#1C2F38] text-slate-900 dark:text-[#E8F2F6] shadow-2xs"
+                    : "text-slate-500 dark:text-[#A0B4BE] hover:text-slate-900"
+                }`}
+              >
+                Free Version
+              </button>
+              <button
+                onClick={() => setActiveMode("premium")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  activeMode === "premium"
+                    ? "bg-[#0EA5A4] text-white shadow-2xs"
+                    : "text-slate-500 dark:text-[#A0B4BE] hover:text-[#0EA5A4]"
+                }`}
+              >
+                <Crown size={13} /> Premium Version
+              </button>
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setReportOpen(true)}
+              className="border-[#F3E308]/40 dark:border-[#F3E308]/40 bg-[#F3E308]/15 dark:bg-[#F3E308]/15 hover:bg-[#F3E308]/25 text-[#7A6600] dark:text-[#F3E308] font-bold shadow-2xs rounded-xl"
             >
-              Free Version
-            </button>
-            <button
-              onClick={() => setActiveMode("premium")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                activeMode === "premium"
-                  ? "bg-[#0EA5A4] text-white shadow-sm"
-                  : "text-slate-500 dark:text-[#A0B4BE] hover:text-[#0EA5A4]"
-              }`}
+              <FileText className="mr-1.5 h-3.5 w-3.5 text-[#7A6600] dark:text-[#F3E308]" />
+              Doctor Report (PDF)
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={generatePredictions}
+              disabled={generating}
+              className="rounded-xl border-slate-200 dark:border-[#243C47] dark:hover:bg-[#1C2F38] text-xs font-semibold"
             >
-              <Crown size={13} /> Premium Version
-            </button>
+              <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${generating ? "animate-spin" : ""}`} />
+              {t("common.refresh", "Refresh")}
+            </Button>
           </div>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setReportOpen(true)}
-            className="border-[#F3E308]/40 dark:border-[#F3E308]/40 bg-[#F3E308]/15 dark:bg-[#F3E308]/15 hover:bg-[#F3E308]/25 text-[#7A6600] dark:text-[#F3E308] font-bold shadow-xs"
-          >
-            <FileText className="mr-1.5 h-3.5 w-3.5 text-[#7A6600] dark:text-[#F3E308]" />
-            Doctor Report (PDF)
-          </Button>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={generatePredictions}
-            disabled={generating}
-            className="dark:border-[#243C47] dark:hover:bg-[#1C2F38]"
-          >
-            <RefreshCw className={`mr-2 h-4 w-4 ${generating ? "animate-spin" : ""}`} />
-            {t("common.refresh", "Refresh")}
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
+            type="button"
             onClick={handleRevoke}
-            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+            className="text-[11px] text-slate-400 hover:text-destructive dark:text-slate-500 dark:hover:text-rose-400 transition font-medium self-start sm:self-end pr-1"
           >
             {t("predictive.revoke", "Revoke consent")}
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -437,7 +439,7 @@ export default function PredictiveView() {
       {pmosRisk && (() => {
         const pmosPct = getConditionPercentage(pmosRisk);
         return (
-          <section className="space-y-3">
+          <div className="space-y-3.5">
             <div>
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-[#0EA5A4]" />
@@ -450,7 +452,7 @@ export default function PredictiveView() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 dark:border-[#243C47] border-t-2 border-t-[#0EA5A4] bg-white dark:bg-[#15232A] p-6 shadow-xs">
+            <div className="rounded-2xl border border-slate-200/90 dark:border-[#243C47] border-t-2 border-t-[#0EA5A4] bg-white dark:bg-[#15232A] p-6 shadow-xs hover:border-slate-300 dark:hover:border-[#325260] transition-all">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-2.5">
@@ -550,12 +552,12 @@ export default function PredictiveView() {
                 </div>
               )}
             </div>
-          </section>
+          </div>
         );
       })()}
 
       {/* Section 2: Long-Term Health Conditions */}
-      <section className="space-y-4">
+      <div className="space-y-3.5">
         <div>
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-purple-500" />
@@ -640,7 +642,7 @@ export default function PredictiveView() {
                               <ShieldCheck className="w-4 h-4" />
                             )}
                           </div>
-                          <span className="font-semibold text-slate-800 dark:text-[#E8F2F6] text-[13px] leading-tight">
+                          <span className="font-bold text-slate-900 dark:text-[#E8F2F6] text-sm leading-snug">
                             {c.title}
                           </span>
                         </div>
@@ -716,7 +718,7 @@ export default function PredictiveView() {
             </div>
           );
         })()}
-      </section>
+      </div>
 
       {/* Upgrade callout if on Free mode */}
       {!showPremiumFeatures && (

@@ -137,8 +137,7 @@
 }
 
 .settings-card,
-#chat > .page-enter > div:last-child,
-#predictive > .page-enter > section {
+#chat > .page-enter > div:last-child {
   background: linear-gradient(145deg, rgba(243, 227, 8, .10), rgba(184, 191, 193, .82)) !important;
   border-color: rgba(184, 191, 193, .9) !important;
   box-shadow: 0 14px 40px rgba(44, 76, 92, .055), 0 1px 0 rgba(184, 191, 193, .95) inset !important;
@@ -376,7 +375,6 @@ body {
 #dashboard section,
 #dashboard .rounded-\[24px\],
 #dashboard .rounded-2xl,
-#predictive section,
 .settings-card {
   border: 1px solid var(--border-light) !important;
   background: var(--surface) !important;
@@ -436,8 +434,8 @@ body {
 #chat input { min-height: 44px; border: 1px solid var(--border-light) !important; background: var(--surface) !important; color: var(--text) !important; }
 #chat .border-t, #chat .border-r, #chat .border-b { border-color: var(--border-light) !important; }
 
-#dashboard h3, #chat h2, #predictive h2, #settings h2 { text-transform: uppercase; letter-spacing: .08em; }
-#dashboard p, #chat p, #predictive p, #settings p { font-size: max(13px, 1em); }
+#dashboard h3, #chat h2, #settings h2 { text-transform: uppercase; letter-spacing: .08em; }
+#dashboard p, #chat p, #settings p { font-size: max(13px, 1em); }
 
 .assistive-layer { position: fixed; inset: 0; z-index: 100; display: flex; justify-content: flex-end; }
 .assistive-backdrop { position: absolute; inset: 0; width: 100%; border: 0; background: rgba(44, 76, 92, .38); }
@@ -465,8 +463,6 @@ body {
 :root.dark #chat .chat-main-card,
 :root[data-theme="dark"] #chat > .page-enter > div.grid,
 :root.dark #chat > .page-enter > div.grid,
-:root[data-theme="dark"] #predictive section,
-:root.dark #predictive section,
 :root[data-theme="dark"] .settings-card,
 :root.dark .settings-card { background: var(--surface) !important; border-color: var(--border-light) !important; }
 :root[data-theme="dark"] .welcome-section .welcome-value,
