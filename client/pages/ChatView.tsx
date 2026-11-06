@@ -80,6 +80,23 @@ export default function ChatView({ language }: ChatViewProps) {
   const [expandedFaqId, setExpandedFaqId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Derive patient user initials for outgoing chat bubble avatars
+  const userInitials = useMemo(() => {
+    const name = profile?.full_name?.trim();
+    if (name) {
+      const parts = name.split(/\s+/);
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+      return name.slice(0, 2).toUpperCase();
+    }
+    const email = user?.email?.trim();
+    if (email) {
+      return email.slice(0, 2).toUpperCase();
+    }
+    return "AM";
+  }, [profile?.full_name, user?.email]);
+
   // Local message store keyed by consultant ID to ensure instantaneous feedback & offline fallback
   const [localMessagesByConsultant, setLocalMessagesByConsultant] = useState<
     Record<string, MessageInfo[]>
@@ -672,6 +689,7 @@ export default function ChatView({ language }: ChatViewProps) {
                     key={msg.id}
                     msg={msg}
                     consultant={consultant}
+                    userInitials={userInitials}
                   />
                 ))}
 
@@ -827,20 +845,31 @@ export default function ChatView({ language }: ChatViewProps) {
 function MessageBubble({
   msg,
   consultant,
+  userInitials,
 }: {
   msg: MessageInfo;
   consultant: ConsultantInfo;
+  userInitials: string;
 }) {
   if (msg.sender_type === "patient") {
     return (
-      <div className="chat-message chat-message-outgoing bg-[#2C4C5C] dark:bg-[#0EA5A4] px-4 py-3 text-[12px] leading-relaxed text-white ml-auto max-w-[75%] rounded-2xl shadow-sm">
-        {msg.body}
+      <div className="chat-message-row chat-message-row-outgoing flex w-full justify-end items-start gap-2.5 my-1 ml-auto">
+        <div className="chat-message chat-message-outgoing bg-[#2C4C5C] dark:bg-[#0EA5A4] px-4 py-3 text-[12px] leading-relaxed text-white max-w-[75%] rounded-2xl shadow-sm text-left">
+          {msg.body}
+        </div>
+        <div
+          className="user-avatar-chat flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[8.5px] font-bold text-white bg-[#2C4C5C] dark:bg-[#0EA5A4] border border-white/20 shadow-xs"
+          style={{ background: "linear-gradient(135deg, #2C4C5C, #4A6E82)", color: "#FFFFFF" }}
+          title="You"
+        >
+          {userInitials}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="chat-message-row flex w-full gap-3">
+    <div className="chat-message-row chat-message-row-incoming flex w-full items-start gap-3 my-1">
       <div
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[8px] font-bold"
         style={{ background: consultant.color, color: "#FFFFFF" }}
