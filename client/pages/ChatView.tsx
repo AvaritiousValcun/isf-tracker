@@ -68,7 +68,7 @@ export default function ChatView({ language }: ChatViewProps) {
   const { messageCount, refetch: refetchMessageCount } = useMessageCount();
 
   const [activeConsultantIdx, setActiveConsultantIdx] = useState(0);
-  const [hasSelectedConsultant, setHasSelectedConsultant] = useState(false);
+  const [hasSelectedConsultant, setHasSelectedConsultant] = useState(true);
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [sending, setSending] = useState(false);
@@ -382,7 +382,7 @@ export default function ChatView({ language }: ChatViewProps) {
   }
 
   return (
-    <div className="page-enter w-full max-w-5xl mx-auto p-4 md:p-6 pb-12">
+    <div className="page-enter w-full max-w-6xl mx-auto p-4 md:p-6 pb-12">
       {/* Attached Main Card: Header + (Consultant Selector + Chat Thread) */}
       <div className="chat-main-card overflow-hidden rounded-[24px] border border-slate-300 dark:border-[#243C47] dark:bg-[#15232A] shadow-2xl">
         {/* Attached Top Header Bar */}
@@ -592,49 +592,47 @@ export default function ChatView({ language }: ChatViewProps) {
           ) : consultant ? (
             <>
               {/* Chat Top Status Header */}
-              <div className="flex items-center gap-3 border-b border-slate-200 dark:border-[#243C47] px-5 py-4">
-                <div
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-[10px] font-bold text-white shadow-xs"
-                  style={{ background: consultant.color, color: "#FFFFFF" }}
-                >
-                  {consultant.initials ||
-                    consultant.full_name.slice(0, 2).toUpperCase()}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">
-                      {consultant.full_name}
-                    </p>
-                    <span className="hidden sm:inline-block rounded-full bg-[#0EA5A4]/15 px-2 py-0.5 text-[9px] font-bold text-[#0EA5A4]">
-                      {consultant.professional_type}
-                    </span>
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#243C47] px-5 py-3.5 bg-white/40 dark:bg-black/10">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white shadow-xs"
+                    style={{ background: consultant.color, color: "#FFFFFF" }}
+                  >
+                    {consultant.initials ||
+                      consultant.full_name.slice(0, 2).toUpperCase()}
+                    {consultant.online && (
+                      <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white dark:border-[#15232A] bg-[#0EA5A4]" />
+                    )}
                   </div>
-                  <p className="mt-0.5 flex items-center gap-1.5 text-[10px] text-slate-500 dark:text-[#A0B4BE]">
-                    <span
-                      className={`h-1.5 w-1.5 rounded-full ${
-                        consultant.online ? "bg-[#0EA5A4]" : "bg-slate-600"
-                      }`}
-                    />
-                    {consultant.online
-                      ? t(language, "chat.available")
-                      : t(language, "chat.repliesSoon")}
-                  </p>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="text-[13px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6]">
+                        {consultant.full_name}
+                      </p>
+                      <span className="rounded-full bg-[#0EA5A4]/15 px-2 py-0.5 text-[9px] font-bold text-[#0EA5A4] capitalize">
+                        {consultant.professional_type}
+                      </span>
+                    </div>
+                    <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-[#A0B4BE]">
+                      <span
+                        className={`h-2 w-2 rounded-full ${
+                          consultant.online ? "bg-[#0EA5A4]" : "bg-slate-400"
+                        }`}
+                      />
+                      {consultant.online
+                        ? "Available now • Continuous ISF telemetry"
+                        : t(language, "chat.repliesSoon")}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="ml-auto flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() => setHasSelectedConsultant(false)}
-                    className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#1C2F38] px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 dark:text-[#E8F2F6] hover:bg-slate-100 dark:hover:bg-[#243C47] transition shadow-2xs cursor-pointer"
+                    className="lg:hidden flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#1C2F38] px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 dark:text-[#E8F2F6] hover:bg-slate-100 dark:hover:bg-[#243C47] transition shadow-2xs cursor-pointer"
                   >
                     <ArrowLeftRight size={12} className="text-[#0EA5A4]" />
-                    <span className="hidden sm:inline">Change Specialist</span>
-                  </button>
-
-                  <button
-                    onClick={() => setReportModalOpen(true)}
-                    className="flex items-center gap-1 text-[11px] font-semibold text-[#0EA5A4] hover:underline"
-                  >
-                    <FileText size={13} /> Clinical Summary
+                    <span>Specialists</span>
                   </button>
                 </div>
               </div>
@@ -642,21 +640,11 @@ export default function ChatView({ language }: ChatViewProps) {
               {/* Message History Feed */}
               <div
                 ref={messagesContainerRef}
-                className="flex-1 space-y-4 p-5 overflow-y-auto max-h-[560px]"
+                className="flex-1 space-y-4 p-5 overflow-y-auto min-h-[380px] max-h-[500px]"
               >
-                <div className="mx-auto flex max-w-[340px] items-center gap-2 rounded-lg bg-[#F3E308]/[0.08] dark:bg-[#F3E308]/15 px-3 py-2 text-[12px] font-medium leading-relaxed text-[#2C4C5C] dark:text-[#E8F2F6]">
-                  <ShieldCheck
-                    size={14}
-                    className="shrink-0 text-[#2C4C5C] dark:text-[#F3E308]"
-                  />
-                  <span className="font-semibold">
-                    {t(language, "chat.dataChoice")}
-                  </span>
-                </div>
-
                 <div className="flex items-center gap-3">
                   <div className="h-px flex-1 bg-[#2C4C5C]/[0.06] dark:bg-[#243C47]" />
-                  <span className="text-[10px] uppercase tracking-[0.14em] text-slate-600 dark:text-[#738C98]">
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-slate-500 dark:text-[#738C98]">
                     {t(language, "chat.today")}
                   </span>
                   <div className="h-px flex-1 bg-[#2C4C5C]/[0.06] dark:bg-[#243C47]" />
@@ -692,46 +680,60 @@ export default function ChatView({ language }: ChatViewProps) {
                     </div>
                   </div>
                 )}
+              </div>
 
-                {/* Commonly Asked Questions Palette — Bot Simulation Trigger */}
-                <div className="pt-3 border-t border-slate-200/60 dark:border-white/5 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <p className="text-[11px] font-bold text-[#2C4C5C] dark:text-[#E8F2F6] flex items-center gap-1.5">
-                      <Sparkles size={13} className="text-[#0EA5A4]" />
-                      <span>Select a question to ask {consultant.full_name}:</span>
-                    </p>
+              {/* Quick Prompts Bar */}
+              <div className="border-t border-slate-200/80 dark:border-[#243C47] bg-slate-50/70 dark:bg-[#111D23] px-4 py-2.5">
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                  <span className="text-[11px] font-semibold text-slate-500 dark:text-[#A0B4BE] shrink-0 flex items-center gap-1 mr-1">
+                    <Sparkles size={12} className="text-[#0EA5A4]" />
+                    Quick ask:
+                  </span>
+                  {CLINICAL_FAQ_ITEMS.map((item) => (
                     <button
-                      onClick={() => setFaqModalOpen(true)}
-                      className="text-[10px] font-semibold text-[#0EA5A4] hover:underline flex items-center gap-1 cursor-pointer"
+                      key={item.id}
+                      type="button"
+                      onClick={() => handleSendMessage(item.question)}
+                      disabled={sending}
+                      className="shrink-0 rounded-full border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1C2F38] hover:border-[#0EA5A4] hover:bg-slate-50 dark:hover:bg-[#243C47] px-3 py-1 text-[11px] font-medium text-slate-700 dark:text-[#E8F2F6] transition shadow-2xs cursor-pointer disabled:opacity-50"
                     >
-                      <BookOpen size={11} /> Browse All ({CLINICAL_FAQ_ITEMS.length})
+                      {item.question}
                     </button>
-                  </div>
-
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {CLINICAL_FAQ_ITEMS.map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => handleSendMessage(item.question)}
-                        disabled={sending}
-                        className="group flex items-start gap-2.5 rounded-xl border border-slate-200/90 dark:border-white/10 bg-slate-50/80 dark:bg-[#1C2F38]/70 p-2.5 text-left transition hover:border-[#0EA5A4] hover:bg-white dark:hover:bg-[#243C47] shadow-2xs cursor-pointer disabled:opacity-50"
-                      >
-                        <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#0EA5A4]/10 text-[#0EA5A4] group-hover:bg-[#0EA5A4] group-hover:text-white transition">
-                          <MessageCircle size={12} />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <span className="inline-block rounded-md bg-[#2C4C5C]/5 dark:bg-white/10 px-1.5 py-0.5 text-[9px] font-bold text-[#2C4C5C] dark:text-[#A0B4BE] mb-0.5">
-                            {item.category}
-                          </span>
-                          <p className="text-[11px] font-medium text-slate-800 dark:text-[#E8F2F6] leading-snug group-hover:text-[#0EA5A4] transition">
-                            {item.question}
-                          </p>
-                        </div>
-                        <Send size={12} className="text-slate-400 group-hover:text-[#0EA5A4] shrink-0 mt-1" />
-                      </button>
-                    ))}
-                  </div>
+                  ))}
                 </div>
+              </div>
+
+              {/* Natural Chat Message Input */}
+              <div className="border-t border-slate-200/80 dark:border-[#243C47] p-3 sm:p-4 bg-white/60 dark:bg-[#15232A]">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <input
+                    type="text"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder={`Ask ${consultant.full_name} a question...`}
+                    disabled={sending}
+                    className="flex-1 rounded-xl border border-slate-300 dark:border-white/10 bg-white dark:bg-[#1C2F38] px-4 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#0EA5A4]/40"
+                  />
+                  <button
+                    type="submit"
+                    disabled={sending || !message.trim()}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0EA5A4] text-white hover:bg-[#0C8F8E] disabled:opacity-40 transition shadow-xs cursor-pointer"
+                  >
+                    <Send size={16} />
+                  </button>
+                </form>
+                {!isPremium && (
+                  <div className="mt-2 flex items-center justify-between px-1 text-[10px] text-slate-500 dark:text-[#A0B4BE]">
+                    <span>Free plan: {messageCount}/{FREE_MESSAGE_LIMIT} messages used</span>
+                    <span className="font-semibold text-[#0EA5A4]">Encrypted telemetry</span>
+                  </div>
+                )}
               </div>
             </>
           ) : null}
