@@ -943,7 +943,7 @@ export default function SettingsView({
             <Button
               onClick={handleUpgrade}
               disabled={loadingPayment}
-              className="gap-2 bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 hover:from-teal-700 hover:to-emerald-700 text-white font-bold shadow-md shadow-teal-900/25 px-5 py-2.5 rounded-xl border border-teal-400/40 transition hover:-translate-y-0.5"
+              className="upgrade-plan-btn gap-2 bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 hover:from-teal-700 hover:to-emerald-700 text-white font-bold shadow-md shadow-teal-900/25 px-5 py-2.5 rounded-xl border border-teal-400/40 transition hover:-translate-y-0.5"
             >
               {loadingPayment
                 ? tr(

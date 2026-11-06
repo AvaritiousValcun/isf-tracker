@@ -382,68 +382,69 @@ export default function ChatView({ language }: ChatViewProps) {
   }
 
   return (
-    <div className="page-enter mx-auto max-w-[1250px] px-5 pb-10 pt-7 sm:px-8 lg:px-10 lg:pt-9">
-      {/* Header Bar */}
-      <div className="mb-7 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <p className="text-[12px] font-medium text-[#2C4C5C] dark:text-[#A0B4BE]">
-              Care team
+    <div className="page-enter mx-auto max-w-[820px] px-4 pb-10 pt-6 sm:px-6 lg:pt-8">
+      {/* Attached Main Card: Header + (Consultant Selector + Chat Thread) */}
+      <div className="chat-main-card overflow-hidden rounded-[24px] border border-slate-300 dark:border-[#243C47] dark:bg-[#15232A] shadow-2xl">
+        {/* Attached Top Header Bar */}
+        <div className="border-b border-slate-200/90 dark:border-[#243C47] bg-white/70 dark:bg-black/20 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <p className="text-[12px] font-medium text-[#2C4C5C] dark:text-[#A0B4BE]">
+                Care team
+              </p>
+              <span className="flex items-center gap-1 rounded-full bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 px-2 py-0.5 text-[10px] font-semibold text-[#0EA5A4]">
+                <Sparkles size={11} /> AI Clinical Consultants
+              </span>
+            </div>
+            <h2 className="font-display text-[27px] font-semibold tracking-[-0.055em] text-[#2C4C5C] dark:text-[#E8F2F6]">
+              {t(language, "chat.title")}
+            </h2>
+            <p className="mt-1.5 text-[13px] text-slate-500 dark:text-[#A0B4BE]">
+              {t(language, "chat.intro")}
             </p>
-            <span className="flex items-center gap-1 rounded-full bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 px-2 py-0.5 text-[10px] font-semibold text-[#0EA5A4]">
-              <Sparkles size={11} /> AI Clinical Consultants
-            </span>
           </div>
-          <h2 className="font-display text-[27px] font-semibold tracking-[-0.055em] text-[#2C4C5C] dark:text-[#E8F2F6]">
-            {t(language, "chat.title")}
-          </h2>
-          <p className="mt-2 text-[13px] text-slate-500 dark:text-[#A0B4BE]">
-            {t(language, "chat.intro")}
-          </p>
+
+          <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto shrink-0">
+            {/* Quick FAQ / Instant Answers Button */}
+            <button
+              onClick={() => setFaqModalOpen(true)}
+              className="flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#1C2F38] hover:bg-slate-100 dark:hover:bg-[#243C47] px-3.5 py-2 text-[12px] font-semibold text-slate-700 dark:text-[#E8F2F6] transition shadow-xs cursor-pointer"
+            >
+              <HelpCircle size={15} className="text-[#0EA5A4]" />
+              <span className="hidden sm:inline">Clinical Q&A</span>
+            </button>
+
+            {/* Doctor-Ready Clinical Report Export Button */}
+            <button
+              onClick={() => setReportModalOpen(true)}
+              className="flex items-center gap-1.5 rounded-xl border border-[#E5D400] dark:border-[#F3E308]/40 bg-[#FFF566] dark:bg-[#F3E308]/15 hover:bg-[#FFED33] dark:hover:bg-[#F3E308]/25 px-3.5 py-2 text-[12px] font-extrabold text-[#473B00] dark:text-[#F3E308] transition shadow-xs cursor-pointer"
+            >
+              <FileText size={15} className="text-[#473B00] dark:text-[#F3E308]" />
+              <span>Doctor Report (PDF)</span>
+            </button>
+
+            {/* Emergency Access QR */}
+            <button
+              onClick={generateQr}
+              className="flex items-center gap-2 rounded-xl border border-[#6C8494]/20 bg-[#6C8494]/[0.06] dark:bg-[#1C2F38] px-3.5 py-2 text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6] hover:bg-[#6C8494]/15 transition cursor-pointer"
+            >
+              <QrCode size={16} />
+              <span className="hidden sm:inline">
+                {t(language, "chat.emergencyAccess")}
+              </span>
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          {/* Quick FAQ / Instant Answers Button */}
-          <button
-            onClick={() => setFaqModalOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#1C2F38] hover:bg-slate-100 dark:hover:bg-[#243C47] px-3.5 py-2.5 text-[12px] font-semibold text-slate-700 dark:text-[#E8F2F6] transition shadow-xs cursor-pointer"
-          >
-            <HelpCircle size={15} className="text-[#0EA5A4]" />
-            <span className="hidden sm:inline">Clinical Q&A</span>
-          </button>
+        {error && (
+          <div className="m-4 rounded-xl border border-red-200 dark:border-red-900/40 bg-red-50 dark:bg-red-950/20 px-4 py-3 text-[12px] font-medium text-red-700 dark:text-red-400">
+            {error}
+          </div>
+        )}
 
-          {/* Doctor-Ready Clinical Report Export Button */}
-          <button
-            onClick={() => setReportModalOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl border border-[#E5D400] dark:border-[#F3E308]/40 bg-[#FFF566] dark:bg-[#F3E308]/15 hover:bg-[#FFED33] dark:hover:bg-[#F3E308]/25 px-3.5 py-2.5 text-[12px] font-extrabold text-[#473B00] dark:text-[#F3E308] transition shadow-xs"
-          >
-            <FileText size={15} className="text-[#473B00] dark:text-[#F3E308]" />
-            <span>Doctor Report (PDF)</span>
-          </button>
-
-          {/* Emergency Access QR */}
-          <button
-            onClick={generateQr}
-            className="flex items-center gap-2 rounded-xl border border-[#6C8494]/20 bg-[#6C8494]/[0.06] dark:bg-[#1C2F38] px-3.5 py-2.5 text-[12px] font-semibold text-[#2C4C5C] dark:text-[#E8F2F6] hover:bg-[#6C8494]/15 transition"
-          >
-            <QrCode size={16} />
-            <span className="hidden sm:inline">
-              {t(language, "chat.emergencyAccess")}
-            </span>
-          </button>
-        </div>
-      </div>
-
-      {error && (
-        <div className="mb-4 rounded-xl border border-red-200 dark:border-red-900/40 bg-red-50 dark:bg-red-950/20 px-4 py-3 text-[12px] font-medium text-red-700 dark:text-red-400">
-          {error}
-        </div>
-      )}
-
-      {/* Main Grid: Consultant Selector + Chat Thread */}
-      <div className="chat-main-card grid overflow-hidden rounded-[24px] border border-slate-300 dark:border-[#243C47] dark:bg-[#15232A] lg:grid-cols-[280px_minmax(0,1fr)] shadow-2xl">
-        
-        {/* Left Column: Consultant List */}
+        {/* Main Grid: Consultant Selector + Chat Thread */}
+        <div className="grid lg:grid-cols-[250px_minmax(0,1fr)]">
+          {/* Left Column: Consultant List */}
         <div className="border-b border-slate-200 dark:border-[#243C47] p-3 lg:border-b-0 lg:border-r">
           <p className="px-3 pb-3 pt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-[#738C98]">
             {t(language, "chat.consultants")}
@@ -735,6 +736,7 @@ export default function ChatView({ language }: ChatViewProps) {
             </>
           ) : null}
         </div>
+      </div>
       </div>
 
       {/* Emergency Access QR Modal */}

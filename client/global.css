@@ -485,11 +485,13 @@ body {
 :root:not([data-theme="dark"]):not(.dark) #chat .consultants-grid > div,
 :root:not([data-theme="dark"]):not(.dark) #predictive [class*="rounded-2xl"],
 :root:not([data-theme="dark"]):not(.dark) #predictive .rounded-2xl,
+:root:not([data-theme="dark"]):not(.dark) #predictive .predictive-header-card,
+:root:not([data-theme="dark"]):not(.dark) #predictive .rounded-\[24px\],
 :root:not([data-theme="dark"]):not(.dark) #settings .settings-card,
-:root:not([data-theme="dark"]):not(.dark) #settings [class*="rounded-2xl"],
-:root:not([data-theme="dark"]):not(.dark) #settings [class*="rounded-xl"],
+:root:not([data-theme="dark"]):not(.dark) #settings [class*="rounded-2xl"]:not(button):not([role="button"]),
+:root:not([data-theme="dark"]):not(.dark) #settings [class*="rounded-xl"]:not(button):not([role="button"]),
 :root:not([data-theme="dark"]):not(.dark) #settings [data-slot="card"],
-:root:not([data-theme="dark"]):not(.dark) #settings .rounded-lg,
+:root:not([data-theme="dark"]):not(.dark) #settings .rounded-lg:not(button):not([role="button"]),
 :root:not([data-theme="dark"]):not(.dark) .settings-card {
   border: 1.5px solid rgba(44, 76, 92, 0.22) !important;
   background: var(--surface) !important;
@@ -598,6 +600,10 @@ body {
 :root.dark #predictive [class*="rounded-2xl"],
 :root[data-theme="dark"] #predictive .rounded-2xl,
 :root.dark #predictive .rounded-2xl,
+:root[data-theme="dark"] #predictive .predictive-header-card,
+:root.dark #predictive .predictive-header-card,
+:root[data-theme="dark"] #predictive .rounded-\[24px\],
+:root.dark #predictive .rounded-\[24px\],
 :root[data-theme="dark"] #settings .settings-card,
 :root.dark #settings .settings-card,
 :root[data-theme="dark"] #settings [class*="rounded-2xl"],
@@ -607,6 +613,29 @@ body {
   background: var(--surface) !important;
   border: 1px solid var(--border-light) !important;
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45), 0 14px 38px -4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Explicit Upgrade button styling: ensures vivid gradient background & white text in all themes */
+.upgrade-plan-btn,
+#settings button.upgrade-plan-btn,
+:root:not([data-theme="dark"]):not(.dark) #settings button.upgrade-plan-btn,
+:root[data-theme="dark"] #settings button.upgrade-plan-btn,
+:root.dark #settings button.upgrade-plan-btn {
+  background: linear-gradient(135deg, #0D9488 0%, #059669 50%, #0F766E 100%) !important;
+  background-image: linear-gradient(135deg, #0D9488 0%, #059669 50%, #0F766E 100%) !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid rgba(45, 212, 191, 0.45) !important;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35) !important;
+}
+
+.upgrade-plan-btn:hover,
+#settings button.upgrade-plan-btn:hover,
+:root:not([data-theme="dark"]):not(.dark) #settings button.upgrade-plan-btn:hover,
+:root[data-theme="dark"] #settings button.upgrade-plan-btn:hover,
+:root.dark #settings button.upgrade-plan-btn:hover {
+  background: linear-gradient(135deg, #0F766E 0%, #047857 50%, #115E59 100%) !important;
+  background-image: linear-gradient(135deg, #0F766E 0%, #047857 50%, #115E59 100%) !important;
+  color: #FFFFFF !important;
 }
 
 :root[data-theme="dark"] .welcome-section .welcome-value,

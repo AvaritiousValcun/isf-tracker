@@ -318,98 +318,100 @@ export default function PredictiveView() {
   };
 
   return (
-    <div className="page-enter mx-auto max-w-[1250px] px-5 pb-10 pt-7 sm:px-8 lg:px-10 lg:pt-9 space-y-8">
-      {/* Header with Plan Switcher */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-1">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#0D9488]">Endocrine Analytics</span>
-            <span className="text-slate-400 dark:text-slate-700">•</span>
-            {showPremiumFeatures ? (
-              <Badge className="bg-[#0D9488] text-white hover:bg-[#0D9488] flex items-center gap-1 text-[10px] font-extrabold rounded-full">
-                <Crown size={11} /> Premium Active
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="text-slate-700 dark:text-[#A0B4BE] border-slate-300 dark:border-white/10 bg-slate-100/90 dark:bg-transparent text-[10px] font-bold rounded-full">
-                Free Plan
-              </Badge>
-            )}
+    <div className="page-enter mx-auto max-w-[820px] px-4 pb-10 pt-6 sm:px-6 lg:pt-8 space-y-6">
+      {/* Attached Top Header Tab Card */}
+      <div className="predictive-header-card rounded-[24px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5 sm:p-6 shadow-xl space-y-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-1">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#0D9488]">Endocrine Analytics</span>
+              <span className="text-slate-400 dark:text-slate-700">•</span>
+              {showPremiumFeatures ? (
+                <Badge className="bg-[#0D9488] text-white hover:bg-[#0D9488] flex items-center gap-1 text-[10px] font-extrabold rounded-full">
+                  <Crown size={11} /> Premium Active
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="text-slate-700 dark:text-[#A0B4BE] border-slate-300 dark:border-white/10 bg-slate-100/90 dark:bg-transparent text-[10px] font-bold rounded-full">
+                  Free Plan
+                </Badge>
+              )}
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-[#E8F2F6]">
+              {t("predictive.title", "Predictive Analysis")}
+            </h1>
+            <p className="text-slate-600 dark:text-[#A0B4BE] text-xs sm:text-sm max-w-2xl leading-relaxed font-medium">
+              {t("predictive.subtitle", "Longitudinal risk projection models derived from continuous interstitial fluid tracking.")}
+            </p>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-[#E8F2F6]">
-            {t("predictive.title", "Predictive Analysis")}
-          </h1>
-          <p className="text-slate-600 dark:text-[#A0B4BE] text-xs sm:text-sm max-w-2xl leading-relaxed font-medium">
-            {t("predictive.subtitle", "Longitudinal risk projection models derived from continuous interstitial fluid tracking.")}
-          </p>
-        </div>
 
-        <div className="flex flex-col sm:items-end gap-2 shrink-0">
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Plan View Switcher Toggle */}
-            <div className="flex items-center rounded-full bg-slate-200/80 dark:bg-[#15232A] border border-slate-300 dark:border-[#243C47] p-1 shadow-2xs">
-              <button
-                onClick={() => setActiveMode("free")}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition ${
-                  activeMode === "free"
-                    ? "bg-white dark:bg-[#1C2F38] text-slate-900 dark:text-[#E8F2F6] shadow-xs"
-                    : "text-slate-600 dark:text-[#A0B4BE] hover:text-slate-900"
-                }`}
+          <div className="flex flex-col sm:items-end gap-2 shrink-0">
+            <div className="flex flex-wrap items-center gap-2.5">
+              {/* Plan View Switcher Toggle */}
+              <div className="flex items-center rounded-full bg-slate-200/80 dark:bg-[#15232A] border border-slate-300 dark:border-[#243C47] p-1 shadow-2xs">
+                <button
+                  onClick={() => setActiveMode("free")}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer ${
+                    activeMode === "free"
+                      ? "bg-white dark:bg-[#1C2F38] text-slate-900 dark:text-[#E8F2F6] shadow-xs"
+                      : "text-slate-600 dark:text-[#A0B4BE] hover:text-slate-900"
+                  }`}
+                >
+                  Free Version
+                </button>
+                <button
+                  onClick={() => setActiveMode("premium")}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer ${
+                    activeMode === "premium"
+                      ? "bg-[#0D9488] text-white shadow-xs"
+                      : "text-slate-600 dark:text-[#A0B4BE] hover:text-[#0D9488]"
+                  }`}
+                >
+                  <Crown size={13} /> Premium Version
+                </button>
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setReportOpen(true)}
+                className="border-[#E5D400] dark:border-[#F3E308]/40 bg-[#FFF566] dark:bg-[#F3E308]/15 hover:bg-[#FFED33] dark:hover:bg-[#F3E308]/25 text-[#473B00] dark:text-[#F3E308] font-extrabold shadow-2xs rounded-full px-4 cursor-pointer"
               >
-                Free Version
-              </button>
-              <button
-                onClick={() => setActiveMode("premium")}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition ${
-                  activeMode === "premium"
-                    ? "bg-[#0D9488] text-white shadow-xs"
-                    : "text-slate-600 dark:text-[#A0B4BE] hover:text-[#0D9488]"
-                }`}
+                <FileText className="mr-1.5 h-3.5 w-3.5 text-[#473B00] dark:text-[#F3E308]" />
+                Doctor Report (PDF)
+              </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={generatePredictions}
+                disabled={generating}
+                className="rounded-full border-slate-300 dark:border-[#243C47] text-slate-700 dark:text-[#E8F2F6] hover:bg-slate-100 dark:hover:bg-[#1C2F38] text-xs font-bold px-4 cursor-pointer"
               >
-                <Crown size={13} /> Premium Version
-              </button>
+                <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${generating ? "animate-spin" : ""}`} />
+                {t("common.refresh", "Refresh")}
+              </Button>
             </div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setReportOpen(true)}
-              className="border-[#E5D400] dark:border-[#F3E308]/40 bg-[#FFF566] dark:bg-[#F3E308]/15 hover:bg-[#FFED33] dark:hover:bg-[#F3E308]/25 text-[#473B00] dark:text-[#F3E308] font-extrabold shadow-2xs rounded-full px-4"
+            <button
+              type="button"
+              onClick={handleRevoke}
+              className="text-[11px] text-slate-500 hover:text-destructive dark:text-slate-400 dark:hover:text-rose-400 transition font-semibold self-start sm:self-end pr-1 cursor-pointer"
             >
-              <FileText className="mr-1.5 h-3.5 w-3.5 text-[#473B00] dark:text-[#F3E308]" />
-              Doctor Report (PDF)
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={generatePredictions}
-              disabled={generating}
-              className="rounded-full border-slate-300 dark:border-[#243C47] text-slate-700 dark:text-[#E8F2F6] hover:bg-slate-100 dark:hover:bg-[#1C2F38] text-xs font-bold px-4"
-            >
-              <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${generating ? "animate-spin" : ""}`} />
-              {t("common.refresh", "Refresh")}
-            </Button>
+              {t("predictive.revoke", "Revoke consent")}
+            </button>
           </div>
-
-          <button
-            type="button"
-            onClick={handleRevoke}
-            className="text-[11px] text-slate-500 hover:text-destructive dark:text-slate-400 dark:hover:text-rose-400 transition font-semibold self-start sm:self-end pr-1"
-          >
-            {t("predictive.revoke", "Revoke consent")}
-          </button>
         </div>
-      </div>
 
-      {/* Medical disclaimer */}
-      <div className="rounded-2xl border border-teal-200/90 dark:border-white/10 bg-teal-50/80 dark:bg-[#15232A] px-4 py-3 flex items-center gap-2.5 text-xs text-teal-950 dark:text-[#A0B4BE] font-medium">
-        <Info className="h-4 w-4 text-[#0D9488] shrink-0" />
-        <span>
-          {t(
-            "predictive.medical_disclaimer",
-            "Predictive analysis provides estimates based on continuous ISF measurements and should not replace clinical medical diagnoses. Always consult your healthcare provider."
-          )}
-        </span>
+        {/* Medical disclaimer attached inside the header card */}
+        <div className="rounded-xl border border-teal-200/90 dark:border-white/10 bg-teal-50/80 dark:bg-[#1C2F38] px-4 py-3 flex items-center gap-2.5 text-xs text-teal-950 dark:text-[#A0B4BE] font-medium">
+          <Info className="h-4 w-4 text-[#0D9488] shrink-0" />
+          <span>
+            {t(
+              "predictive.medical_disclaimer",
+              "Predictive analysis provides estimates based on continuous ISF measurements and should not replace clinical medical diagnoses. Always consult your healthcare provider."
+            )}
+          </span>
+        </div>
       </div>
 
       {/* No predictions */}
