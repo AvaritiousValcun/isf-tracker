@@ -415,9 +415,9 @@ export default function ChatView({ language }: ChatViewProps) {
           {/* Doctor-Ready Clinical Report Export Button */}
           <button
             onClick={() => setReportModalOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl border border-[#F3E308]/40 dark:border-[#F3E308]/40 bg-[#F3E308]/15 dark:bg-[#F3E308]/15 hover:bg-[#F3E308]/25 px-3.5 py-2.5 text-[12px] font-bold text-[#7A6600] dark:text-[#F3E308] transition shadow-xs"
+            className="flex items-center gap-1.5 rounded-xl border border-[#E5D400] dark:border-[#F3E308]/40 bg-[#FFF566] dark:bg-[#F3E308]/15 hover:bg-[#FFED33] dark:hover:bg-[#F3E308]/25 px-3.5 py-2.5 text-[12px] font-extrabold text-[#473B00] dark:text-[#F3E308] transition shadow-xs"
           >
-            <FileText size={15} className="text-[#7A6600] dark:text-[#F3E308]" />
+            <FileText size={15} className="text-[#473B00] dark:text-[#F3E308]" />
             <span>Doctor Report (PDF)</span>
           </button>
 

@@ -306,9 +306,9 @@ export default function PredictiveView() {
   };
 
   const getPercentageColor = (pct: number) => {
-    if (pct < 15) return "text-emerald-600 dark:text-emerald-400";
-    if (pct < 30) return "text-amber-500 dark:text-[#F3E308]";
-    return "text-rose-500 dark:text-rose-400";
+    if (pct < 15) return "text-emerald-700 dark:text-emerald-400 font-extrabold";
+    if (pct < 30) return "text-amber-600 dark:text-[#F3E308] font-extrabold";
+    return "text-rose-600 dark:text-rose-400 font-extrabold";
   };
 
   const getProgressColor = (pct: number) => {
@@ -323,14 +323,14 @@ export default function PredictiveView() {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-1">
         <div className="space-y-1">
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#0EA5A4]">Endocrine Analytics</span>
-            <span className="text-slate-300 dark:text-slate-700">•</span>
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#0D9488]">Endocrine Analytics</span>
+            <span className="text-slate-400 dark:text-slate-700">•</span>
             {showPremiumFeatures ? (
-              <Badge className="bg-[#0EA5A4] text-white hover:bg-[#0EA5A4] flex items-center gap-1 text-[10px] font-bold rounded-full">
+              <Badge className="bg-[#0D9488] text-white hover:bg-[#0D9488] flex items-center gap-1 text-[10px] font-extrabold rounded-full">
                 <Crown size={11} /> Premium Active
               </Badge>
             ) : (
-              <Badge variant="outline" className="text-slate-600 dark:text-[#A0B4BE] border-slate-200 dark:border-white/10 text-[10px] font-semibold rounded-full">
+              <Badge variant="outline" className="text-slate-700 dark:text-[#A0B4BE] border-slate-300 dark:border-white/10 bg-slate-100/90 dark:bg-transparent text-[10px] font-bold rounded-full">
                 Free Plan
               </Badge>
             )}
@@ -338,7 +338,7 @@ export default function PredictiveView() {
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-[#E8F2F6]">
             {t("predictive.title", "Predictive Analysis")}
           </h1>
-          <p className="text-slate-500 dark:text-[#A0B4BE] text-xs sm:text-sm max-w-2xl leading-relaxed">
+          <p className="text-slate-600 dark:text-[#A0B4BE] text-xs sm:text-sm max-w-2xl leading-relaxed font-medium">
             {t("predictive.subtitle", "Longitudinal risk projection models derived from continuous interstitial fluid tracking.")}
           </p>
         </div>
@@ -346,23 +346,23 @@ export default function PredictiveView() {
         <div className="flex flex-col sm:items-end gap-2 shrink-0">
           <div className="flex flex-wrap items-center gap-2.5">
             {/* Plan View Switcher Toggle */}
-            <div className="flex items-center rounded-full bg-slate-100 dark:bg-[#15232A] border border-slate-200 dark:border-[#243C47] p-1 shadow-2xs">
+            <div className="flex items-center rounded-full bg-slate-200/80 dark:bg-[#15232A] border border-slate-300 dark:border-[#243C47] p-1 shadow-2xs">
               <button
                 onClick={() => setActiveMode("free")}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition ${
                   activeMode === "free"
-                    ? "bg-white dark:bg-[#1C2F38] text-slate-900 dark:text-[#E8F2F6] shadow-2xs"
-                    : "text-slate-500 dark:text-[#A0B4BE] hover:text-slate-900"
+                    ? "bg-white dark:bg-[#1C2F38] text-slate-900 dark:text-[#E8F2F6] shadow-xs"
+                    : "text-slate-600 dark:text-[#A0B4BE] hover:text-slate-900"
                 }`}
               >
                 Free Version
               </button>
               <button
                 onClick={() => setActiveMode("premium")}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition ${
                   activeMode === "premium"
-                    ? "bg-[#0EA5A4] text-white shadow-2xs"
-                    : "text-slate-500 dark:text-[#A0B4BE] hover:text-[#0EA5A4]"
+                    ? "bg-[#0D9488] text-white shadow-xs"
+                    : "text-slate-600 dark:text-[#A0B4BE] hover:text-[#0D9488]"
                 }`}
               >
                 <Crown size={13} /> Premium Version
@@ -373,9 +373,9 @@ export default function PredictiveView() {
               variant="outline"
               size="sm"
               onClick={() => setReportOpen(true)}
-              className="border-[#F3E308]/40 dark:border-[#F3E308]/40 bg-[#F3E308]/15 dark:bg-[#F3E308]/15 hover:bg-[#F3E308]/25 text-[#7A6600] dark:text-[#F3E308] font-bold shadow-2xs rounded-full px-4"
+              className="border-[#E5D400] dark:border-[#F3E308]/40 bg-[#FFF566] dark:bg-[#F3E308]/15 hover:bg-[#FFED33] dark:hover:bg-[#F3E308]/25 text-[#473B00] dark:text-[#F3E308] font-extrabold shadow-2xs rounded-full px-4"
             >
-              <FileText className="mr-1.5 h-3.5 w-3.5 text-[#7A6600] dark:text-[#F3E308]" />
+              <FileText className="mr-1.5 h-3.5 w-3.5 text-[#473B00] dark:text-[#F3E308]" />
               Doctor Report (PDF)
             </Button>
 
@@ -384,7 +384,7 @@ export default function PredictiveView() {
               size="sm"
               onClick={generatePredictions}
               disabled={generating}
-              className="rounded-full border-slate-200 dark:border-[#243C47] dark:hover:bg-[#1C2F38] text-xs font-semibold px-4"
+              className="rounded-full border-slate-300 dark:border-[#243C47] text-slate-700 dark:text-[#E8F2F6] hover:bg-slate-100 dark:hover:bg-[#1C2F38] text-xs font-bold px-4"
             >
               <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${generating ? "animate-spin" : ""}`} />
               {t("common.refresh", "Refresh")}
@@ -394,7 +394,7 @@ export default function PredictiveView() {
           <button
             type="button"
             onClick={handleRevoke}
-            className="text-[11px] text-slate-400 hover:text-destructive dark:text-slate-500 dark:hover:text-rose-400 transition font-medium self-start sm:self-end pr-1"
+            className="text-[11px] text-slate-500 hover:text-destructive dark:text-slate-400 dark:hover:text-rose-400 transition font-semibold self-start sm:self-end pr-1"
           >
             {t("predictive.revoke", "Revoke consent")}
           </button>
@@ -402,8 +402,8 @@ export default function PredictiveView() {
       </div>
 
       {/* Medical disclaimer */}
-      <div className="rounded-2xl border border-slate-200/90 dark:border-white/10 bg-slate-50/60 dark:bg-[#15232A] px-4 py-3 flex items-center gap-2.5 text-xs text-slate-500 dark:text-[#A0B4BE]">
-        <Info className="h-4 w-4 text-[#0EA5A4] shrink-0" />
+      <div className="rounded-2xl border border-teal-200/90 dark:border-white/10 bg-teal-50/80 dark:bg-[#15232A] px-4 py-3 flex items-center gap-2.5 text-xs text-teal-950 dark:text-[#A0B4BE] font-medium">
+        <Info className="h-4 w-4 text-[#0D9488] shrink-0" />
         <span>
           {t(
             "predictive.medical_disclaimer",
@@ -442,29 +442,29 @@ export default function PredictiveView() {
           <div className="space-y-3.5">
             <div>
               <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-[#0EA5A4]" />
-                <h2 className="text-xs font-bold tracking-wider text-[#2C4C5C] dark:text-[#E8F2F6] uppercase">
+                <span className="h-2 w-2 rounded-full bg-[#0D9488]" />
+                <h2 className="text-xs font-extrabold tracking-wider text-[#2C4C5C] dark:text-[#E8F2F6] uppercase">
                   {t("predictive.section1_title", "Future PMOS / PCOS Risk")}
                 </h2>
               </div>
-              <p className="text-xs text-slate-500 dark:text-[#A0B4BE] mt-0.5">
+              <p className="text-xs text-slate-600 dark:text-[#A0B4BE] mt-0.5 font-medium">
                 Continuous free testosterone-to-progesterone ratio correlation & interstitial fluid kinetics
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200/90 dark:border-[#243C47] border-t-2 border-t-[#0EA5A4] bg-white dark:bg-[#15232A] p-6 shadow-xs hover:border-slate-300 dark:hover:border-[#325260] transition-all">
+            <div className="rounded-2xl border border-slate-200/90 dark:border-[#243C47] border-t-2 border-t-[#0D9488] bg-white dark:bg-[#15232A] p-6 shadow-xs hover:border-slate-300 dark:hover:border-[#325260] transition-all">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-2.5">
                     <h3 className="font-display text-lg font-bold tracking-tight text-[#2C4C5C] dark:text-[#E8F2F6]">
                       PMOS / PCOS Trajectory
                     </h3>
-                    <span className="inline-flex items-center rounded-full bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800/40 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+                    <span className="inline-flex items-center rounded-full bg-teal-100 dark:bg-teal-950/50 text-teal-900 dark:text-teal-300 border border-teal-300 dark:border-teal-800/50 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider">
                       Primary Predictive Model
                     </span>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 dark:text-slate-500">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
                     <span>Model version: {pmosRisk.model_version || "demo-1.1.0"}</span>
                     <span>•</span>
                     <span>
@@ -490,7 +490,7 @@ export default function PredictiveView() {
                         >
                           {pmosPct.toFixed(1)}%
                         </div>
-                        <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                        <div className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                           Estimated Risk
                         </div>
                       </div>
@@ -506,34 +506,34 @@ export default function PredictiveView() {
                             }}
                           />
                         </div>
-                        <p className="text-[10px] text-slate-500 text-center">
+                        <p className="text-[10px] text-slate-600 dark:text-slate-400 font-medium text-center">
                           90-day trajectory
                         </p>
                       </div>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-1.5 rounded-full bg-slate-50 dark:bg-[#1C2F38] border border-slate-200 dark:border-white/10 px-3.5 py-1.5 text-xs text-slate-600 dark:text-slate-300 font-medium">
-                      <Lock size={12} className="text-amber-500" />
+                    <div className="flex items-center gap-1.5 rounded-full bg-amber-100/70 dark:bg-[#1C2F38] border border-amber-300/80 dark:border-white/10 px-3.5 py-1.5 text-xs text-amber-950 dark:text-slate-300 font-bold shadow-2xs">
+                      <Lock size={12} className="text-amber-600 dark:text-amber-400" />
                       <span>Exact % locked (Free)</span>
                     </div>
                   )}
 
                   <div
-                    className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold capitalize ${
+                    className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold capitalize ${
                       pmosRisk.risk_category === "monitoring"
-                        ? "bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-900/40 text-amber-700 dark:text-amber-300"
+                        ? "bg-amber-100 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-800/50 text-amber-950 dark:text-amber-200"
                         : pmosRisk.risk_category === "elevated"
-                        ? "bg-rose-50 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-900/40 text-rose-600 dark:text-rose-300"
-                        : "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-900/40 text-emerald-600 dark:text-emerald-300"
+                        ? "bg-rose-100 dark:bg-rose-950/50 border border-rose-300 dark:border-rose-800/50 text-rose-900 dark:text-rose-200"
+                        : "bg-emerald-100 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800/50 text-emerald-950 dark:text-emerald-200"
                     }`}
                   >
                     <span
                       className={`h-1.5 w-1.5 rounded-full ${
                         pmosRisk.risk_category === "monitoring"
-                          ? "bg-amber-500"
+                          ? "bg-amber-600"
                           : pmosRisk.risk_category === "elevated"
-                          ? "bg-rose-500"
-                          : "bg-emerald-500"
+                          ? "bg-rose-600"
+                          : "bg-emerald-600"
                       }`}
                     />
                     <span>{pmosRisk.risk_category}</span>
@@ -542,11 +542,11 @@ export default function PredictiveView() {
               </div>
 
               {showPremiumFeatures && (
-                <div className="mt-5 pt-4 border-t border-slate-100 dark:border-[#243C47] flex flex-wrap items-center justify-between text-xs text-slate-500 dark:text-[#A0B4BE] gap-2">
+                <div className="mt-5 pt-4 border-t border-slate-100 dark:border-[#243C47] flex flex-wrap items-center justify-between text-xs text-slate-600 dark:text-[#A0B4BE] gap-2 font-medium">
                   <span>
                     Biomarker weights: Free Testosterone (58%), Progesterone (27%), Cortisol (15%)
                   </span>
-                  <span className="text-teal-600 dark:text-teal-300 font-bold">
+                  <span className="text-teal-700 dark:text-teal-300 font-extrabold">
                     Confidence Interval: 94.2%
                   </span>
                 </div>
@@ -560,12 +560,12 @@ export default function PredictiveView() {
       <div className="space-y-3.5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-purple-500" />
-            <h2 className="text-xs font-bold tracking-wider text-[#2C4C5C] dark:text-[#E8F2F6] uppercase">
+            <span className="h-2 w-2 rounded-full bg-purple-600" />
+            <h2 className="text-xs font-extrabold tracking-wider text-[#2C4C5C] dark:text-[#E8F2F6] uppercase">
               {t("predictive.section2_title", "Long-Term Health Conditions")}
             </h2>
           </div>
-          <p className="text-xs text-slate-500 dark:text-[#A0B4BE] mt-0.5">
+          <p className="text-xs text-slate-600 dark:text-[#A0B4BE] mt-0.5 font-medium">
             {showPremiumFeatures
               ? "Premium View: Each long-term analysis displays its own calibrated percentage and longitudinal gauge."
               : "Free View: Qualitative status categories and trend indicators."}
@@ -603,7 +603,7 @@ export default function PredictiveView() {
           return (
             <div className="overflow-hidden rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white dark:bg-[#15232A] shadow-xs">
               {/* Table Column Headers */}
-              <div className="hidden md:grid grid-cols-12 items-center px-6 py-3.5 border-b border-slate-100 dark:border-white/5 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 bg-slate-50/50 dark:bg-white/[0.02]">
+              <div className="hidden md:grid grid-cols-12 items-center px-6 py-3.5 border-b border-slate-200 dark:border-white/5 text-[11px] font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300 bg-slate-100/90 dark:bg-white/[0.02]">
                 <div className="col-span-4">Condition</div>
                 <div className="col-span-4">Basis</div>
                 <div className="col-span-2">Status</div>
@@ -636,10 +636,10 @@ export default function PredictiveView() {
                         <div
                           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
                             c.iconType === "diabetes"
-                              ? "bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border border-teal-200/60 dark:border-teal-800/40"
+                              ? "bg-teal-100 dark:bg-teal-950/50 text-teal-800 dark:text-teal-300 border border-teal-300 dark:border-teal-800/50"
                               : c.iconType === "insulin"
-                              ? "bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200/60 dark:border-amber-800/40"
-                              : "bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 border border-violet-200/60 dark:border-violet-800/40"
+                              ? "bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800/50"
+                              : "bg-violet-100 dark:bg-violet-950/50 text-violet-800 dark:text-violet-300 border border-violet-300 dark:border-violet-800/50"
                           }`}
                         >
                           {c.iconType === "diabetes" ? (
@@ -656,28 +656,28 @@ export default function PredictiveView() {
                       </div>
 
                       {/* Basis */}
-                      <div className="col-span-4 text-xs text-slate-500 dark:text-[#A0B4BE] pr-4">
+                      <div className="col-span-4 text-xs text-slate-600 dark:text-[#A0B4BE] pr-4 font-medium">
                         {c.subtitle}
                       </div>
 
                       {/* Status */}
                       <div className="col-span-2 flex items-center">
                         <span
-                          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold capitalize ${
+                          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold capitalize ${
                             category === "moderate"
-                              ? "bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/40 text-amber-700 dark:text-amber-300"
+                              ? "bg-amber-100 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-800/50 text-amber-950 dark:text-amber-200"
                               : category === "elevated"
-                              ? "bg-rose-50 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-800/40 text-rose-700 dark:text-rose-300"
-                              : "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/40 text-emerald-700 dark:text-emerald-300"
+                              ? "bg-rose-100 dark:bg-rose-950/50 border border-rose-300 dark:border-rose-800/50 text-rose-900 dark:text-rose-200"
+                              : "bg-emerald-100 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800/50 text-emerald-950 dark:text-emerald-200"
                           }`}
                         >
                           <span
                             className={`h-1.5 w-1.5 rounded-full ${
                               category === "moderate"
-                                ? "bg-amber-500"
+                                ? "bg-amber-600"
                                 : category === "elevated"
-                                ? "bg-rose-500"
-                                : "bg-emerald-500"
+                                ? "bg-rose-600"
+                                : "bg-emerald-600"
                             }`}
                           />
                           <span>{category}</span>
@@ -710,14 +710,14 @@ export default function PredictiveView() {
                           </div>
                         ) : (
                           <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end text-xs">
-                            <span className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 font-medium">
-                              <Lock size={12} className="text-amber-500 dark:text-[#F3E308]" />
+                            <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-bold">
+                              <Lock size={12} className="text-amber-600 dark:text-[#F3E308]" />
                               <span>Locked</span>
                             </span>
                             <button
                               type="button"
                               onClick={() => setActiveMode("premium")}
-                              className="font-semibold text-[#0EA5A4] hover:text-[#0C8F8E] dark:text-[#0EA5A4] dark:hover:text-[#5EEAD4] transition flex items-center gap-0.5 text-xs"
+                              className="font-bold text-[#0D9488] hover:text-[#0A7369] dark:text-[#0EA5A4] dark:hover:text-[#5EEAD4] transition flex items-center gap-0.5 text-xs"
                             >
                               <span>Upgrade to Premium</span>
                               <span className="text-sm leading-none">›</span>
@@ -736,18 +736,18 @@ export default function PredictiveView() {
 
       {/* Upgrade callout if on Free mode */}
       {!showPremiumFeatures && (
-        <div className="rounded-2xl border border-teal-500/25 bg-teal-50/30 dark:bg-teal-950/20 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="rounded-2xl border border-teal-300 dark:border-teal-500/30 bg-[#E6F8F5] dark:bg-teal-950/25 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-2xs">
           <div className="space-y-1">
-            <h3 className="font-bold text-slate-900 dark:text-[#E8F2F6] text-sm">
+            <h3 className="font-extrabold text-[#0D5251] dark:text-[#E8F2F6] text-sm">
               Want individual percentages for every predictive marker?
             </h3>
-            <p className="text-xs text-slate-500 dark:text-[#A0B4BE] max-w-xl">
+            <p className="text-xs text-slate-700 dark:text-[#A0B4BE] max-w-xl font-medium leading-relaxed">
               Premium unlocks calibrated percentages (e.g. Type 2 Diabetes: 12.0%, Insulin Resistance: 24.0%), hormonal velocity forecasts, and full AI care consultant access.
             </p>
           </div>
           <button
             onClick={() => setActiveMode("premium")}
-            className="rounded-full bg-[#0EA5A4] hover:bg-[#0C8F8E] text-white px-5 py-2.5 text-xs font-semibold shadow-xs transition shrink-0"
+            className="rounded-full bg-[#0D9488] hover:bg-[#0A7369] text-white px-5 py-2.5 text-xs font-bold shadow-xs transition shrink-0"
           >
             Toggle Premium View
           </button>
