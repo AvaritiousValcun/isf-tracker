@@ -318,7 +318,7 @@ export default function PredictiveView() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 md:p-6 space-y-8 page-enter">
+    <div className="page-enter mx-auto max-w-[1250px] px-5 pb-10 pt-7 sm:px-8 lg:px-10 lg:pt-9 space-y-8">
       {/* Header with Plan Switcher */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-1">
         <div className="space-y-1">
