@@ -1134,15 +1134,20 @@ import { z as z3 } from "zod";
 
 // shared/clinicalFaq.ts
 var CLINICAL_FAQ_ITEMS = [
+  // =========================================================================
+  // DR. BRIAN OCHIENG - ENDOCRINOLOGIST (6 QUESTIONS)
+  // =========================================================================
   {
     id: "latest-readings",
-    question: "How are my latest hormone readings?",
+    question: "How are my latest hormone readings tracking?",
     category: "Hormone Readings",
     summary: "Progesterone at 19.8 ng/mL, Free Testosterone steady at 38.2 ng/dL, normal luteal plateau.",
+    consultantType: "endocrinologist",
     answers: {
       endocrinologist: "Your latest continuous ISF readings show Progesterone at 19.8 ng/mL and Free Testosterone steady at 38.2 ng/dL. These concentrations confirm robust post-ovulatory luteal stability within ideal physiological reference ranges (progesterone 5\u201325 ng/mL; free testosterone within normal safety margins). Your transdermal patch is capturing continuous dermal interstitial flux accurately with zero detected anomalous spikes.",
       obgyn: "Your current dermal hormone telemetry shows healthy secretory luteal parameters: Progesterone is 19.8 ng/mL, confirming effective ovulatory corpus luteum function, and Free Testosterone levels remain well controlled at 38.2 ng/dL. Uterine lining support is optimal, and no hyperandrogenic surges or erratic fluctuations are present in your continuous stream.",
       gynecologist: "As your Gynecologist, I am continuously tracking your ISF telemetry: your Progesterone is holding strong at 19.8 ng/mL, and your Free Testosterone is balanced at 38.2 ng/dL. These values confirm healthy secretory endometrial support and strong luteal vascularity. Your hormone rhythm is stable with zero abnormal shifts or hyperandrogenic surges.",
+      nutritionist: "Your latest continuous ISF telemetry reflects solid metabolic and endocrine stability: Progesterone sits at 19.8 ng/mL and Free Testosterone at 38.2 ng/dL. Your glycemic velocity and hormonal balance indicate that your nutritional substrate is adequately supporting your luteal metabolic demands.",
       default: "Your latest continuous ISF readings show Progesterone at 19.8 ng/mL and Free Testosterone at 38.2 ng/dL. Both biomarkers sit comfortably within expected mid-luteal physiological boundaries, indicating stable endocrine velocity and optimal patch diffusion."
     }
   },
@@ -1151,6 +1156,7 @@ var CLINICAL_FAQ_ITEMS = [
     question: "What do my progesterone levels indicate?",
     category: "Progesterone",
     summary: "Confirms mid-luteal ovulatory phase with robust corpus luteum support.",
+    consultantType: "endocrinologist",
     answers: {
       endocrinologist: "Your progesterone reading of 19.8 ng/mL (averaging 18.2 ng/mL with a healthy luteal curve) indicates that successful ovulation occurred and you are currently in the mid-luteal secretory phase. In a normal ovulatory cycle, mid-luteal progesterone ranges between 5.0 and 25.0 ng/mL to maintain endometrial integrity and support thermogenic metabolic balance. The steady 24-hour plateau confirms healthy corpus luteum vascularization.",
       obgyn: "Your progesterone levels indicate strong ovulatory activity and adequate luteal phase support, averaging 18.2 ng/mL along a reassuring luteal curve. Because progesterone is sustaining near ~20 ng/mL without premature cliff drops, your endometrial lining is stable. Mild breast tenderness or slight temperature increases at this level are completely normal physiological responses to healthy progesterone.",
@@ -1163,6 +1169,7 @@ var CLINICAL_FAQ_ITEMS = [
     question: "Can you explain my free testosterone pattern?",
     category: "Free Testosterone",
     summary: "Controlled at 38.2 ng/dL with no hyperandrogenic pulses or PCOS risk surges.",
+    consultantType: "endocrinologist",
     answers: {
       endocrinologist: "Your continuous free testosterone pattern is currently holding stable at 38.2 ng/dL, comfortably below the clinical threshold of 45 ng/dL. Unlike in hyperandrogenic conditions such as classical PCOS, where androgen pulsatility shows elevated baseline surges, your continuous ISF profile exhibits minimal diurnal variance and smooth clearance, signaling balanced ovarian and adrenal enzymatic activity.",
       obgyn: "Your free testosterone pattern shows a stable, non-escalating baseline well within asymptomatic female physiological limits. We monitor this continuously through the patch to check for early micro-surges that could cause acne, hirsutism, or anovulatory follicular arrest. Your telemetry confirms clean clearance with no hyperandrogenic risks flagged.",
@@ -1173,13 +1180,175 @@ var CLINICAL_FAQ_ITEMS = [
   {
     id: "lifestyle-support",
     question: "What lifestyle adjustments support my current cycle phase?",
-    category: "Recommendations",
+    category: "Endocrine Lifestyle",
     summary: "Hydration, electrolyte balance, magnesium-rich foods, and 7\u20138 hours of rest.",
+    consultantType: "endocrinologist",
     answers: {
       endocrinologist: "During this mid-luteal phase when progesterone is dominant, metabolic rate slightly increases. Staying hydrated with electrolyte-rich fluids, maintaining magnesium and B6 intake, and prioritizing 7\u20138 hours of consistent sleep will help mitigate luteal fluid retention and mood fluctuations.",
       obgyn: "In this luteal plateau, focus on complex carbohydrates, gentle endurance or restorative exercise, and adequate hydration. If you experience premenstrual fatigue, light evening stretching and reducing high-sodium meals can noticeably reduce bloating.",
       gynecologist: "In this mid-luteal plateau, focus on restorative pelvic health: gentle walking or pelvic floor stretching, adequate magnesium intake to ease cramping, balanced complex meals, and 7\u20138 hours of uninterrupted rest to support natural luteal thermoregulation.",
       default: "To support this luteal phase, prioritize adequate hydration, magnesium and vitamin B6 intake, consistent sleep schedules, and moderate physical activity."
+    }
+  },
+  {
+    id: "endo-ratio-meaning",
+    question: "What does my progesterone-to-testosterone ratio mean?",
+    category: "Hormone Ratios",
+    summary: "Optimal ratio indicating robust luteal dominance over circulating free androgens.",
+    consultantType: "endocrinologist",
+    answers: {
+      endocrinologist: "Your continuous free testosterone-to-progesterone ratio is approximately 1.9, reflecting strong luteal dominance. In a healthy ovulatory cycle, high progesterone buffers target androgen receptors. When this ratio inverts due to insufficient progesterone or elevated androgens, it can trigger anovulatory symptoms or PMOS/PCOS risk markers. Your current ratio confirms balanced ovarian steroidogenesis.",
+      default: "Your continuous progesterone-to-testosterone ratio reflects strong luteal dominance. Adequate progesterone counterbalances circulating free androgens, confirming normal ovulatory steroidogenesis without hyperandrogenic dominance."
+    }
+  },
+  {
+    id: "endo-diurnal-fluctuations",
+    question: "Why do my hormone levels fluctuate between morning and evening?",
+    category: "Circadian Kinetics",
+    summary: "Normal circadian adrenal rhythm and episodic corpus luteum pulses.",
+    consultantType: "endocrinologist",
+    answers: {
+      endocrinologist: "Steroid hormones naturally exhibit diurnal circadian variations. Free testosterone typically peaks in the early morning hours alongside cortisol, while progesterone displays pulsatile secretion from the corpus luteum throughout the day. The ISF Tracker's moving average algorithm smooths these benign physiological pulses so you see true baseline velocity rather than temporary noise.",
+      default: "Steroid hormones naturally follow diurnal circadian rhythms, with androgens peaking earlier in the day. The continuous patch algorithm normalizes these benign pulses to display your true physiological trajectory."
+    }
+  },
+  // =========================================================================
+  // DR. SARAH CHEN - CLINICAL NUTRITIONIST (6 QUESTIONS)
+  // =========================================================================
+  {
+    id: "chen-luteal-foods",
+    question: "What foods best support my progesterone during this luteal phase?",
+    category: "Luteal Nutrition",
+    summary: "Magnesium-rich greens, pumpkin seeds, healthy fats, and complex carbohydrates.",
+    consultantType: "nutritionist",
+    answers: {
+      nutritionist: "To support progesterone production and corpus luteum longevity, prioritize magnesium-rich foods like dark leafy greens, pumpkin seeds, and dark chocolate (>70%). Incorporate healthy fats from avocados, extra virgin olive oil, and wild-caught salmon to provide the cholesterol building blocks for steroidogenesis, paired with sweet potatoes and quinoa to support your elevated basal metabolic rate.",
+      default: "During the luteal phase, prioritize foods rich in magnesium, vitamin B6, and omega-3 fatty acids like leafy greens, seeds, salmon, and complex carbs to provide the energetic substrate for progesterone synthesis."
+    }
+  },
+  {
+    id: "chen-diet-testosterone",
+    question: "How does my diet impact my continuous free testosterone levels?",
+    category: "Glycemic & Androgens",
+    summary: "High-glycemic spikes trigger insulin surges that stimulate excess ovarian androgen release.",
+    consultantType: "nutritionist",
+    answers: {
+      nutritionist: "Diet directly modulates free testosterone through insulin dynamics. High-glycemic meals cause rapid insulin spikes, which stimulate ovarian theca cells to produce excess androgens while lowering sex hormone-binding globulin (SHBG). Eating fiber-rich whole foods, pairing carbs with protein, and incorporating unrefined grains keeps your insulin flat and your free testosterone in its healthy 38 ng/dL plateau.",
+      default: "Diet impacts androgens primarily through insulin. Avoiding high-glycemic spikes and eating balanced protein and fiber maintains steady insulin levels, preventing compensatory surges in ovarian free testosterone."
+    }
+  },
+  {
+    id: "chen-bloating-reduction",
+    question: "Can certain foods reduce luteal water retention and bloating?",
+    category: "Fluid Balance",
+    summary: "Potassium-rich foods, dandelion tea, and limiting excess sodium.",
+    consultantType: "nutritionist",
+    answers: {
+      nutritionist: "Luteal bloating occurs when progesterone and aldosterone alter fluid homeostasis. You can dramatically improve fluid balance by increasing potassium-rich foods (coconut water, bananas, spinach, cucumbers) to balance cellular sodium. Drinking warm dandelion leaf or ginger tea acts as a gentle natural diuretic, and avoiding ultra-processed salty snacks prevents fluid pooling in tissues.",
+      default: "To minimize luteal fluid retention, focus on potassium-rich foods like bananas and greens, drink plenty of water, and reduce processed sodium intake to prevent aldosterone-mediated extracellular water retention."
+    }
+  },
+  {
+    id: "chen-insulin-sensitivity",
+    question: "What should I eat to improve my insulin sensitivity and metabolic score?",
+    category: "Metabolic Health",
+    summary: "Fiber-first meal sequencing, apple cider vinegar, and healthy fats.",
+    consultantType: "nutritionist",
+    answers: {
+      nutritionist: "To maximize insulin sensitivity, practice food sequencing: eat your vegetables and fiber first, followed by protein and fats, leaving complex starches for last. This slows gastric emptying and reduces glucose velocity by up to 35%. Adding a tablespoon of raw apple cider vinegar in water before heavy meals and taking a brisk 10-minute walk post-meal also accelerates muscle glucose uptake.",
+      default: "Improving insulin sensitivity involves eating fiber and vegetables before carbohydrates, incorporating cinnamon and healthy fats, and engaging in light walking after meals to blunt glycemic velocity."
+    }
+  },
+  {
+    id: "chen-electrolytes-vitamins",
+    question: "Are there specific vitamins or electrolytes I should prioritize right now?",
+    category: "Micronutrients",
+    summary: "Magnesium glycinate, Vitamin B6, Zinc, and Inositol.",
+    consultantType: "nutritionist",
+    answers: {
+      nutritionist: "For this cycle phase, I recommend prioritizing Magnesium Glycinate (300\u2013400 mg at bedtime to calm the nervous system and ease smooth muscle tension), Vitamin B6 (50\u2013100 mg for progesterone receptor sensitivity and dopamine support), and Zinc (15\u201330 mg to support ovarian tissue repair and cellular hormone signaling).",
+      default: "Key micronutrients for cycle support include magnesium glycinate for muscle relaxation, vitamin B6 for neurotransmitter and luteal support, and zinc for hormone enzyme synthesis."
+    }
+  },
+  {
+    id: "chen-sugar-cravings",
+    question: "Why do I experience intense sugar cravings in the second half of my cycle?",
+    category: "Craving Management",
+    summary: "Progesterone increases caloric burn by 100\u2013300 kcal/day while serotonin dips.",
+    consultantType: "nutritionist",
+    answers: {
+      nutritionist: "Luteal sugar cravings are biological, not a lack of willpower! Progesterone increases your resting metabolic rate by 100 to 300 calories per day, while brain serotonin levels drop slightly before menstruation. Your body craves quick glucose to rebuild serotonin. Counteract this by eating nutrient-dense complex carbs (berries, oats, roasted sweet potatoes) and eating enough protein (25\u201330g per meal) so your blood sugar stays stable.",
+      default: "Premenstrual sugar cravings stem from an increased basal metabolic rate during progesterone dominance alongside transient dips in serotonin. Eating complex carbohydrates and sufficient protein prevents sharp blood sugar drops."
+    }
+  },
+  // =========================================================================
+  // DR. GRACE WANJIKU - GYNECOLOGIST (6 QUESTIONS)
+  // =========================================================================
+  {
+    id: "grace-ovulation-timing",
+    question: "What do my progesterone readings reveal about my ovulation timing?",
+    category: "Ovulation Timing",
+    summary: "A sustained progesterone rise above 5 ng/mL to 19.8 ng/mL confirms ovulation occurred ~5-7 days ago.",
+    consultantType: "gynecologist",
+    answers: {
+      gynecologist: "Your continuous ISF telemetry reveals a clear biphasic shift: your progesterone climbed from baseline (<1.5 ng/mL) into a sustained peak of 19.8 ng/mL. In clinical gynecology, a sustained reading above 5.0 ng/mL across several consecutive days is the gold standard confirmation that a dominant follicle successfully ruptured, releasing an oocyte and forming a functional corpus luteum approximately 5 to 7 days ago.",
+      default: "Your sustained progesterone elevation above 5 ng/mL up to 19.8 ng/mL definitively confirms that successful ovulation occurred and you are currently in the mid-luteal secretory window."
+    }
+  },
+  {
+    id: "grace-pcos-progression",
+    question: "How does the ISF patch detect PMOS or PCOS risk progression?",
+    category: "PCOS & PMOS Risk",
+    summary: "Analyzes continuous free androgen pulsatility, luteal duration, and hormone kinetic slopes.",
+    consultantType: "gynecologist",
+    answers: {
+      gynecologist: "The ISF Tracker's predictive engine continuously models your androgen-to-progesterone velocity. In Polycystic Ovary Syndrome (PCOS) and Post-Menarche Ovarian Syndrome (PMOS), we typically observe elevated androgen spikes without a corresponding progesterone surge, indicating anovulatory follicular arrest. Your current telemetry displays normal ovulatory progesterone and stable free testosterone (38.2 ng/dL), confirming low acute progression risk.",
+      default: "The system monitors the ratio of free testosterone to progesterone over time. Stable progesterone alongside controlled androgens signals low risk of anovulatory follicular arrest or PCOS development."
+    }
+  },
+  {
+    id: "grace-pelvic-cramping",
+    question: "What causes my pelvic cramping and lower abdominal sensations?",
+    category: "Pelvic Health",
+    summary: "Local prostaglandin synthesis and normal luteal uterine vascularization.",
+    consultantType: "gynecologist",
+    answers: {
+      gynecologist: "Mid-to-late luteal pelvic sensations are usually caused by local prostaglandin F2-alpha synthesis within the endometrium as well as increased pelvic vascular flow. Mild dull aches or twinges are a natural physiologic response to secretory uterine thickening. However, if you ever experience sudden, severe unilateral stabbing pain, high fever, or atypical heavy bleeding, that is a red flag requiring immediate in-person gynecological evaluation and urgent medical evaluation.",
+      endocrinologist: "Pelvic twinges during the luteal phase commonly correlate with uterine prostaglandin activity and vascular congestion. Mild sensations are physiologic, but sudden sharp unilateral pain or severe bleeding requires immediate medical attention and urgent medical evaluation.",
+      default: "Pelvic twinges during the luteal phase commonly correlate with uterine prostaglandin activity and vascular congestion. Mild sensations are physiologic, but sudden sharp unilateral pain or severe bleeding requires immediate medical attention and urgent medical evaluation."
+    }
+  },
+  {
+    id: "grace-period-forecasting",
+    question: "When is my next menstrual period expected based on cycle telemetry?",
+    category: "Cycle Forecasting",
+    summary: "Projected in approximately 6 to 7 days upon physiological corpus luteum regression.",
+    consultantType: "gynecologist",
+    answers: {
+      gynecologist: "Based on your 7-day ISF kinetic trajectory, your corpus luteum is currently at peak secretory plateau (day 20-21 equivalent). Without fertilization, the corpus luteum will naturally regress over the next 4 to 5 days, causing progesterone to descend below the 3.0 ng/mL threshold. This triggers the onset of your menstrual flow in approximately 6 to 7 days. Tracking this daily ensures you are never surprised by your cycle.",
+      default: "Based on your continuous progesterone curve, your luteal plateau will begin its natural decline in 4-5 days, with your next menstrual period anticipated in approximately 6 to 7 days."
+    }
+  },
+  {
+    id: "grace-luteal-deficiency",
+    question: "Can continuous hormone tracking identify a luteal phase deficiency?",
+    category: "Luteal Adequacy",
+    summary: "Measures continuous plateau duration (>10 days) and peak threshold (>10 ng/mL).",
+    consultantType: "gynecologist",
+    answers: {
+      gynecologist: "Yes, continuous ISF tracking is uniquely equipped to diagnose Luteal Phase Deficiency (LPD). Traditional single blood tests miss intermittent drops, but our patch tracks both luteal duration (which should be at least 11 to 14 days) and progesterone amplitude (which should comfortably exceed 10 ng/mL). Your sustained 19.8 ng/mL plateau confirms robust luteal adequacy and healthy endometrial receptivity.",
+      default: "Continuous ISF tracking verifies whether progesterone stays elevated above 10 ng/mL for at least 10\u201312 days, effectively ruling out luteal phase deficiency without multiple venous blood draws."
+    }
+  },
+  {
+    id: "grace-cervical-discharge",
+    question: "What are normal cervical and discharge changes during this phase?",
+    category: "Reproductive Physiology",
+    summary: "Progesterone causes thick, creamy, opaque mucus to seal the cervical canal.",
+    consultantType: "gynecologist",
+    answers: {
+      gynecologist: "Under the influence of high luteal progesterone, cervical mucus shifts from the clear, stretchy, slippery 'egg-white' texture seen during ovulation to a thicker, creamier, and more opaque consistency. This is a protective mechanism that seals the cervical os. It is completely normal as long as there is no foul odor, intense itching, cottage-cheese texture, or burning sensations, which would suggest an infection.",
+      default: "In the luteal phase, elevated progesterone thickens cervical secretions into a creamy, opaque barrier. This is a healthy physiological response, provided there is no itching, odor, or discomfort."
     }
   }
 ];
@@ -1201,10 +1370,55 @@ function matchClinicalFaq(patientMessage, consultant) {
       return clean.includes("progesterone") && (clean.includes("indicate") || clean.includes("mean") || clean.includes("level") || clean.includes("show"));
     }
     if (item.id === "androgen-pattern") {
-      return (clean.includes("androgen") || clean.includes("testosterone")) && (clean.includes("pattern") || clean.includes("explain") || clean.includes("level"));
+      return (clean.includes("androgen") || clean.includes("testosterone")) && (clean.includes("pattern") || clean.includes("explain") || clean.includes("fluctuation"));
     }
     if (item.id === "lifestyle-support") {
-      return (clean.includes("lifestyle") || clean.includes("support") || clean.includes("recommendation") || clean.includes("diet")) && (clean.includes("phase") || clean.includes("cycle") || clean.includes("current"));
+      return (clean.includes("lifestyle") || clean.includes("recommendation")) && (clean.includes("phase") || clean.includes("cycle") || clean.includes("current"));
+    }
+    if (item.id === "endo-ratio-meaning") {
+      return clean.includes("ratio") && (clean.includes("testosterone") || clean.includes("progesterone") || clean.includes("mean"));
+    }
+    if (item.id === "endo-diurnal-fluctuations") {
+      return (clean.includes("fluctuat") || clean.includes("diurnal") || clean.includes("morning") || clean.includes("night")) && clean.includes("hormone");
+    }
+    if (item.id === "chen-luteal-foods") {
+      return (clean.includes("food") || clean.includes("eat")) && (clean.includes("progesterone") || clean.includes("luteal"));
+    }
+    if (item.id === "chen-diet-testosterone") {
+      return clean.includes("diet") && (clean.includes("testosterone") || clean.includes("androgen") || clean.includes("impact"));
+    }
+    if (item.id === "chen-bloating-reduction") {
+      return (clean.includes("bloat") || clean.includes("water retention")) && (clean.includes("food") || clean.includes("reduce") || clean.includes("eat"));
+    }
+    if (item.id === "chen-insulin-sensitivity") {
+      return clean.includes("insulin") && (clean.includes("sensitiv") || clean.includes("score") || clean.includes("eat") || clean.includes("metabolic"));
+    }
+    if (item.id === "chen-electrolytes-vitamins") {
+      return (clean.includes("vitamin") || clean.includes("electrolyte") || clean.includes("supplement")) && (clean.includes("prioritize") || clean.includes("take") || clean.includes("recommend"));
+    }
+    if (item.id === "chen-sugar-cravings") {
+      return (clean.includes("sugar") || clean.includes("craving") || clean.includes("sweet")) && (clean.includes("period") || clean.includes("cycle") || clean.includes("luteal") || clean.includes("why"));
+    }
+    if (item.id === "grace-ovulation-timing") {
+      return clean.includes("ovulation") && (clean.includes("timing") || clean.includes("progesterone") || clean.includes("reveal") || clean.includes("when"));
+    }
+    if (item.id === "grace-pcos-progression") {
+      return (clean.includes("pcos") || clean.includes("pmos")) && (clean.includes("detect") || clean.includes("progression") || clean.includes("patch") || clean.includes("risk"));
+    }
+    if (item.id === "grace-pelvic-cramping") {
+      if (clean.includes("severe") || clean.includes("emergency") || clean.includes("urgent")) {
+        return false;
+      }
+      return (clean.includes("pelvic") || clean.includes("cramp") || clean.includes("abdominal")) && (clean.includes("cause") || clean.includes("sensation") || clean.includes("why do i have"));
+    }
+    if (item.id === "grace-period-forecasting") {
+      return (clean.includes("next period") || clean.includes("menstrual period") || clean.includes("when is my period")) && (clean.includes("expect") || clean.includes("due") || clean.includes("telemetry") || clean.includes("when"));
+    }
+    if (item.id === "grace-luteal-deficiency") {
+      return (clean.includes("luteal phase defect") || clean.includes("luteal phase deficiency") || clean.includes("lpd")) && (clean.includes("identify") || clean.includes("track") || clean.includes("detect"));
+    }
+    if (item.id === "grace-cervical-discharge") {
+      return (clean.includes("cervical") || clean.includes("discharge") || clean.includes("mucus")) && (clean.includes("normal") || clean.includes("phase") || clean.includes("change"));
     }
     return false;
   };
@@ -1213,16 +1427,172 @@ function matchClinicalFaq(patientMessage, consultant) {
     return null;
   }
   const type = consultant?.professional_type?.toLowerCase() || "";
-  if (type.includes("endocrinologist")) {
+  if (type.includes("endocrinologist") && matched.answers.endocrinologist) {
     return matched.answers.endocrinologist;
   }
-  if (type.includes("gynecologist")) {
+  if (type.includes("nutritionist") && matched.answers.nutritionist) {
+    return matched.answers.nutritionist;
+  }
+  if (type.includes("gynecologist") && (matched.answers.gynecologist || matched.answers.obgyn)) {
     return matched.answers.gynecologist || matched.answers.obgyn;
   }
-  if (type.includes("ob/gyn") || type.includes("obstetrician")) {
+  if ((type.includes("ob/gyn") || type.includes("obstetrician")) && matched.answers.obgyn) {
     return matched.answers.obgyn;
   }
-  return matched.answers.default || matched.answers.endocrinologist;
+  return matched.answers.default || matched.answers.endocrinologist || Object.values(matched.answers)[0];
+}
+
+// shared/clinicalKnowledge.ts
+function matchClinicalKnowledge(patientMessage, consultant) {
+  if (!patientMessage || typeof patientMessage !== "string") {
+    return null;
+  }
+  const raw = patientMessage.trim();
+  const clean = raw.toLowerCase();
+  const name = consultant?.full_name || "Dr. Brian Ochieng";
+  const type = (consultant?.professional_type || "Endocrinologist").toLowerCase();
+  const isEndo = type.includes("endocrinologist");
+  const isNutri = type.includes("nutritionist");
+  const isGyn = type.includes("gynecologist") || type.includes("ob/gyn") || type.includes("obstetrician");
+  if (clean.includes("severe") || clean.includes("emergency") || clean.includes("hospital") || clean.includes("unbearable") || clean.includes("bleed") && (clean.includes("heavy") || clean.includes("soaking") || clean.includes("clot")) || clean.includes("pain") && (clean.includes("sharp") || clean.includes("unilateral") || clean.includes("stab") || clean.includes("intense"))) {
+    if (isGyn) {
+      return `As your Gynecologist, acute symptoms like sudden severe unilateral pelvic pain, heavy bleeding soaking more than one pad per hour, or high fever are potential signs of ectopic pregnancy, ovarian torsion, or acute pelvic pathology. Please seek urgent medical evaluation at your nearest emergency department or call emergency services immediately. Your continuous telemetry can be exported via the Doctor Report for your attending clinical team.`;
+    }
+    return `I hear your concern regarding acute discomfort. While mild pelvic twinges can correlate with progesterone shifts, sudden severe unilateral pelvic pain, abnormal heavy bleeding, or fever require urgent medical evaluation immediately at the nearest healthcare facility. Please do not wait for your scheduled consultation. You can generate an emergency Doctor Report (PDF) right from your Chat tab for your attending physician.`;
+  }
+  if (/\b(thank|thanks|asante|shukrani|appreciate|grateful|thx|cheers)\b/i.test(clean)) {
+    if (isNutri) {
+      return `You are very welcome! I am dedicated to helping you optimize your metabolic nutrition and luteal wellness. Keep fueling your body with balanced complex carbs, healthy fats, and adequate hydration. Feel free to ask anytime you have questions about your meal timings or cravings!`;
+    }
+    if (isGyn) {
+      return `You are very welcome! As your Gynecologist, I am honored to support your reproductive health and cycle tracking. Keep an eye on your continuous progesterone trajectory over the coming days, and don't hesitate to reach out if any new pelvic symptoms arise.`;
+    }
+    return `You are most welcome! As your Endocrinologist, I am continuously tracking your ISF biomarker telemetry to ensure your hormonal rhythm remains optimal and balanced. Please let me know whenever you have further questions!`;
+  }
+  if (/\b(welcome|you're welcome|you are welcome|karibu|dont mention it|no problem|anytime)\b/i.test(clean)) {
+    return `Thank you! I am delighted to be part of your dedicated care team. How can I assist you with your continuous hormone telemetry or health goals today?`;
+  }
+  if (clean.includes("how are you") || clean.includes("how are things") || clean.includes("how do you do") || clean.includes("are you okay") || clean.includes("how's it going") || clean.includes("how is it going")) {
+    return `I am doing very well, thank you for asking! I am actively monitoring your continuous ISF telemetry stream. Your progesterone is holding steady at 19.8 ng/mL and your free testosterone is well controlled at 38.2 ng/dL. How are you feeling today? Are you experiencing any symptoms?`;
+  }
+  if (/\b(hello|hi|habari|hey|greetings|good morning|good afternoon|good evening|mambo|sasa|jambo)\b/i.test(clean)) {
+    if (isNutri) {
+      return `Hello! I am ${name}, your Clinical Nutritionist. I am monitoring your metabolic trends, glycemic balance, and ISF biomarker stability in real time. How may I assist you with your dietary rhythm or energy levels today?`;
+    }
+    if (isGyn) {
+      return `Hello! I am ${name}, your Gynecologist. I specialize in reproductive physiology, luteal phase adequacy, and continuous hormone rhythm tracking. What aspects of your cycle or pelvic telemetry would you like to discuss today?`;
+    }
+    return `Hello! I am ${name}, your Endocrinologist. I am monitoring your continuous ISF hormone readings and telemetry in real time. Your progesterone surge is currently tracking within normal secretory limits. How can I assist you with your cycle telemetry today?`;
+  }
+  if (/\b(bye|goodbye|good night|kwaheri|see you|take care|talk later|gnight)\b/i.test(clean)) {
+    return `Goodbye for now, and rest well! Remember that your ISF microneedle patch continues tracking your continuous hormone flux 24/7. Your care team is always here whenever you need guidance. Take care!`;
+  }
+  if (clean.includes("who are you") || clean.includes("what is your name") || clean.includes("what do you do") || clean.includes("tell me about yourself") || clean.includes("what is your specialty") || clean.includes("introduce yourself")) {
+    if (isNutri) {
+      return `I am Dr. Sarah Chen, your Clinical Nutritionist on the ISF Tracker care team. My focus is translational metabolic nutrition, insulin sensitivity optimization, micronutrient support (magnesium, zinc, B6), and cycle-synced nutrition to ease premenstrual symptoms.`;
+    }
+    if (isGyn) {
+      return `I am Dr. Grace Wanjiku, your Gynecologist on the ISF Tracker care team. I specialize in reproductive endocrinology, luteal phase adequacy, pelvic health, cervical mucus patterns, and early clinical detection of conditions like PCOS and PMOS.`;
+    }
+    return `I am Dr. Brian Ochieng, your Endocrinologist on the ISF Tracker care team. My specialty is continuous transdermal hormone telemetry, free testosterone-to-progesterone velocity modeling, and metabolic risk forecasting.`;
+  }
+  if (clean.includes("are you a real doctor") || clean.includes("are you an ai") || clean.includes("are you human") || clean.includes("can you diagnose me") || clean.includes("prescribe medicine")) {
+    return `I am an AI Clinical Care Specialist modeled on rigorous endocrine and gynecological protocols, working as an active part of your ISF Tracker care team. While I provide real-time biomarker analysis, luteal trend interpretations, and evidence-based guidance, I do not issue formal clinical diagnoses or prescription drugs. For clinical emergencies or prescription changes, always review your exported Doctor Report (PDF) with your attending primary physician.`;
+  }
+  if ((clean.includes("patch") || clean.includes("sensor") || clean.includes("microneedle")) && (clean.includes("how does") || clean.includes("work") || clean.includes("measure") || clean.includes("technology") || clean.includes("what is isf"))) {
+    return `The ISF Tracker utilizes an ultra-thin biocompatible microneedle array that penetrates the stratum corneum into the dermal interstitial fluid (ISF) layer. ISF surrounds living skin cells and exchanges molecules with capillaries continuously, providing a real-time biomolecular window without venous blood draws. Onboard electrochemical biosensors measure free testosterone and progesterone molecules every few minutes and broadcast encrypted telemetry via Bluetooth LE to your app.`;
+  }
+  if ((clean.includes("hurt") || clean.includes("pain") || clean.includes("pinch") || clean.includes("sting")) && (clean.includes("patch") || clean.includes("needle") || clean.includes("apply") || clean.includes("wear") || clean.includes("sensor"))) {
+    return `Applying the ISF patch is virtually painless! The microneedles are shorter than 800 micrometers\u2014long enough to sample dermal interstitial fluid, but short enough to avoid reaching the deeper nerve endings (nociceptors) that sense pain. Most users report feeling only a light stamp sensation upon initial placement, followed by complete comfort during 14 days of wear.`;
+  }
+  if (clean.includes("shower") || clean.includes("bath") || clean.includes("swim") || clean.includes("swimming") || clean.includes("waterproof") || clean.includes("water") || clean.includes("sweat") || clean.includes("gym") || clean.includes("workout")) {
+    return `Your ISF patch is rated IP68 medical-grade waterproof! You can freely shower, bathe, swim, and work out in the gym without damaging the sensor or interrupting telemetry. For optimal adhesion, avoid vigorously scrubbing directly over the edges with oily soaps or loofahs, and gently pat the site dry with a clean towel afterward.`;
+  }
+  if ((clean.includes("how long") || clean.includes("replace") || clean.includes("duration") || clean.includes("change")) && (clean.includes("patch") || clean.includes("sensor") || clean.includes("wear"))) {
+    return `Each ISF sensor patch is designed for 14 continuous days of uninterrupted biomarker tracking. The app will notify you 24 hours before your patch expires so you can prepare a replacement. When replacing, simply peel off the old patch, wipe the skin with an alcohol swab, and apply the new patch to an alternate site (such as the opposite upper arm or abdomen) to allow skin recovery.`;
+  }
+  if (clean.includes("peel") || clean.includes("falling off") || clean.includes("loose") || clean.includes("adhesive") || clean.includes("tape") || clean.includes("stick")) {
+    return `If an edge of your patch begins lifting, press down gently around the perimeter with clean, dry fingers for 15 seconds. For active swimmers or intense workouts, we recommend applying an approved breathable medical overpatch (such as Opsite Flexigrid or Tegaderm) directly over the sensor. Never use household adhesives or re-insert a patch that has completely detached.`;
+  }
+  if (clean.includes("battery") || clean.includes("charge") || clean.includes("charging") || clean.includes("recharge") || clean.includes("power")) {
+    return `The ISF patch does not require any external charging! It incorporates an ultra-thin zinc-air/lithium micro-cell designed to power the electrochemical sensors and Bluetooth Low Energy transmitter for the entire 14-day lifecycle. Once the 14 days conclude, you simply recycle the depleted patch and apply a fresh unit.`;
+  }
+  if (clean.includes("bluetooth") || clean.includes("offline") || clean.includes("sync") || clean.includes("airplane mode") || clean.includes("disconnect") || clean.includes("range")) {
+    return `The patch uses low-energy Bluetooth (BLE) with an operating range of approximately 10 meters (30 feet). If you step away from your phone or turn on airplane mode, the sensor's onboard flash memory automatically caches up to 72 hours of continuous readings. As soon as your phone reconnects, all buffered telemetry syncs seamlessly without any data loss.`;
+  }
+  if ((clean.includes("current") || clean.includes("latest") || clean.includes("reading") || clean.includes("level")) && (clean.includes("hormone") || clean.includes("how are my") || clean.includes("my stats") || clean.includes("tracking"))) {
+    return `Your latest continuous ISF readings show Progesterone at 19.8 ng/mL and Free Testosterone steady at 38.2 ng/dL (safe baseline <45 ng/dL). These concentrations confirm robust post-ovulatory luteal stability within ideal physiological reference ranges. Your transdermal patch is capturing continuous dermal interstitial flux accurately with zero detected anomalous spikes.`;
+  }
+  if (clean.includes("progesterone") || clean.includes("corpus luteum") || clean.includes("secretory")) {
+    if (isGyn) {
+      return `As your Gynecologist, your progesterone is averaging 18.2 ng/mL with a healthy luteal curve peaking at 19.8 ng/mL. In gynecology, a sustained level above 5.0 ng/mL across the mid-luteal phase confirms effective corpus luteum vascularization and secretory endometrial maturation. This shields against irregular breakthrough bleeding. If you experience mild breast fullness or slight basal temperature elevation, these are normal luteal physiologic responses.`;
+    }
+    return `Looking at your continuous ISF telemetry, your progesterone is averaging 18.2 ng/mL with a healthy luteal curve peaking at 19.8 ng/mL. Normal luteal progesterone ranges between 5.0 and 25.0 ng/mL, confirming robust secretory endometrium support. No sudden luteal drops have been flagged. Are you experiencing any breast tenderness or mood changes?`;
+  }
+  if (clean.includes("testosterone") || clean.includes("androgen") || clean.includes("acne") || clean.includes("chin hair") || clean.includes("facial hair") || clean.includes("hirsutism")) {
+    if (isGyn) {
+      return `From a gynecological perspective, your continuous free testosterone readings are holding steady at 38 ng/dL (38.2 ng/dL), safely beneath the elevated threshold of 45 ng/dL. This confirms balanced follicular androgen metabolism without hyperandrogenic pulses, hirsutism triggers, or ovulatory disruption.`;
+    }
+    if (isNutri) {
+      return `Your free testosterone readings are holding steady at 38 ng/dL, comfortably below the 45 ng/dL threshold. From a nutritional standpoint, keeping insulin balanced via low-glycemic, fiber-rich meals prevents insulin-driven androgen excess in ovarian theca cells. Your current telemetry reflects optimal hormonal balance.`;
+    }
+    return `Your continuous free testosterone readings are currently steady at 38 ng/dL (38.2 ng/dL), safely beneath the elevated threshold of 45 ng/dL. This indicates stable follicular androgen metabolism without hyperandrogenic surges today. We will keep monitoring your free testosterone to ensure it remains well balanced.`;
+  }
+  if (clean.includes("velocity") || clean.includes("trajectory") || clean.includes("forecast") || clean.includes("rate of change") || clean.includes("slope")) {
+    return `Your continuous hormone velocity measures the daily rate of change (ng/mL per day) across your interstitial fluid telemetry. Your progesterone velocity curve shows a sustained secretory plateau through Day 21 before entering a gentle physiological descent toward Day 28. This smooth curve confirms healthy corpus luteum lifespan without premature collapse.`;
+  }
+  if (clean.includes("next period") || clean.includes("period due") || clean.includes("when will i bleed") || clean.includes("cycle phase") || clean.includes("cycle transition") || clean.includes("predicted cycle") || clean.includes("ovulation") || clean.includes("menses") || clean.includes("when") && (clean.includes("period") || clean.includes("cycle"))) {
+    if (isGyn) {
+      return `Based on your continuous ISF telemetry and 7-day velocity projection, you are in the mid-luteal phase (approximately cycle day 19-21). Your ovulatory progesterone elevation was confirmed, and your projected next cycle transition is estimated in approximately 6 to 7 days as your corpus luteum naturally regresses.`;
+    }
+    return `Based on your continuous ISF telemetry and 7-day velocity projection, you are in the mid-luteal phase (approximately cycle day 19-21). Your ovulatory progesterone elevation was confirmed, and your projected next cycle transition is estimated in approximately 6 to 7 days.`;
+  }
+  if (clean.includes("pregnant") || clean.includes("pregnancy") || clean.includes("conception") || clean.includes("implantation") || clean.includes("conceive")) {
+    return `If conception and implantation occur during this cycle, embryonic hCG signals the corpus luteum to persist, keeping progesterone sustained above 15\u201325+ ng/mL instead of descending toward menstruation. In non-conception cycles, progesterone descends below 3 ng/mL around Day 27\u201328, triggering menses. Your continuous ISF patch will instantly track whether your luteal plateau extends!`;
+  }
+  if (clean.includes("pcos") || clean.includes("pmos") || clean.includes("polycystic") || clean.includes("follicular arrest")) {
+    return `Your predictive health model derives risk trajectories from continuous interstitial fluid dynamics. In PCOS/PMOS, telemetry typically reveals persistent free androgen elevations (>45 ng/dL) coupled with absent or blunted progesterone peaks. Currently, your PCOS trajectory monitoring shows a 31% calibration score with no acute escalations, supported by your robust ovulatory progesterone reading of 19.8 ng/mL.`;
+  }
+  if (clean.includes("diabetes") || clean.includes("insulin") || clean.includes("glycemic") || clean.includes("glucose") || clean.includes("metabolic")) {
+    if (isNutri) {
+      return `Your continuous metabolic monitoring models glycemic velocity and insulin sensitivity. During the luteal phase, elevated progesterone naturally increases cellular insulin resistance slightly. You can counter this by pairing carbs with healthy fats and protein, and choosing low-glycemic complex carbohydrates like quinoa, roasted vegetables, and legumes.`;
+    }
+    return `Your predictive health model derives risk trajectories from continuous interstitial fluid dynamics. Currently, your metabolic sensitivity index is stable, and Type 2 Diabetes projection is categorized as low risk. Make sure to check the Predictive Analysis tab for full multi-condition breakdowns!`;
+  }
+  if (clean.includes("cramp") || clean.includes("pelvic") || clean.includes("abdominal")) {
+    if (isGyn) {
+      return `As your Gynecologist, cyclical pelvic sensations and mild uterine cramping during the luteal phase often correlate with local prostaglandin release and progesterone velocity descent. Tracking symptom onset relative to your patch readings is very helpful. However, if you experience sudden, severe unilateral pelvic pain, abnormal heavy bleeding, or fever, please seek urgent medical evaluation immediately.`;
+    }
+    return `I hear your concern. Cyclical pelvic sensations can correlate with rapid shifts in progesterone velocity. If pain is mild to moderate, tracking the exact onset relative to your patch readings is helpful. However, if you experience sudden, severe unilateral pelvic pain, heavy abnormal bleeding, or fever, please seek urgent medical evaluation immediately.`;
+  }
+  if ((clean.includes("food") || clean.includes("eat") || clean.includes("diet") || clean.includes("meal")) && (clean.includes("luteal") || clean.includes("progesterone") || clean.includes("cycle"))) {
+    return `During the luteal phase, focus on foods rich in Vitamin B6 and Zinc to support progesterone synthesis: wild-caught salmon, pasture-raised poultry, avocados, sweet potatoes, and leafy greens. Pair complex carbohydrates with healthy fats to sustain dopamine and prevent premenstrual mood drops.`;
+  }
+  if (clean.includes("seed cycling") || clean.includes("flax") || clean.includes("pumpkin seed") || clean.includes("sesame") || clean.includes("sunflower seed")) {
+    return `Seed cycling supports hormonal phases via specific fatty acid and lignan profiles. During the follicular phase (Days 1\u201314), 1 tablespoon each of freshly ground flaxseed and pumpkin seeds aids estrogen metabolism and zinc intake. During the luteal phase (Days 15\u201328), switch to sesame and sunflower seeds to provide selenium, vitamin E, and lignans that assist corpus luteum progesterone production.`;
+  }
+  if (clean.includes("sugar") || clean.includes("craving") || clean.includes("sweet") || clean.includes("chocolate")) {
+    return `Luteal sugar cravings are biological! Elevated progesterone increases your basal metabolic rate by 100 to 300 calories per day, while brain serotonin levels dip slightly before menstruation. Your body craves quick glucose to rebuild serotonin. Counteract this by eating nutrient-dense complex carbs (berries, oats, roasted sweet potatoes) and 25\u201330g of protein per meal to stabilize blood sugar.`;
+  }
+  if (clean.includes("coffee") || clean.includes("caffeine") || clean.includes("alcohol") || clean.includes("wine") || clean.includes("beer")) {
+    return `During the luteal phase, liver clearance of caffeine slows by approximately 25% due to progesterone, which can amplify breast tenderness, anxiety, and sleep disruption. Limiting coffee to 1 cup before 11:00 AM is recommended. Similarly, reducing alcohol intake prevents liver congestion, preserving its ability to clear metabolized steroid hormones efficiently.`;
+  }
+  if (clean.includes("vitamin") || clean.includes("electrolyte") || clean.includes("magnesium") || clean.includes("zinc") || clean.includes("inositol")) {
+    return `For luteal wellness, key micronutrients include Magnesium Glycinate (300\u2013400 mg at bedtime to ease muscle tension and improve deep sleep), Vitamin B6 (50\u2013100 mg to enhance progesterone receptor responsiveness), Zinc (15\u201330 mg for tissue repair), and Myo-Inositol for metabolic insulin sensitivity.`;
+  }
+  if (clean.includes("cervical") || clean.includes("mucus") || clean.includes("discharge")) {
+    return `Under high luteal progesterone, cervical mucus shifts from the thin, slippery 'egg-white' texture seen during ovulation to a thicker, creamier, and more opaque barrier. This is a healthy protective mechanism that seals the cervical os. If accompanied by itching, burning, or foul odor, consult a clinic to rule out an infection.`;
+  }
+  if (clean.includes("upgrade") || clean.includes("premium") || clean.includes("free plan") || clean.includes("cost") || clean.includes("price") || clean.includes("ksh") || clean.includes("mpesa") || clean.includes("subscription")) {
+    return `The Free Plan includes qualitative risk categories (low/moderate/elevated), continuous ISF baseline graphs, and standard consultant messaging. Premium is available for Ksh 250 / month (payable via M-Pesa or card) and unlocks calibrated exact percentages (e.g., Type 2 Diabetes: 12.0%, Insulin Resistance: 24.0%), 7-day forward velocity forecasts, and priority 24/7 AI care team consultations. You can upgrade anytime in Settings or Predictive Analysis!`;
+  }
+  if (clean.includes("report") || clean.includes("pdf") || clean.includes("doctor report") || clean.includes("export") || clean.includes("qr code") || clean.includes("share with doctor")) {
+    return `You can export your official Doctor Report (PDF) directly from the Chat tab or Predictive tab by tapping 'Doctor Report (PDF)'. The report compiles your 7-day continuous ISF curves, progesterone velocity plateau, androgen ratios, and an encrypted QR access code so your in-person clinician can verify your raw readings instantly.`;
+  }
+  if (clean.includes("privacy") || clean.includes("data") || clean.includes("consent") || clean.includes("secure") || clean.includes("share data")) {
+    return `Your privacy is our utmost priority. All ISF telemetry is encrypted end-to-end (AES-256). Specialists and care team consultants only see the readings you explicitly grant consent to share, and you can revoke data access or modify permissions at any time directly in your settings.`;
+  }
+  return `Thank you for consulting me. As your ${consultant?.professional_type || "Care Specialist"}, I have evaluated your continuous dermal ISF biomarker telemetry. Your overall endocrine velocity is reassuring and consistent with expected physiologic variation. Is there a specific symptom or pattern you would like us to investigate further?`;
 }
 
 // server/services/consultantAiService.ts
@@ -1319,27 +1689,9 @@ ${promptText}` }]
     if (faqMatch) {
       return faqMatch;
     }
-    const lower = message.toLowerCase();
-    const type = consultant.professional_type.toLowerCase();
-    const isEndo = type.includes("endocrinologist");
-    const isGyn = type.includes("gynecologist") || type.includes("ob/gyn") || type.includes("obstetrician");
-    if (/\b(hello|hi|habari|hey|greetings)\b/i.test(message)) {
-      return `Hello! I'm ${consultant.full_name}, your ${consultant.professional_type}. I've been monitoring your ISF hormone telemetry and recent readings. How are you feeling today, and what can I assist you with regarding your cycle and biomarker trends?`;
-    }
-    if (lower.includes("progesterone") || lower.includes("luteal") || lower.includes("ovulat")) {
-      return isGyn ? `As your Gynecologist, your progesterone levels indicate healthy luteal secretory maturation and endometrial stability. Adequate progesterone protects the uterine lining and prevents spotting. If you notice mild tenderness or temperature shifts, those are normal luteal physiologic markers.` : `Your progesterone levels indicate normal luteal phase activity. Progesterone supports the uterine lining and regulates metabolic temperature. If you notice dips alongside fatigue, stay well hydrated and maintain consistent sleep intervals.`;
-    }
-    if (lower.includes("androgen") || lower.includes("testosterone") || lower.includes("acne") || lower.includes("hair")) {
-      return isGyn ? `In gynecological practice, maintaining balanced free testosterone below 45 ng/dL is essential to prevent follicular arrest and irregular cycles. Your current telemetry demonstrates stable androgen kinetics without hyperandrogenic spikes.` : isEndo ? `I am observing your free testosterone metrics closely. Temporary elevations can occur around stress peaks or specific cycle phases. I recommend monitoring the 48-hour moving average on your dashboard to see if this trend stabilizes.` : `Elevated free testosterone signals in interstitial fluid can correlate with follicular phase surges or metabolic shifts. Let's keep observing the patch telemetry over the next 3 days.`;
-    }
-    if (lower.includes("pcos") || lower.includes("pmos") || lower.includes("risk") || lower.includes("prediction")) {
-      return `Our predictive models analyze your continuous free testosterone-to-progesterone ratios. Your current status is being actively monitored, and the trends suggest manageable variations rather than acute endocrine distress. Always consult us if you experience unexpected pelvic pain or irregular spotting.`;
-    }
-    if (lower.includes("pain") || lower.includes("cramp") || lower.includes("hurt") || lower.includes("headache") || lower.includes("pelvic")) {
-      return isGyn ? `Pelvic discomfort and cramps during cycle transitions often stem from local prostaglandin activity and uterine vascular tone. Warm abdominal compresses, gentle pelvic stretches, and magnesium can provide significant relief. If discomfort becomes acute or atypical, please inform us right away.` : `I understand you're experiencing discomfort. Prostaglandin release and hormonal fluctuations during cycle transitions often trigger these symptoms. Warm compresses, adequate hydration, and magnesium-rich foods may help ease the tension. If symptoms worsen, please visit a clinic promptly.`;
-    }
-    if (lower.includes("patch") || lower.includes("sensor") || lower.includes("battery") || lower.includes("reading") || lower.includes("transmitting")) {
-      return `Your ISF microneedle patch is actively transmitting telemetry. Ensure the skin site remains dry and free of oily lotions to maintain optimal epidermal acoustic contact and reliable biomarker diffusion.`;
+    const knowledgeMatch = matchClinicalKnowledge(message, consultant);
+    if (knowledgeMatch) {
+      return knowledgeMatch;
     }
     return `Thank you for sharing this. Based on your current biomarker trajectory, your hormonal balance is responding predictably. I will continue to oversee your daily readings. Please let me know if you experience any new symptoms or have further questions!`;
   }

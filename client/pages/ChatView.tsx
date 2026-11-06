@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -16,7 +16,7 @@ import { apiRequest } from "@/lib/api";
 import { generateClientConsultantReply } from "@/lib/clinicalBotFallback";
 import ClinicalReportExportModal from "@/components/ClinicalReportExportModal";
 import ClinicalFaqModal from "@/components/ClinicalFaqModal";
-import { CLINICAL_FAQ_ITEMS } from "@shared/clinicalFaq";
+import { CLINICAL_FAQ_ITEMS, getConsultantFaqItems } from "@shared/clinicalFaq";
 import {
   ChevronRight,
   ChevronDown,
@@ -140,6 +140,11 @@ export default function ChatView({ language }: ChatViewProps) {
   })();
   const consultant =
     effectiveConsultants[activeConsultantIdx] || effectiveConsultants[0];
+
+  const consultantFaqItems = useMemo(
+    () => getConsultantFaqItems(consultant),
+    [consultant?.professional_type, consultant?.id]
+  );
 
   const isPremium = subscription?.plan === "premium";
   const FREE_MESSAGE_LIMIT = 50;
@@ -689,7 +694,7 @@ export default function ChatView({ language }: ChatViewProps) {
                     <Sparkles size={13} className="text-[#0EA5A4]" />
                     <span>Commonly Asked Questions</span>
                     <span className="rounded-full bg-[#0EA5A4]/15 px-1.5 py-0.5 text-[9px] font-bold text-[#0EA5A4]">
-                      {CLINICAL_FAQ_ITEMS.length}
+                      {consultantFaqItems.length}
                     </span>
                     {showQuickQuestions ? (
                       <ChevronUp size={13} className="text-slate-400" />
@@ -709,7 +714,7 @@ export default function ChatView({ language }: ChatViewProps) {
 
                 {showQuickQuestions && (
                   <div className="space-y-1.5">
-                    {CLINICAL_FAQ_ITEMS.map((item) => (
+                    {consultantFaqItems.map((item) => (
                       <button
                         key={item.id}
                         type="button"

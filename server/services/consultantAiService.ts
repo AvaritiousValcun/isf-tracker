@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "../lib/supabaseAdmin";
 import { matchClinicalFaq } from "../../shared/clinicalFaq";
+import { matchClinicalKnowledge } from "../../shared/clinicalKnowledge";
 
 export interface ConsultantContext {
   id: string;
@@ -137,41 +138,9 @@ Guidelines:
       return faqMatch;
     }
 
-    const lower = message.toLowerCase();
-    const type = consultant.professional_type.toLowerCase();
-    const isEndo = type.includes("endocrinologist");
-    const isGyn = type.includes("gynecologist") || type.includes("ob/gyn") || type.includes("obstetrician");
-
-    if (/\b(hello|hi|habari|hey|greetings)\b/i.test(message)) {
-      return `Hello! I'm ${consultant.full_name}, your ${consultant.professional_type}. I've been monitoring your ISF hormone telemetry and recent readings. How are you feeling today, and what can I assist you with regarding your cycle and biomarker trends?`;
-    }
-
-    if (lower.includes("progesterone") || lower.includes("luteal") || lower.includes("ovulat")) {
-      return isGyn
-        ? `As your Gynecologist, your progesterone levels indicate healthy luteal secretory maturation and endometrial stability. Adequate progesterone protects the uterine lining and prevents spotting. If you notice mild tenderness or temperature shifts, those are normal luteal physiologic markers.`
-        : `Your progesterone levels indicate normal luteal phase activity. Progesterone supports the uterine lining and regulates metabolic temperature. If you notice dips alongside fatigue, stay well hydrated and maintain consistent sleep intervals.`;
-    }
-
-    if (lower.includes("androgen") || lower.includes("testosterone") || lower.includes("acne") || lower.includes("hair")) {
-      return isGyn
-        ? `In gynecological practice, maintaining balanced free testosterone below 45 ng/dL is essential to prevent follicular arrest and irregular cycles. Your current telemetry demonstrates stable androgen kinetics without hyperandrogenic spikes.`
-        : isEndo
-        ? `I am observing your free testosterone metrics closely. Temporary elevations can occur around stress peaks or specific cycle phases. I recommend monitoring the 48-hour moving average on your dashboard to see if this trend stabilizes.`
-        : `Elevated free testosterone signals in interstitial fluid can correlate with follicular phase surges or metabolic shifts. Let's keep observing the patch telemetry over the next 3 days.`;
-    }
-
-    if (lower.includes("pcos") || lower.includes("pmos") || lower.includes("risk") || lower.includes("prediction")) {
-      return `Our predictive models analyze your continuous free testosterone-to-progesterone ratios. Your current status is being actively monitored, and the trends suggest manageable variations rather than acute endocrine distress. Always consult us if you experience unexpected pelvic pain or irregular spotting.`;
-    }
-
-    if (lower.includes("pain") || lower.includes("cramp") || lower.includes("hurt") || lower.includes("headache") || lower.includes("pelvic")) {
-      return isGyn
-        ? `Pelvic discomfort and cramps during cycle transitions often stem from local prostaglandin activity and uterine vascular tone. Warm abdominal compresses, gentle pelvic stretches, and magnesium can provide significant relief. If discomfort becomes acute or atypical, please inform us right away.`
-        : `I understand you're experiencing discomfort. Prostaglandin release and hormonal fluctuations during cycle transitions often trigger these symptoms. Warm compresses, adequate hydration, and magnesium-rich foods may help ease the tension. If symptoms worsen, please visit a clinic promptly.`;
-    }
-
-    if (lower.includes("patch") || lower.includes("sensor") || lower.includes("battery") || lower.includes("reading") || lower.includes("transmitting")) {
-      return `Your ISF microneedle patch is actively transmitting telemetry. Ensure the skin site remains dry and free of oily lotions to maintain optimal epidermal acoustic contact and reliable biomarker diffusion.`;
+    const knowledgeMatch = matchClinicalKnowledge(message, consultant);
+    if (knowledgeMatch) {
+      return knowledgeMatch;
     }
 
     // General clinical response

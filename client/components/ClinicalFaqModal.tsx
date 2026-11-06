@@ -57,17 +57,28 @@ export default function ClinicalFaqModal({
 
   const getAnswer = (item: ClinicalFaqItem) => {
     const type = consultant.professional_type.toLowerCase();
-    if (type.includes("endocrinologist")) {
+    if (type.includes("endocrinologist") && item.answers.endocrinologist) {
       return item.answers.endocrinologist;
     }
-    if (
-      type.includes("gynecologist") ||
-      type.includes("ob/gyn") ||
-      type.includes("obstetrician")
-    ) {
-      return item.answers.obgyn;
+    if (type.includes("nutritionist") && item.answers.nutritionist) {
+      return item.answers.nutritionist;
     }
-    return item.answers.default || item.answers.endocrinologist;
+    if (
+      (type.includes("gynecologist") ||
+        type.includes("ob/gyn") ||
+        type.includes("obstetrician")) &&
+      (item.answers.gynecologist || item.answers.obgyn)
+    ) {
+      return item.answers.gynecologist || item.answers.obgyn;
+    }
+    return (
+      item.answers.default ||
+      item.answers.endocrinologist ||
+      item.answers.nutritionist ||
+      item.answers.gynecologist ||
+      item.answers.obgyn ||
+      Object.values(item.answers)[0]
+    );
   };
 
   const handleAsk = (question: string) => {

@@ -42,4 +42,27 @@ describe("generateClientConsultantReply", () => {
     const reply = generateClientConsultantReply(consultant, "Can you review my profile overall?");
     expect(reply).toContain("physiologic variation");
   });
+
+  it("handles common courtesies like thank you and welcome", () => {
+    const thanksReply = generateClientConsultantReply(consultant, "Thank you so much doctor!");
+    expect(thanksReply.toLowerCase()).toContain("welcome");
+
+    const welcomeReply = generateClientConsultantReply(consultant, "You're welcome!");
+    expect(welcomeReply.toLowerCase()).toContain("delighted to be part of your dedicated care team");
+
+    const howAreYou = generateClientConsultantReply(consultant, "How are you doing today?");
+    expect(howAreYou).toContain("19.8 ng/mL");
+    expect(howAreYou).toContain("38.2 ng/dL");
+  });
+
+  it("answers hardware and patch questions like waterproofing and microneedles", () => {
+    const waterReply = generateClientConsultantReply(consultant, "Can I shower or swim with the patch?");
+    expect(waterReply).toContain("IP68");
+
+    const needleReply = generateClientConsultantReply(consultant, "Does the microneedle patch hurt when applying?");
+    expect(needleReply.toLowerCase()).toContain("painless");
+
+    const batteryReply = generateClientConsultantReply(consultant, "How do I charge the patch battery?");
+    expect(batteryReply).toContain("14-day");
+  });
 });

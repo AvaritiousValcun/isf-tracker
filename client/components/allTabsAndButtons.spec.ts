@@ -3,7 +3,7 @@ import { t, type Language } from "../lib/i18n";
 import { resolveTheme, readStoredThemeMode, writeStoredThemeMode } from "../lib/theme";
 import { DEFAULT_CONSULTANTS, DEFAULT_CONVERSATIONS } from "../hooks/useData";
 import { generateClientConsultantReply } from "../lib/clinicalBotFallback";
-import { CLINICAL_FAQ_ITEMS, matchClinicalFaq } from "../../shared/clinicalFaq";
+import { CLINICAL_FAQ_ITEMS, getConsultantFaqItems, matchClinicalFaq } from "../../shared/clinicalFaq";
 import { HORMONE_DATA, type HormoneType } from "./Hormone3DVisualizer";
 import { FORECAST_DATA } from "./HormoneVelocityForecast";
 
@@ -281,15 +281,18 @@ describe("All Tabs, Buttons, Dialogs, and Interactive Controls Verification", ()
     });
 
     it("verifies all curated FAQ question buttons trigger authoritative matching answers", () => {
-      expect(CLINICAL_FAQ_ITEMS).toHaveLength(4);
+      expect(CLINICAL_FAQ_ITEMS).toHaveLength(18);
 
-      const specialist = DEFAULT_CONSULTANTS[2]; // Dr. Grace Wanjiku (Gynecologist)
-
-      for (const faqItem of CLINICAL_FAQ_ITEMS) {
-        const answer = matchClinicalFaq(faqItem.question, specialist);
-        expect(answer).toBeTruthy();
-        expect(typeof answer).toBe("string");
-        expect(answer!.length).toBeGreaterThan(25);
+      // Verify each of the 3 specialists has exactly 6 curated questions
+      for (const specialist of DEFAULT_CONSULTANTS) {
+        const specialistFaq = getConsultantFaqItems(specialist);
+        expect(specialistFaq).toHaveLength(6);
+        for (const faqItem of specialistFaq) {
+          const answer = matchClinicalFaq(faqItem.question, specialist);
+          expect(answer).toBeTruthy();
+          expect(typeof answer).toBe("string");
+          expect(answer!.length).toBeGreaterThan(25);
+        }
       }
     });
 
