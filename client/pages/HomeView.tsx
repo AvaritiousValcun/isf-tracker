@@ -934,7 +934,7 @@ export default function HomeView({
 
           {/* Right Column: The Dark Brand Box With the 3D Animation Inside */}
           <div className="welcome-brand-art relative mx-auto w-full max-w-[430px]">
-            <div className="welcome-orbit absolute -inset-4 rounded-[38px] border border-[#F3E308]/15 pointer-events-none" />
+            <div className="welcome-orbit absolute -inset-4 rounded-[38px] border border-amber-500/25 pointer-events-none" />
 
             <div className="relative overflow-hidden rounded-[30px] border border-[#B8BFC1]/80 bg-gradient-to-br from-[#15232A] to-[#080D10] p-6 text-white shadow-[0_28px_70px_rgba(44,76,92,0.22)] sm:p-8">
               <div className="relative">
@@ -963,7 +963,7 @@ export default function HomeView({
 
                 {/* Middle Text: A better way to listen / Your care, in a clearer rhythm. */}
                 <div className="mt-4 max-w-[300px]">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#F3E308]">
+                  <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-amber-500 dark:text-amber-400">
                     {language === "en" ? "A better way to listen" : "Njia bora ya kusikiliza"}
                   </p>
 
@@ -977,13 +977,13 @@ export default function HomeView({
                   <div>
                     <p className="text-[11px] text-slate-300 font-medium">Private by design</p>
                     <div className="mt-1 flex items-center gap-2 text-[12px] font-medium text-white">
-                      <LockKeyhole size={13} className="text-[#F3E308]" />
+                      <LockKeyhole size={13} className="text-amber-500 dark:text-amber-400" />
                       {language === "en" ? "Your data stays yours" : "Taarifa zako ni zako"}
                     </div>
                   </div>
 
-                  <div className="h-12 w-12 rounded-full border border-[#F3E308]/40 bg-[#F3E308]/[0.12] p-1.5 flex items-center justify-center">
-                    <div className="h-full w-full rounded-full border border-[#B8BFC1]/35 flex items-center justify-center text-[10px] text-[#F3E308] font-bold">
+                  <div className="h-12 w-12 rounded-full border border-amber-500/50 bg-amber-500/[0.15] p-1.5 flex items-center justify-center">
+                    <div className="h-full w-full rounded-full border border-amber-400/40 flex items-center justify-center text-[10px] text-amber-400 font-bold">
                       ISF
                     </div>
                   </div>

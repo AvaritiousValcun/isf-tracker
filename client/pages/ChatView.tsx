@@ -732,44 +732,6 @@ export default function ChatView({ language }: ChatViewProps) {
                   </div>
                 </div>
               </div>
-
-              {/* Chat Input Bar */}
-              <div className="border-t border-slate-200 dark:border-[#243C47] p-4">
-                <div className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-[#243C47] bg-[#B8BFC1]/[0.10] dark:bg-[#111D23] px-3 py-1.5">
-                  <input
-                    value={message}
-                    disabled={sending}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={(e) =>
-                      e.key === "Enter" && !e.shiftKey && handleSendMessage()
-                    }
-                    placeholder="Ask Dr. Brian, Dr. Sarah, or Dr. Grace about your hormones, cycle, or telemetry..."
-                    className="min-w-0 flex-1 bg-transparent py-2 text-[12px] text-[#2C4C5C] dark:text-[#E8F2F6] outline-none placeholder:text-slate-500 dark:placeholder:text-[#738C98]"
-                  />
-                  <span className="hidden text-[10px] sm:flex items-center gap-1">
-                    {isPremium ? (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 dark:border-amber-700/50 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 font-semibold text-amber-700 dark:text-amber-300">
-                        <Crown size={10} className="text-amber-500 fill-amber-500" />
-                        {t(language, "chat.unlimited")}
-                      </span>
-                    ) : (
-                      <span className="text-slate-500 dark:text-[#A0B4BE]">
-                        {`${Math.max(
-                          0,
-                          FREE_MESSAGE_LIMIT - messageCount
-                        )} ${t(language, "chat.messagesLeft")}`}
-                      </span>
-                    )}
-                  </span>
-                  <button
-                    onClick={() => handleSendMessage()}
-                    disabled={sending || !message.trim()}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2C4C5C] dark:bg-[#0EA5A4] text-white transition hover:opacity-90 disabled:opacity-40"
-                  >
-                    <Send size={14} />
-                  </button>
-                </div>
-              </div>
             </>
           ) : null}
         </div>
