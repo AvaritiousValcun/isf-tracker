@@ -457,44 +457,59 @@ export default function ChatView({ language }: ChatViewProps) {
           </p>
 
           <div className="space-y-1">
-            {effectiveConsultants.map((item, index) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveConsultantIdx(index);
-                  setHasSelectedConsultant(true);
-                }}
-                className={`flex w-full items-center gap-3 rounded-xl p-3 text-left transition ${
-                  hasSelectedConsultant && activeConsultantIdx === index
-                    ? "bg-[#2C4C5C]/[0.07] dark:bg-[#F3E308]/15"
-                    : "hover:bg-slate-50 dark:hover:bg-[#1C2F38]"
-                }`}
-              >
-                <div
-                  className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
-                  style={{ background: item.color, color: "#FFFFFF" }}
+            {effectiveConsultants.map((item, index) => {
+              const isSelected = hasSelectedConsultant && activeConsultantIdx === index;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveConsultantIdx(index);
+                    setHasSelectedConsultant(true);
+                  }}
+                  className={`consultant-item-btn flex w-full items-center gap-3 rounded-xl p-3 text-left transition ${
+                    isSelected
+                      ? "consultant-item-selected bg-[#2C4C5C] dark:bg-[#F3E308]/15"
+                      : "hover:bg-slate-50 dark:hover:bg-[#1C2F38]"
+                  }`}
                 >
-                  {item.initials || item.full_name.slice(0, 2).toUpperCase()}
-                  {item.online && (
-                    <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white dark:border-[#15232A] bg-[#0EA5A4]" />
+                  <div
+                    className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
+                    style={{ background: item.color, color: "#FFFFFF" }}
+                  >
+                    {item.initials || item.full_name.slice(0, 2).toUpperCase()}
+                    {item.online && (
+                      <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white dark:border-[#15232A] bg-[#0EA5A4]" />
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p
+                      className={`consultant-name truncate text-[12px] font-semibold transition-colors ${
+                        isSelected
+                          ? "!text-white dark:!text-[#E8F2F6]"
+                          : "text-slate-900 dark:text-[#E8F2F6]"
+                      }`}
+                    >
+                      {item.full_name}
+                    </p>
+                    <p
+                      className={`consultant-role mt-0.5 text-[10px] capitalize transition-colors ${
+                        isSelected
+                          ? "!text-[#D5E4EC] dark:!text-[#A0B4BE]"
+                          : "text-slate-500 dark:text-[#A0B4BE]"
+                      }`}
+                    >
+                      {item.professional_type}
+                    </p>
+                  </div>
+                  {isSelected && (
+                    <ChevronRight
+                      className="ml-auto !text-white dark:!text-[#F3E308]"
+                      size={14}
+                    />
                   )}
-                </div>
-                <div className="min-w-0">
-                  <p className="truncate text-[12px] font-semibold text-slate-900 dark:text-[#E8F2F6]">
-                    {item.full_name}
-                  </p>
-                  <p className="mt-0.5 text-[10px] text-slate-500 dark:text-[#A0B4BE] capitalize">
-                    {item.professional_type}
-                  </p>
-                </div>
-                {hasSelectedConsultant && activeConsultantIdx === index && (
-                  <ChevronRight
-                    className="ml-auto text-[#2C4C5C] dark:text-[#F3E308]"
-                    size={14}
-                  />
-                )}
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </div>
 
           <div className="mt-2.5 flex items-center gap-1.5 rounded-lg border border-slate-200/60 dark:border-white/5 bg-slate-50/60 dark:bg-[#111D23]/60 px-2.5 py-1.5 text-[9.5px] text-slate-500 dark:text-[#8FA5B0]">
@@ -509,7 +524,7 @@ export default function ChatView({ language }: ChatViewProps) {
         </div>
 
         {/* Right Column: Chat Window or Specialist Selection */}
-        <div className="flex min-h-[520px] flex-col">
+        <div className="chat-thread-pane flex min-h-[520px] flex-col bg-transparent">
           {!hasSelectedConsultant ? (
             <div className="flex flex-1 flex-col items-center justify-center p-6 sm:p-10 text-center my-auto">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0EA5A4]/15 text-[#0EA5A4] mb-3">
@@ -593,7 +608,7 @@ export default function ChatView({ language }: ChatViewProps) {
           ) : consultant ? (
             <>
               {/* Chat Top Status Header */}
-              <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#243C47] px-5 py-3.5 bg-white/40 dark:bg-black/10">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#243C47] px-5 py-3.5 bg-transparent">
                 <div className="flex items-center gap-3">
                   <div
                     className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white shadow-xs"
@@ -684,7 +699,7 @@ export default function ChatView({ language }: ChatViewProps) {
               </div>
 
               {/* Linear Commonly Asked Questions List */}
-              <div className="border-t border-slate-200/80 dark:border-[#243C47] bg-slate-50/70 dark:bg-[#111D23] px-4 py-3">
+              <div className="border-t border-slate-200/80 dark:border-[#243C47] bg-transparent px-4 py-3">
                 <div className="flex items-center justify-between mb-2">
                   <button
                     type="button"
@@ -741,7 +756,7 @@ export default function ChatView({ language }: ChatViewProps) {
               </div>
 
               {/* Natural Chat Message Input */}
-              <div className="border-t border-slate-200/80 dark:border-[#243C47] p-3 sm:p-4 bg-white/60 dark:bg-[#15232A]">
+              <div className="border-t border-slate-200/80 dark:border-[#243C47] p-3 sm:p-4 bg-transparent">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
