@@ -802,25 +802,31 @@ export default function HomeView({
           <div className="max-w-[650px]">
             {/* Top telemetry badges */}
             <div className="mb-3 flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-yellow-400 dark:border-[#F3E308]/70 bg-[#FEE868] dark:bg-[#F3E308]/30 px-3.5 py-1 text-[11px] font-bold text-[#523600] dark:text-[#F3E308] shadow-xs">
-                <Sparkles size={12} className="text-[#854D0E] dark:text-[#F3E308]" />
+              {/* Telemetry Sensor Status Tag */}
+              <div className="inline-flex items-center gap-2 rounded-lg border border-yellow-400/90 dark:border-[#F3E308]/70 bg-[#FEE868] dark:bg-[#F3E308]/30 px-3 py-1 text-[11px] font-bold text-[#523600] dark:text-[#F3E308] shadow-xs cursor-default select-none">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-500 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-600 dark:bg-[#F3E308]" />
+                </span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#78350F] dark:text-[#F3E308]/80">Sensor:</span>
                 Micro-needle Telemetry Active
-              </span>
-              <span className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-[11px] font-bold transition ${
-                isPremium
-                  ? "border border-amber-300/80 dark:border-amber-500/30 bg-gradient-to-r from-amber-50 via-teal-50/60 to-emerald-50 dark:from-amber-950/40 dark:via-teal-950/30 dark:to-emerald-950/40 text-amber-900 dark:text-amber-300 shadow-xs"
-                  : "border border-slate-300 dark:border-white/20 bg-slate-200/90 dark:bg-[#1C2F38] text-slate-900 dark:text-[#E8F2F6] shadow-xs"
-              }`}>
+              </div>
+
+              {/* Account Plan Status Tag */}
+              <div className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-white/15 bg-slate-100/90 dark:bg-[#1C2F38] px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:text-[#D5E2E8] shadow-2xs cursor-default select-none">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-[#738C98]">Plan:</span>
                 {isPremium ? (
-                  <>
-                    <Crown size={12} className="text-amber-500 dark:text-amber-400" />
-                    <span>Premium Account</span>
-                  </>
+                  <span className="flex items-center gap-1 font-bold text-amber-600 dark:text-amber-400">
+                    <Crown size={12} />
+                    Premium
+                  </span>
                 ) : (
-                  <span>Free Version</span>
+                  <span className="font-bold">Free</span>
                 )}
-              </span>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-[#738C98]">
+              </div>
+
+              {/* Date */}
+              <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-[#738C98] select-none">
                 {dateStr}
               </span>
             </div>
@@ -835,25 +841,36 @@ export default function HomeView({
               </p>
             </div>
 
-            {/* Live Patch Status Pill */}
-            <div className="mt-3.5 flex flex-wrap items-center gap-2">
+            {/* Live Patch Telemetry Status Strip (Read-only Device Readout) */}
+            <div className="mt-3.5 inline-flex flex-wrap items-center gap-3 rounded-xl border border-slate-200/90 dark:border-[#243C47] bg-white/90 dark:bg-[#15232A]/80 px-3.5 py-1.5 text-xs text-slate-600 dark:text-[#A0B4BE] shadow-2xs cursor-default select-none">
               {patch ? (
                 <>
-                  <StatusPill icon={<Wifi size={12} />} tone={patch.connected ? "teal" : "coral"}>
-                    <span className="text-[12px]">{patch.connected ? t(language, "home.connected") : t(language, "home.disconnected")}</span>
-                  </StatusPill>
-                  <StatusPill icon={<BatteryMedium size={12} />} tone="purple">
-                    <span className="text-[12px] font-medium">Battery {patch.battery_percent ?? "—"}%</span>
-                  </StatusPill>
-                  <span className="flex items-center gap-1.5 px-1 text-[12px] text-slate-600 dark:text-[#A0B4BE]">
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <span className={`h-2 w-2 rounded-full ${patch.connected ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]" : "bg-rose-500"}`} />
+                    <Wifi size={12} className={patch.connected ? "text-emerald-600 dark:text-emerald-400" : "text-rose-500"} />
+                    <span className="text-[12px] font-semibold text-slate-700 dark:text-[#E8F2F6]">
+                      {patch.connected ? t(language, "home.connected") : t(language, "home.disconnected")}
+                    </span>
+                  </span>
+                  <span className="h-3 w-px bg-slate-200 dark:bg-white/15" />
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <BatteryMedium size={13} className="text-slate-400 dark:text-[#8FA5B1]" />
+                    <span className="text-[12px] font-medium text-slate-600 dark:text-[#C4D3DC]">
+                      Battery {patch.battery_percent ?? "—"}%
+                    </span>
+                  </span>
+                  <span className="h-3 w-px bg-slate-200 dark:bg-white/15" />
+                  <span className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-[#8FA5B1]">
                     <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
                     {t(language, "home.updated")}
                   </span>
                 </>
               ) : (
-                <StatusPill icon={<Wifi size={12} />} tone="coral">
+                <span className="flex items-center gap-1.5 font-medium text-rose-500">
+                  <span className="h-2 w-2 rounded-full bg-rose-500" />
+                  <Wifi size={12} />
                   <span className="text-[12px]">{t(language, "home.disconnected")}</span>
-                </StatusPill>
+                </span>
               )}
             </div>
 
@@ -868,8 +885,8 @@ export default function HomeView({
                 : "ISF Tracker huleta ishara zako za homoni, timu ya afya na maarifa ya muda mrefu pamoja katika nafasi moja tulivu na wazi."}
             </p>
 
-            {/* Action Buttons */}
-            <div className="mt-7 flex flex-wrap items-center gap-3">
+            {/* Action Buttons: Prominent Clickable Interactive Controls */}
+            <div className="mt-7 flex flex-wrap items-center gap-3.5">
               <button
                 type="button"
                 onClick={() => {
@@ -878,28 +895,28 @@ export default function HomeView({
                     el.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="group flex items-center gap-2 rounded-full bg-[#2C4C5C] dark:bg-[#F3E308] px-5 py-3 text-[12px] font-bold text-white dark:text-[#142229] shadow-[0_8px_20px_rgba(44,76,92,0.2)] dark:shadow-[0_8px_20px_rgba(243,227,8,0.25)] transition hover:-translate-y-0.5"
+                className="group flex items-center gap-2 rounded-full bg-[#2C4C5C] hover:bg-[#203743] dark:bg-[#F3E308] dark:hover:bg-[#d8c907] px-6 py-3.5 text-[13px] font-bold text-white dark:text-[#142229] shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 <span>{language === "en" ? "Open dashboard" : "Fungua dashibodi"}</span>
-                <ArrowUpRight size={15} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight size={16} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </button>
 
               <button
                 type="button"
                 onClick={() => setReportModalOpen(true)}
-                className="flex items-center gap-2 rounded-full border border-yellow-400 dark:border-[#F3E308]/70 bg-[#FEE868] hover:bg-[#FDD835] dark:bg-[#F3E308]/30 dark:hover:bg-[#F3E308]/40 px-5 py-3 text-[12px] font-extrabold text-[#523600] dark:text-[#F3E308] transition hover:-translate-y-0.5 shadow-xs cursor-pointer"
+                className="group flex items-center gap-2 rounded-full border border-yellow-400 dark:border-[#F3E308]/70 bg-[#FEE868] hover:bg-[#FDD835] dark:bg-[#F3E308]/30 dark:hover:bg-[#F3E308]/40 px-5 py-3.5 text-[13px] font-extrabold text-[#523600] dark:text-[#F3E308] shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
-                <FileText size={15} className="text-[#854D0E] dark:text-[#F3E308]" />
+                <FileText size={16} className="text-[#854D0E] dark:text-[#F3E308]" />
                 <span>Doctor Report (PDF)</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setView("chat")}
-                className="flex items-center gap-2 rounded-full border border-slate-300 dark:border-[#243C47] bg-slate-100/90 hover:bg-slate-200/90 dark:bg-[#1C2F38] dark:hover:bg-[#243C47] px-5 py-3 text-[12px] font-bold text-slate-900 dark:text-[#E8F2F6] transition hover:-translate-y-0.5 shadow-xs"
+                className="group flex items-center gap-2 rounded-full border border-slate-300 dark:border-[#243C47] bg-white hover:bg-slate-50 dark:bg-[#1C2F38] dark:hover:bg-[#243C47] px-5 py-3.5 text-[13px] font-bold text-slate-800 dark:text-[#E8F2F6] shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 <span>{language === "en" ? "Explore care spaces" : "Gundua huduma za afya"}</span>
-                <ChevronRight size={14} className="text-teal-600 dark:text-teal-300" />
+                <ChevronRight size={15} className="text-teal-600 dark:text-teal-300 transition group-hover:translate-x-0.5" />
               </button>
             </div>
 
