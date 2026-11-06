@@ -3,14 +3,14 @@ import { generateClientConsultantReply } from "./clinicalBotFallback";
 
 describe("generateClientConsultantReply", () => {
   const consultant = {
-    full_name: "Dr. Amina Patel",
-    professional_type: "Reproductive Endocrinologist",
+    full_name: "Dr. Brian Ochieng",
+    professional_type: "Endocrinologist",
   };
 
   it("responds to greetings with doctor introduction", () => {
-    const reply = generateClientConsultantReply(consultant, "Hello Dr. Amina!");
-    expect(reply).toContain("Dr. Amina Patel");
-    expect(reply).toContain("Reproductive Endocrinologist");
+    const reply = generateClientConsultantReply(consultant, "Hello Dr. Brian!");
+    expect(reply).toContain("Dr. Brian Ochieng");
+    expect(reply).toContain("Endocrinologist");
     expect(reply).toContain("telemetry");
   });
 

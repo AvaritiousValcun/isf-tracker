@@ -53,9 +53,9 @@ interface QrAccess {
 
 const DEFAULT_WELCOME_MESSAGES: Record<string, string> = {
   "375d31f5-c96f-4d11-8934-be6aec206f56":
-    "Hello! I am Dr. Amina Patel, your Reproductive Endocrinologist. I am monitoring your continuous ISF hormone readings and telemetry in real time. Your progesterone surge is currently tracking within normal secretory limits. How can I assist you with your cycle telemetry today?",
+    "Hello! I am Dr. Brian Ochieng, your Endocrinologist. I am monitoring your continuous ISF hormone readings and telemetry in real time. Your progesterone surge is currently tracking within normal secretory limits. How can I assist you with your cycle telemetry today?",
   "b4d81234-5678-4abc-9def-0123456789ab":
-    "Greetings, I'm Dr. David Kim, your OB/GYN clinical specialist. I have access to your continuous patch telemetry and luteal phase stability markers. What symptoms or questions would you like to review?",
+    "Hello! I am Dr. Sarah Chen, your Clinical Nutritionist. I am monitoring your metabolic trends and ISF biomarker stability. How can I help support your nutrition and hormonal balance today?",
   "c8e23456-789a-4bcd-ef01-23456789abcd":
     "Hello! I am Dr. Grace Wanjiku, your Gynecologist. I specialize in reproductive physiology, luteal phase adequacy, and hormone rhythm tracking. What aspects of your progesterone or free testosterone trends would you like to discuss today?",
 };
@@ -88,8 +88,15 @@ export default function ChatView({ language }: ChatViewProps) {
 
   // Guarantee all 3 core care team specialists (including Gynecologist) are always available
   const effectiveConsultants: ConsultantInfo[] = (() => {
-    const list = [...(consultants.length > 0 ? consultants : DEFAULT_CONSULTANTS)];
+    const rawList = [...(consultants.length > 0 ? consultants : DEFAULT_CONSULTANTS)];
     
+    // Explicitly exclude legacy starter consultants not in user requirements
+    const list = rawList.filter(
+      (c) =>
+        !c.full_name?.toLowerCase().includes("amina patel") &&
+        !c.full_name?.toLowerCase().includes("david kim")
+    );
+
     // Ensure that a Gynecologist specialist is ALWAYS available
     const hasGynecologist = list.some(
       (c) =>
@@ -736,7 +743,7 @@ export default function ChatView({ language }: ChatViewProps) {
                     onKeyDown={(e) =>
                       e.key === "Enter" && !e.shiftKey && handleSendMessage()
                     }
-                    placeholder="Ask Dr. Amina, Dr. David, or Dr. Grace about your hormones, cycle, or telemetry..."
+                    placeholder="Ask Dr. Brian, Dr. Sarah, or Dr. Grace about your hormones, cycle, or telemetry..."
                     className="min-w-0 flex-1 bg-transparent py-2 text-[12px] text-[#2C4C5C] dark:text-[#E8F2F6] outline-none placeholder:text-slate-500 dark:placeholder:text-[#738C98]"
                   />
                   <span className="hidden text-[10px] sm:flex items-center gap-1">

@@ -317,9 +317,9 @@ export function usePatch() {
 export const DEFAULT_CONSULTANTS: ConsultantSummary[] = [
   {
     id: "375d31f5-c96f-4d11-8934-be6aec206f56",
-    full_name: "Dr. Amina Patel",
-    professional_type: "Reproductive Endocrinologist",
-    initials: "AP",
+    full_name: "Dr. Brian Ochieng",
+    professional_type: "Endocrinologist",
+    initials: "BO",
     color: "#0EA5A4",
     online: true,
     status: "active",
@@ -336,10 +336,10 @@ export const DEFAULT_CONSULTANTS: ConsultantSummary[] = [
   },
   {
     id: "b4d81234-5678-4abc-9def-0123456789ab",
-    full_name: "Dr. David Kim",
-    professional_type: "Obstetrician & Gynecologist",
-    initials: "DK",
-    color: "#2C4C5C",
+    full_name: "Dr. Sarah Chen",
+    professional_type: "Clinical Nutritionist",
+    initials: "SC",
+    color: "#10B981",
     online: true,
     status: "active",
     consent_status: "granted",
@@ -417,7 +417,13 @@ export function useConsultants() {
           );
 
         if (Array.isArray(result) && result.length > 0) {
-          const merged = [...result];
+          // Explicitly exclude legacy starter consultants not in user requirements
+          const cleaned = result.filter(
+            (c) =>
+              !c.full_name?.toLowerCase().includes("amina patel") &&
+              !c.full_name?.toLowerCase().includes("david kim")
+          );
+          const merged = [...cleaned];
           const hasGynecologist = merged.some(
             (c) =>
               c.professional_type?.toLowerCase().includes("gynecologist") ||
@@ -486,7 +492,7 @@ export function useConsultants() {
 
 export const DEFAULT_CONVERSATIONS: Conversation[] = [
   {
-    id: "conv-default-amina",
+    id: "conv-default-brian",
     patient_user_id: "00000000-0000-4000-a000-000000000001",
     consultant_id: "375d31f5-c96f-4d11-8934-be6aec206f56",
     status: "active",
@@ -494,7 +500,7 @@ export const DEFAULT_CONVERSATIONS: Conversation[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "conv-default-david",
+    id: "conv-default-sarah",
     patient_user_id: "00000000-0000-4000-a000-000000000001",
     consultant_id: "b4d81234-5678-4abc-9def-0123456789ab",
     status: "active",

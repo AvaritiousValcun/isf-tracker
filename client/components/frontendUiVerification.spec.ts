@@ -32,20 +32,20 @@ describe("Frontend UI & User Interface Elements Verification", () => {
   });
 
   describe("Care Team & Consultant AI Bots", () => {
-    it("has Dr. Amina Patel, Dr. David Kim, and Dr. Grace Wanjiku active by default", () => {
+    it("has Dr. Brian Ochieng, Dr. Sarah Chen, and Dr. Grace Wanjiku active by default", () => {
       expect(DEFAULT_CONSULTANTS).toHaveLength(3);
 
-      const amina = DEFAULT_CONSULTANTS.find((c) => c.full_name === "Dr. Amina Patel");
-      expect(amina).toBeDefined();
-      expect(amina?.professional_type).toBe("Reproductive Endocrinologist");
-      expect(amina?.consent_status).toBe("granted");
-      expect(amina?.online).toBe(true);
+      const brian = DEFAULT_CONSULTANTS.find((c) => c.full_name === "Dr. Brian Ochieng");
+      expect(brian).toBeDefined();
+      expect(brian?.professional_type).toBe("Endocrinologist");
+      expect(brian?.consent_status).toBe("granted");
+      expect(brian?.online).toBe(true);
 
-      const david = DEFAULT_CONSULTANTS.find((c) => c.full_name === "Dr. David Kim");
-      expect(david).toBeDefined();
-      expect(david?.professional_type).toBe("Obstetrician & Gynecologist");
-      expect(david?.consent_status).toBe("granted");
-      expect(david?.online).toBe(true);
+      const sarah = DEFAULT_CONSULTANTS.find((c) => c.full_name === "Dr. Sarah Chen");
+      expect(sarah).toBeDefined();
+      expect(sarah?.professional_type).toBe("Clinical Nutritionist");
+      expect(sarah?.consent_status).toBe("granted");
+      expect(sarah?.online).toBe(true);
 
       const grace = DEFAULT_CONSULTANTS.find((c) => c.full_name === "Dr. Grace Wanjiku");
       expect(grace).toBeDefined();

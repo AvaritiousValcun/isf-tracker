@@ -207,16 +207,16 @@ describe("All Tabs, Buttons, Dialogs, and Interactive Controls Verification", ()
      3. CHAT TAB - SPECIALIST SELECTION & BOT CONVERSATION
   ========================================================= */
   describe("Chat Tab - Care Team Specialists & Simulated Bot Conversation", () => {
-    it("verifies all 3 specialists are available: Endocrinologist, OB/GYN, and Gynecologist", () => {
+    it("verifies all 3 specialists are available: Endocrinologist, Nutritionist, and Gynecologist", () => {
       expect(DEFAULT_CONSULTANTS).toHaveLength(3);
 
-      const [patel, kim, wanjiku] = DEFAULT_CONSULTANTS;
+      const [ochieng, chen, wanjiku] = DEFAULT_CONSULTANTS;
 
-      expect(patel.full_name).toBe("Dr. Amina Patel");
-      expect(patel.professional_type).toBe("Reproductive Endocrinologist");
+      expect(ochieng.full_name).toBe("Dr. Brian Ochieng");
+      expect(ochieng.professional_type).toBe("Endocrinologist");
 
-      expect(kim.full_name).toBe("Dr. David Kim");
-      expect(kim.professional_type).toBe("Obstetrician & Gynecologist");
+      expect(chen.full_name).toBe("Dr. Sarah Chen");
+      expect(chen.professional_type).toBe("Clinical Nutritionist");
 
       expect(wanjiku.full_name).toBe("Dr. Grace Wanjiku");
       expect(wanjiku.professional_type).toBe("Gynecologist");
@@ -236,13 +236,13 @@ describe("All Tabs, Buttons, Dialogs, and Interactive Controls Verification", ()
       const serverPartial = [
         {
           id: "375d31f5-c96f-4d11-8934-be6aec206f56",
-          full_name: "Dr. Amina Patel",
-          professional_type: "Reproductive Endocrinologist",
+          full_name: "Dr. Brian Ochieng",
+          professional_type: "Endocrinologist",
         },
         {
           id: "b4d81234-5678-4abc-9def-0123456789ab",
-          full_name: "Dr. David Kim",
-          professional_type: "Obstetrician & Gynecologist",
+          full_name: "Dr. Sarah Chen",
+          professional_type: "Clinical Nutritionist",
         },
       ];
 
@@ -274,10 +274,10 @@ describe("All Tabs, Buttons, Dialogs, and Interactive Controls Verification", ()
       expect(activeIndex).toBe(2);
       expect(DEFAULT_CONSULTANTS[activeIndex].full_name).toBe("Dr. Grace Wanjiku");
 
-      // Switch to Dr. Amina Patel (index 0)
+      // Switch to Dr. Brian Ochieng (index 0)
       selectSpecialist(0);
       expect(activeIndex).toBe(0);
-      expect(DEFAULT_CONSULTANTS[activeIndex].full_name).toBe("Dr. Amina Patel");
+      expect(DEFAULT_CONSULTANTS[activeIndex].full_name).toBe("Dr. Brian Ochieng");
     });
 
     it("verifies all curated FAQ question buttons trigger authoritative matching answers", () => {

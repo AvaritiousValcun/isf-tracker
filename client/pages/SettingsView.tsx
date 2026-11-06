@@ -355,7 +355,12 @@ export default function SettingsView({
             ? consultantData.consultants
             : [];
 
-        const merged = [...raw];
+        const cleaned = raw.filter(
+          (c: any) =>
+            !c.full_name?.toLowerCase().includes("amina patel") &&
+            !c.full_name?.toLowerCase().includes("david kim")
+        );
+        const merged = [...cleaned];
         const hasGynecologist = merged.some(
           (c: any) =>
             c.professional_type?.toLowerCase().includes("gynecologist") ||

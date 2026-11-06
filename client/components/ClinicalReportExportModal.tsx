@@ -215,8 +215,8 @@ Date:           ______________________________________
 
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-[#738C98]">Care Team Review</p>
-              <p className="text-sm font-bold text-slate-900 dark:text-white print:text-black mt-0.5">Dr. Amina Patel</p>
-              <p className="text-[11px] text-slate-500 dark:text-[#A0B4BE]">Reproductive Endocrinology</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-white print:text-black mt-0.5">Dr. Grace Wanjiku</p>
+              <p className="text-[11px] text-slate-500 dark:text-[#A0B4BE]">Gynecology &amp; Reproductive Health</p>
             </div>
           </div>
 
@@ -258,7 +258,7 @@ Date:           ______________________________________
                   </tr>
 
                   <tr className="hover:bg-slate-50 dark:hover:bg-[#15232A]/50">
-                    <td className="py-2.5 px-3 font-semibold text-[#7C3AED]">Free Testosterone</td>
+                    <td className="py-2.5 px-3 font-semibold text-[#D97706]">Free Testosterone</td>
                     <td className="py-2.5 px-3">38.2 ng/dL</td>
                     <td className="py-2.5 px-3 font-medium">41.6 ng/dL</td>
                     <td className="py-2.5 px-3 text-slate-500 dark:text-[#A0B4BE]">&lt; 45.0 ng/dL (Normal)</td>
@@ -293,7 +293,7 @@ Date:           ______________________________________
 
               <div className="rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#15232A] p-3 print:border-slate-200">
                 <span className="text-[10px] font-semibold text-slate-400 uppercase">Free Testosterone Velocity</span>
-                <p className="text-base font-bold text-[#7C3AED] mt-0.5">+0.2 ng/dL/day</p>
+                <p className="text-base font-bold text-[#D97706] mt-0.5">+0.2 ng/dL/day</p>
                 <p className="text-[11px] text-slate-500 mt-1">
                   Stable non-escalating baseline profile within normal safety margins.
                 </p>

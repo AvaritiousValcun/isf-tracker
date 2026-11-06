@@ -1395,9 +1395,9 @@ router2.get(
         return res.json([
           {
             id: "375d31f5-c96f-4d11-8934-be6aec206f56",
-            full_name: "Dr. Amina Patel",
-            professional_type: "Reproductive Endocrinologist",
-            initials: "AP",
+            full_name: "Dr. Brian Ochieng",
+            professional_type: "Endocrinologist",
+            initials: "BO",
             color: "#0EA5A4",
             online: true,
             status: "active",
@@ -1408,10 +1408,10 @@ router2.get(
           },
           {
             id: "b4d81234-5678-4abc-9def-0123456789ab",
-            full_name: "Dr. David Kim",
-            professional_type: "Obstetrician & Gynecologist",
-            initials: "DK",
-            color: "#2C4C5C",
+            full_name: "Dr. Sarah Chen",
+            professional_type: "Clinical Nutritionist",
+            initials: "SC",
+            color: "#10B981",
             online: true,
             status: "active",
             consent_status: "granted",
@@ -1464,7 +1464,9 @@ router2.get(
           relationship_status: relationship.status,
           started_at: relationship.started_at
         };
-      }).filter(Boolean);
+      }).filter(Boolean).filter(
+        (c) => !c.full_name?.toLowerCase().includes("amina patel") && !c.full_name?.toLowerCase().includes("david kim")
+      );
       const hasGrace = enriched.some(
         (c) => c.id === "c8e23456-789a-4bcd-ef01-23456789abcd" || c.full_name?.toLowerCase().includes("grace wanjiku") || c.professional_type?.toLowerCase() === "gynecologist"
       );

@@ -243,15 +243,15 @@ export default function HormoneVelocityForecast({
 
         <div className={`rounded-2xl border p-4 transition ${
           showPremium
-            ? "border-purple-200/70 dark:border-purple-900/40 bg-gradient-to-b from-purple-50/40 to-white dark:from-purple-950/25 dark:to-[#111D23] shadow-xs"
+            ? "border-amber-200/70 dark:border-amber-900/40 bg-gradient-to-b from-amber-50/40 to-white dark:from-amber-950/25 dark:to-[#111D23] shadow-xs"
             : "border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23]"
         }`}>
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase text-slate-400">Free Testosterone Velocity</span>
-            <span className="h-2 w-2 rounded-full bg-[#7C3AED]" />
+            <span className="h-2 w-2 rounded-full bg-amber-500" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#7C3AED]">+0.1</span>
+            <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">+0.1</span>
             <span className="text-xs text-slate-500">pg/mL/day</span>
           </div>
           <p className="mt-1 text-[11px] text-slate-600 dark:text-[#A0B4BE]">
@@ -311,7 +311,7 @@ export default function HormoneVelocityForecast({
                 yAxisId="freeTestosterone"
                 orientation="right"
                 domain={[0, 8]}
-                tick={{ fontSize: 10, fill: "#7C3AED" }}
+                tick={{ fontSize: 10, fill: "#D97706" }}
                 axisLine={false}
                 tickLine={false}
                 width={40}
@@ -332,7 +332,7 @@ export default function HormoneVelocityForecast({
                         <span className="font-bold">{item?.progesterone} ng/mL</span>
                       </div>
                       <div className="flex items-center justify-between gap-4">
-                        <span className="text-[#7C3AED] font-semibold">Free Testosterone (FT):</span>
+                        <span className="text-amber-600 dark:text-amber-400 font-semibold">Free Testosterone (FT):</span>
                         <span className="font-bold">{item?.freeTestosterone} pg/mL</span>
                       </div>
                       <div className="text-[10px] text-slate-400 pt-1 border-t border-slate-100 dark:border-white/5">
@@ -380,11 +380,11 @@ export default function HormoneVelocityForecast({
                 type="monotone"
                 dataKey="freeTestosterone"
                 name="Free Testosterone (pg/mL)"
-                stroke="#7C3AED"
+                stroke="#D97706"
                 strokeWidth={3}
                 strokeDasharray="4 4"
-                dot={{ r: 4, fill: "#7C3AED", stroke: "#FFFFFF", strokeWidth: 2 }}
-                activeDot={{ r: 7, fill: "#7C3AED", stroke: "#FFFFFF", strokeWidth: 3 }}
+                dot={{ r: 4, fill: "#D97706", stroke: "#FFFFFF", strokeWidth: 2 }}
+                activeDot={{ r: 7, fill: "#D97706", stroke: "#FFFFFF", strokeWidth: 3 }}
               />
             </ComposedChart>
           </ResponsiveContainer>
@@ -419,7 +419,7 @@ export default function HormoneVelocityForecast({
             <span className="h-2 w-2 rounded-full bg-[#0EA5A4]" /> Progesterone Velocity (&Delta;P4)
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#7C3AED]" /> Free Testosterone Velocity (&Delta;FT)
+            <span className="h-2 w-2 rounded-full bg-amber-500" /> Free Testosterone Velocity (&Delta;FT)
           </span>
           <span className="flex items-center gap-1.5">
             <span className="h-2 w-4 rounded-xs bg-[#0EA5A4]/20" /> 95% Bayesian Confidence Corridor

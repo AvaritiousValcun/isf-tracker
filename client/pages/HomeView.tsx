@@ -536,18 +536,18 @@ function HormoneChart({
               "home.androgen"
             )}
             yAxisId="hormone"
-            stroke="#7C3AED"
+            stroke="#D97706"
             strokeWidth={3}
             dot={{
               r: 3,
-              fill: "#7C3AED",
+              fill: "#D97706",
               strokeWidth: 2,
               stroke:
                 "#FFFFFF",
             }}
             activeDot={{
               r: 7,
-              fill: "#7C3AED",
+              fill: "#D97706",
               stroke:
                 "#FFFFFF",
               strokeWidth: 3,
@@ -1103,7 +1103,7 @@ export default function HomeView({
                   : "—"
               }
               unit="nmol/L"
-              color="purple"
+              color="gold"
               change={
                 androgenChange !==
                 0
@@ -1383,7 +1383,7 @@ export default function HomeView({
                         : "Within range"
                     : "—"
                 }
-                color="purple"
+                color="gold"
               />
 
               <InsightRow
@@ -1412,7 +1412,7 @@ export default function HomeView({
                     ? activeEvent.event_type
                     : "Stable"
                 }
-                color="teal"
+                color="purple"
               />
             </div>
 
@@ -1458,6 +1458,7 @@ function ReadingCard({
   value: string;
   unit: string;
   color:
+    | "gold"
     | "purple"
     | "coral";
   change: string;
@@ -1468,8 +1469,9 @@ function ReadingCard({
         <p className="flex items-center gap-2 text-[12px] font-medium text-slate-600 dark:text-[#A0B4BE]">
           <span
             className={`h-2 w-2 rounded-full ${
-              color ===
-              "purple"
+              color === "gold"
+                ? "bg-amber-500"
+                : color === "purple"
                 ? "bg-violet-600"
                 : "bg-teal-500"
             }`}
@@ -1505,27 +1507,37 @@ function InsightRow({
 }: {
   label: string;
   value: string;
-  color: string;
+  color: "gold" | "purple" | "coral" | string;
 }) {
+  const dotColor =
+    color === "gold"
+      ? "bg-amber-500"
+      : color === "purple"
+      ? "bg-violet-600"
+      : "bg-teal-500";
+
+  const labelColor =
+    color === "gold"
+      ? "text-amber-700 dark:text-amber-400 font-medium"
+      : color === "purple"
+      ? "text-violet-700 dark:text-violet-400 font-medium"
+      : "text-slate-600 dark:text-[#A0B4BE]";
+
+  const valueColor =
+    color === "gold"
+      ? "text-amber-800 dark:text-amber-300 font-semibold"
+      : color === "purple"
+      ? "text-violet-800 dark:text-violet-300 font-semibold"
+      : "font-medium text-slate-800 dark:text-[#E8F2F6]";
+
   return (
     <div className="flex items-center justify-between text-[13px]">
-      <span className="flex items-center gap-2 text-slate-600 dark:text-[#A0B4BE]">
-        <span
-          className={`h-1.5 w-1.5 rounded-full ${
-            color ===
-            "purple"
-              ? "bg-violet-600"
-              : color ===
-                "coral"
-              ? "bg-teal-500"
-              : "bg-amber-500"
-          }`}
-        />
-
+      <span className={`flex items-center gap-2 ${labelColor}`}>
+        <span className={`h-1.5 w-1.5 rounded-full ${dotColor}`} />
         {label}
       </span>
 
-      <span className="font-medium text-slate-800 dark:text-[#E8F2F6]">
+      <span className={valueColor}>
         {value}
       </span>
     </div>

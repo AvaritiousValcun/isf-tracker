@@ -2,25 +2,25 @@ import { describe, it, expect } from "vitest";
 import { ConsultantAiService, type ConsultantContext } from "./consultantAiService";
 
 describe("ConsultantAiService - Care Team AI Bot", () => {
-  const drAmina: ConsultantContext = {
+  const drBrian: ConsultantContext = {
     id: "375d31f5-c96f-4d11-8934-be6aec206f56",
-    full_name: "Dr. Amina Patel",
-    professional_type: "Reproductive Endocrinologist",
-    initials: "AP",
+    full_name: "Dr. Brian Ochieng",
+    professional_type: "Endocrinologist",
+    initials: "BO",
   };
 
-  const drDavid: ConsultantContext = {
-    id: "b4d81234-5678-4abc-9def-0123456789ab",
-    full_name: "Dr. David Kim",
-    professional_type: "Obstetrician & Gynecologist",
-    initials: "DK",
+  const drGrace: ConsultantContext = {
+    id: "c8e23456-789a-4bcd-ef01-23456789abcd",
+    full_name: "Dr. Grace Wanjiku",
+    professional_type: "Gynecologist",
+    initials: "GW",
   };
 
   const testPatientUserId = "test-patient-user-5678";
 
   it("should generate a welcoming clinical greeting identifying the consultant", async () => {
     const reply = await ConsultantAiService.generateReply(
-      drAmina,
+      drBrian,
       testPatientUserId,
       "Hello doctor, I just joined the app!"
     );
@@ -28,13 +28,13 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
     expect(reply).toBeDefined();
     expect(typeof reply).toBe("string");
     expect(reply.length).toBeGreaterThan(20);
-    expect(reply).toContain("Dr. Amina Patel");
+    expect(reply).toContain("Dr. Brian Ochieng");
     expect(reply.toLowerCase()).toMatch(/isf|hormone|telemetry|reading/);
   });
 
   it("should answer progesterone and luteal phase questions with clinical guidance", async () => {
     const reply = await ConsultantAiService.generateReply(
-      drAmina,
+      drBrian,
       testPatientUserId,
       "What do my progesterone levels mean for my luteal phase?"
     );
@@ -47,7 +47,7 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
 
   it("should respond to androgen elevation and acne questions as an endocrinologist", async () => {
     const reply = await ConsultantAiService.generateReply(
-      drAmina,
+      drBrian,
       testPatientUserId,
       "My androgen reading spiked and I'm getting acne on my chin"
     );
@@ -58,21 +58,21 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
     expect(reply.toLowerCase()).toMatch(/trend|average|moving|monitor|observe/);
   });
 
-  it("should provide specialized OB/GYN advice for Dr. David Kim", async () => {
+  it("should provide specialized gynecological advice for Dr. Grace Wanjiku", async () => {
     const reply = await ConsultantAiService.generateReply(
-      drDavid,
+      drGrace,
       testPatientUserId,
       "I have pelvic cramps and want to know if it is normal for my cycle phase"
     );
 
     expect(reply).toBeDefined();
     expect(typeof reply).toBe("string");
-    expect(reply.toLowerCase()).toMatch(/discomfort|prostaglandin|fluctuation|cycle|symptom/);
+    expect(reply.toLowerCase()).toMatch(/discomfort|prostaglandin|fluctuation|cycle|symptom|cramp/);
   });
 
   it("should guide patients on PCOS / PMOS predictive risk indicators", async () => {
     const reply = await ConsultantAiService.generateReply(
-      drAmina,
+      drBrian,
       testPatientUserId,
       "My dashboard shows a PMOS/PCOS risk percentage, what should I do?"
     );
@@ -84,7 +84,7 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
 
   it("should troubleshoot sensor patch adhesion and telemetry connectivity", async () => {
     const reply = await ConsultantAiService.generateReply(
-      drDavid,
+      drGrace,
       testPatientUserId,
       "My ISF patch sensor battery is at 88% and I want to make sure it's transmitting"
     );
@@ -101,7 +101,7 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
     ];
 
     const reply = await ConsultantAiService.generateReply(
-      drAmina,
+      drBrian,
       testPatientUserId,
       "My androgen value seems slightly higher than last week",
       history
@@ -115,7 +115,7 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
   describe("Curated Clinical FAQ hardcoded matches", () => {
     it("should match 'How are my latest hormone readings?' with accurate clinical telemetry answers", async () => {
       const reply = await ConsultantAiService.generateReply(
-        drAmina,
+        drBrian,
         testPatientUserId,
         "How are my latest hormone readings?"
       );
@@ -126,7 +126,7 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
 
     it("should match 'What do my progesterone levels indicate?' with ovulatory confirmation", async () => {
       const reply = await ConsultantAiService.generateReply(
-        drAmina,
+        drBrian,
         testPatientUserId,
         "What do my progesterone levels indicate?"
       );
@@ -137,7 +137,7 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
 
     it("should match 'Can you explain my androgen pattern?' with stable baseline details", async () => {
       const reply = await ConsultantAiService.generateReply(
-        drAmina,
+        drBrian,
         testPatientUserId,
         "Can you explain my androgen pattern?"
       );
@@ -147,7 +147,7 @@ describe("ConsultantAiService - Care Team AI Bot", () => {
 
     it("should match 'What lifestyle adjustments support my current cycle phase?' with clinical recommendations", async () => {
       const reply = await ConsultantAiService.generateReply(
-        drAmina,
+        drBrian,
         testPatientUserId,
         "What lifestyle adjustments support my current cycle phase?"
       );
