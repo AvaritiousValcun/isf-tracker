@@ -441,7 +441,7 @@ export default function ChatView({ language }: ChatViewProps) {
       )}
 
       {/* Main Grid: Consultant Selector + Chat Thread */}
-      <div className="grid overflow-hidden rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] lg:grid-cols-[280px_minmax(0,1fr)] shadow-sm">
+      <div className="chat-main-card grid overflow-hidden rounded-[24px] border border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] lg:grid-cols-[280px_minmax(0,1fr)] shadow-sm">
         
         {/* Left Column: Consultant List */}
         <div className="border-b border-slate-200 dark:border-[#243C47] p-3 lg:border-b-0 lg:border-r">
@@ -520,7 +520,7 @@ export default function ChatView({ language }: ChatViewProps) {
                 Choose a specialist below to begin your personalized consultation regarding continuous ISF hormone readings, luteal velocity, and cycle patterns.
               </p>
 
-              <div className="mt-7 grid w-full max-w-[880px] gap-4 sm:grid-cols-2 lg:grid-cols-3 text-left">
+              <div className="consultants-grid mt-7 grid w-full max-w-[880px] gap-4 sm:grid-cols-2 lg:grid-cols-3 text-left !bg-transparent !border-none !shadow-none">
                 {effectiveConsultants.map((item, idx) => (
                   <div
                     key={item.id}

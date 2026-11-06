@@ -376,13 +376,20 @@ body {
 #dashboard section,
 #dashboard .rounded-\[24px\],
 #dashboard .rounded-2xl,
-#chat .grid,
+#chat .chat-main-card,
+#chat > .page-enter > div.grid,
 #predictive section,
 .settings-card {
   border: 1px solid var(--border-light) !important;
   background: var(--surface) !important;
   background-image: none !important;
   box-shadow: var(--shadow-soft) !important;
+}
+
+#chat .consultants-grid {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 .welcome-section .welcome-value { background: var(--surface-alt) !important; }
 .welcome-section .welcome-brand-art > div:last-child { background: linear-gradient(145deg, var(--blue), var(--muted-blue)) !important; color: #FFFFFF !important; box-shadow: var(--shadow-float) !important; }
@@ -449,8 +456,10 @@ body {
 :root.dark #dashboard .rounded-\[24px\],
 :root[data-theme="dark"] #dashboard .rounded-2xl,
 :root.dark #dashboard .rounded-2xl,
-:root[data-theme="dark"] #chat .grid,
-:root.dark #chat .grid,
+:root[data-theme="dark"] #chat .chat-main-card,
+:root.dark #chat .chat-main-card,
+:root[data-theme="dark"] #chat > .page-enter > div.grid,
+:root.dark #chat > .page-enter > div.grid,
 :root[data-theme="dark"] #predictive section,
 :root.dark #predictive section,
 :root[data-theme="dark"] .settings-card,
