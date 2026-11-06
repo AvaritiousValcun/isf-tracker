@@ -382,7 +382,7 @@ export default function ChatView({ language }: ChatViewProps) {
   }
 
   return (
-    <div className="page-enter mx-auto max-w-[820px] px-4 pb-10 pt-6 sm:px-6 lg:pt-8">
+    <div className="page-enter w-full max-w-5xl mx-auto p-4 md:p-6 pb-12">
       {/* Attached Main Card: Header + (Consultant Selector + Chat Thread) */}
       <div className="chat-main-card overflow-hidden rounded-[24px] border border-slate-300 dark:border-[#243C47] dark:bg-[#15232A] shadow-2xl">
         {/* Attached Top Header Bar */}
@@ -443,7 +443,7 @@ export default function ChatView({ language }: ChatViewProps) {
         )}
 
         {/* Main Grid: Consultant Selector + Chat Thread */}
-        <div className="grid lg:grid-cols-[250px_minmax(0,1fr)]">
+        <div className="grid lg:grid-cols-[280px_minmax(0,1fr)]">
           {/* Left Column: Consultant List */}
         <div className="border-b border-slate-200 dark:border-[#243C47] p-3 lg:border-b-0 lg:border-r">
           <p className="px-3 pb-3 pt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-[#738C98]">

@@ -318,7 +318,7 @@ export default function PredictiveView() {
   };
 
   return (
-    <div className="page-enter mx-auto max-w-[820px] px-4 pb-10 pt-6 sm:px-6 lg:pt-8 space-y-6">
+    <div className="page-enter w-full max-w-5xl mx-auto p-4 md:p-6 space-y-8">
       {/* Attached Top Header Tab Card */}
       <div className="predictive-header-card rounded-[24px] border border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] p-5 sm:p-6 shadow-xl space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-1">
