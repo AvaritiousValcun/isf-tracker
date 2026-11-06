@@ -25,19 +25,49 @@ export default function ISFPatch3DHero({
     let animId: number;
     let time = 0;
 
-    // Ambient floating particles (hormone analytes matching chart colors)
-    // 0: Progesterone (Greenish-Blue / Teal #0EA5A4)
-    // 1: Free Testosterone (Orange / Gold #F59E0B)
-    // 2: Trend / ISF Kinetic (Purple #7C3AED)
-    const particles = Array.from({ length: 36 }).map((_, i) => ({
-      angle: (i / 36) * Math.PI * 2,
-      dist: 110 + Math.random() * 80,
-      yOffset: (Math.random() - 0.5) * 60,
-      speed: 0.008 + Math.random() * 0.012,
-      size: 2.5 + Math.random() * 3.5,
-      color: i % 3 === 0 ? "#0EA5A4" : i % 3 === 1 ? "#F59E0B" : "#7C3AED",
-      label: i % 3 === 0 ? "P4" : i % 3 === 1 ? "FT" : "ISF",
-    }));
+    // Ambient floating particles (hormone analytes matching 3D hormone elements)
+    // Sourced directly from Three.js hormone atom materials (Carbon #9333EA, Oxygen #FB923C, Hydrogen #2DD4BF)
+    const HORMONE_SPECIES = [
+      {
+        name: "Carbon / Progesterone",
+        label: "P4",
+        color: "#9333EA",
+        highlight: "#F5D0FE",
+        dark: "#3B0764",
+        glow: "rgba(147, 51, 234, 0.85)",
+        shadowColor: "#9333EA",
+      },
+      {
+        name: "Oxygen / Androgen",
+        label: "FT",
+        color: "#FB923C",
+        highlight: "#FFEDD5",
+        dark: "#9A3412",
+        glow: "rgba(251, 146, 60, 0.85)",
+        shadowColor: "#FB923C",
+      },
+      {
+        name: "Hydrogen / ISF Telemetry",
+        label: "ISF",
+        color: "#2DD4BF",
+        highlight: "#CCFBF1",
+        dark: "#115E59",
+        glow: "rgba(45, 212, 191, 0.85)",
+        shadowColor: "#2DD4BF",
+      },
+    ];
+
+    const particles = Array.from({ length: 38 }).map((_, i) => {
+      const species = HORMONE_SPECIES[i % 3];
+      return {
+        angle: (i / 38) * Math.PI * 2,
+        dist: 108 + Math.random() * 85,
+        yOffset: (Math.random() - 0.5) * 65,
+        speed: 0.007 + Math.random() * 0.012,
+        size: 3.4 + Math.random() * 3.4,
+        ...species,
+      };
+    });
 
     const render = () => {
       time += 0.018;
@@ -81,6 +111,62 @@ export default function ISFPatch3DHero({
         };
       };
 
+      // Render 3D shaded hormone atom particle with specular glint, saturated core, and emissive glow
+      const drawHormoneDot = (
+        p: (typeof particles)[0],
+        projX: number,
+        projY: number,
+        scale: number,
+        isForeground: boolean
+      ) => {
+        const r = Math.max(2.2, p.size * scale);
+        ctx.save();
+
+        // 1. Emissive glow halo matching 3D hormone atom radiance
+        ctx.shadowColor = p.shadowColor;
+        ctx.shadowBlur = isForeground ? Math.round(18 * scale) : Math.round(10 * scale);
+        ctx.globalAlpha = isForeground ? 1.0 : Math.min(0.85, 0.65 + 0.25 * scale);
+
+        // 2. Soft outer radial radiance (eliminates washed-out look)
+        const haloGrad = ctx.createRadialGradient(projX, projY, r * 0.3, projX, projY, r * 2.2);
+        haloGrad.addColorStop(0, p.glow);
+        haloGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.beginPath();
+        ctx.arc(projX, projY, r * 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = haloGrad;
+        ctx.fill();
+
+        // 3. Volumetric 3D Shaded Sphere (specular glint + vibrant hormone atom color + rim shadow)
+        const sphereGrad = ctx.createRadialGradient(
+          projX - r * 0.35,
+          projY - r * 0.35,
+          r * 0.08,
+          projX,
+          projY,
+          r
+        );
+        sphereGrad.addColorStop(0, "#FFFFFF");          // 3D Specular reflection glint
+        sphereGrad.addColorStop(0.25, p.highlight);     // Tinted specular highlight
+        sphereGrad.addColorStop(0.68, p.color);         // Saturated 3D hormone color
+        sphereGrad.addColorStop(1.0, p.dark);           // Three.js-style rim shadow
+
+        ctx.beginPath();
+        ctx.arc(projX, projY, r, 0, Math.PI * 2);
+        ctx.fillStyle = sphereGrad;
+        ctx.fill();
+
+        // 4. Foreground Analyte Label (crisp, high-contrast)
+        if (isForeground && scale > 0.82) {
+          ctx.font = "bold 9.5px sans-serif";
+          ctx.fillStyle = p.highlight;
+          ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
+          ctx.shadowBlur = 4;
+          ctx.fillText(p.label, projX + r + 3, projY + 3.5);
+        }
+
+        ctx.restore();
+      };
+
       // 1. Soft 3D Drop Shadow on Ground
       const shadowY = cy + 110;
       const shadowScale = 1 - Math.sin(time * 1.5) * 0.08;
@@ -105,15 +191,7 @@ export default function ISFPatch3DHero({
 
         const proj = project(px, py, pz);
         if (proj.z < 0) {
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(proj.px, proj.py, p.size * proj.scale, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = 0.45 * proj.scale;
-          ctx.shadowColor = p.color;
-          ctx.shadowBlur = 8;
-          ctx.fill();
-          ctx.restore();
+          drawHormoneDot(p, proj.px, proj.py, proj.scale, false);
         }
       });
 
@@ -189,14 +267,14 @@ export default function ISFPatch3DHero({
         ctx.lineTo(ledPoints[s].px, ledPoints[s].py);
       }
       ctx.closePath();
-      ctx.strokeStyle = "rgba(14, 165, 164, 0.9)"; // Greenish-blue / Teal
+      ctx.strokeStyle = "rgba(45, 212, 191, 0.95)"; // Luminous Teal / Hydrogen
       ctx.lineWidth = 3.2;
-      ctx.shadowColor = "#0EA5A4";
-      ctx.shadowBlur = 12;
+      ctx.shadowColor = "#2DD4BF";
+      ctx.shadowBlur = 14;
       ctx.stroke();
       ctx.restore();
 
-      // 5. Central Sensing Micro-needle Module (Whitish Core with Chart Gold & Purple Accents)
+      // 5. Central Sensing Micro-needle Module (Whitish Core with 3D Hormone Accents)
       const coreCenter = project(0, -thickness / 2 - 1, 0);
       const innerRadius = 38;
       const innerPoints = [];
@@ -225,37 +303,37 @@ export default function ISFPatch3DHero({
       coreGrad.addColorStop(1, "#E2E8F0");
       ctx.fillStyle = coreGrad;
       ctx.fill();
-      ctx.strokeStyle = "rgba(245, 158, 11, 0.85)"; // Orange/Gold chart accent ring
+      ctx.strokeStyle = "rgba(251, 146, 60, 0.9)"; // Oxygen / Amber accent ring
       ctx.lineWidth = 2;
-      ctx.shadowColor = "#F59E0B";
+      ctx.shadowColor = "#FB923C";
       ctx.shadowBlur = 8;
       ctx.stroke();
 
-      // Pulsing Center Biosensor Dot (Orange/Gold)
+      // Pulsing Center Biosensor Dot (Oxygen / Amber)
       const pulse = Math.sin(time * 3) * 0.4 + 0.6;
       ctx.beginPath();
       ctx.arc(coreCenter.px, coreCenter.py, 6.5 * coreCenter.scale * pulse, 0, Math.PI * 2);
-      ctx.fillStyle = "#F59E0B";
-      ctx.shadowColor = "#F59E0B";
+      ctx.fillStyle = "#FB923C";
+      ctx.shadowColor = "#FB923C";
       ctx.shadowBlur = 14;
       ctx.fill();
       ctx.restore();
 
-      // Micro-needle array indicators on the patch surface (Matching Chart Trio)
+      // Micro-needle array indicators on the patch surface (Matching 3D Hormone Atoms)
       const pinpoints = [
-        { x: -16, z: -16, color: "#0EA5A4" }, // Greenish-blue / Teal
-        { x: 16, z: -16, color: "#F59E0B" },  // Orange / Gold
-        { x: -16, z: 16, color: "#7C3AED" },  // Purple
-        { x: 16, z: 16, color: "#F59E0B" },   // Orange / Gold
+        { x: -16, z: -16, color: "#2DD4BF" }, // Luminous Teal / Hydrogen
+        { x: 16, z: -16, color: "#FB923C" },  // Vibrant Orange / Oxygen
+        { x: -16, z: 16, color: "#9333EA" },  // Deep Purple / Carbon
+        { x: 16, z: 16, color: "#FB923C" },   // Vibrant Orange / Oxygen
       ];
       pinpoints.forEach((pin) => {
         const p = project(pin.x, -thickness / 2 - 1.2, pin.z);
         ctx.save();
         ctx.beginPath();
-        ctx.arc(p.px, p.py, 2.8 * p.scale, 0, Math.PI * 2);
+        ctx.arc(p.px, p.py, 3.2 * p.scale, 0, Math.PI * 2);
         ctx.fillStyle = pin.color;
         ctx.shadowColor = pin.color;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 10;
         ctx.fill();
         ctx.restore();
       });
@@ -268,24 +346,7 @@ export default function ISFPatch3DHero({
 
         const proj = project(px, py, pz);
         if (proj.z >= 0) {
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(proj.px, proj.py, p.size * proj.scale, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = Math.min(1, 0.75 * proj.scale);
-          ctx.shadowColor = p.color;
-          ctx.shadowBlur = 12;
-          ctx.fill();
-
-          // Particle tag matching hormone analyte color
-          if (proj.scale > 0.85) {
-            ctx.font = "bold 9.5px sans-serif";
-            ctx.fillStyle = p.color;
-            ctx.shadowColor = "rgba(0, 0, 0, 0.75)";
-            ctx.shadowBlur = 4;
-            ctx.fillText(p.label, proj.px + 5, proj.py + 3);
-          }
-          ctx.restore();
+          drawHormoneDot(p, proj.px, proj.py, proj.scale, true);
         }
       });
 
