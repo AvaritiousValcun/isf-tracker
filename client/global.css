@@ -671,6 +671,320 @@ body {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
 }
 
+/* ==========================================================================
+   Accessibility (a11y) System: Assistive Tools, Font Scaling & High Contrast
+   ========================================================================== */
+
+/* Assistive Tools Modal & Drawer */
+.assistive-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: auto;
+}
+
+.assistive-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.assistive-panel {
+  position: relative;
+  z-index: 10000;
+  width: 100%;
+  max-width: 420px;
+  height: 100%;
+  background: #FFFFFF;
+  color: #172033;
+  padding: 28px 24px;
+  overflow-y: auto;
+  box-shadow: -8px 0 36px rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root[data-theme="dark"] .assistive-panel,
+:root.dark .assistive-panel {
+  background: #15232A;
+  color: #E8F2F6;
+  border-left: 1px solid #243C47;
+  box-shadow: -8px 0 36px rgba(0, 0, 0, 0.6);
+}
+
+.text-size-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  color: #1E293B;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+:root[data-theme="dark"] .text-size-option,
+:root.dark .text-size-option {
+  background: #1C2F38;
+  border-color: #243C47;
+  color: #E2E8F0;
+}
+
+.text-size-option:hover {
+  border-color: #00BBA7;
+}
+
+.text-size-option-active {
+  background: #00BBA7 !important;
+  border-color: #00BBA7 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(0, 187, 167, 0.38);
+}
+
+.assistive-choice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  color: #1E293B;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+:root[data-theme="dark"] .assistive-choice,
+:root.dark .assistive-choice {
+  background: #1C2F38;
+  border-color: #243C47;
+  color: #E2E8F0;
+}
+
+.assistive-choice:hover {
+  border-color: #00BBA7;
+}
+
+.assistive-choice-active {
+  background: #00BBA7 !important;
+  border-color: #00BBA7 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(0, 187, 167, 0.38);
+}
+
+.assistive-toggle {
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  color: #1E293B;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+:root[data-theme="dark"] .assistive-toggle,
+:root.dark .assistive-toggle {
+  background: #1C2F38;
+  border-color: #243C47;
+  color: #E2E8F0;
+}
+
+.assistive-toggle:hover {
+  border-color: #00BBA7;
+}
+
+.assistive-toggle-active {
+  border-color: #00BBA7 !important;
+  background: rgba(0, 187, 167, 0.08) !important;
+  color: #00BBA7 !important;
+}
+
+:root[data-theme="dark"] .assistive-toggle-active,
+:root.dark .assistive-toggle-active {
+  background: rgba(0, 187, 167, 0.16) !important;
+  border-color: #00BBA7 !important;
+  color: #2dd4bf !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Text Size Scaling */
+:root[data-text-size="small"] {
+  font-size: 14px;
+}
+
+:root[data-text-size="medium"] {
+  font-size: 16px;
+}
+
+:root[data-text-size="large"] {
+  font-size: 18px;
+}
+
+:root[data-text-size="extra-large"] {
+  font-size: 20px;
+}
+
+:root[data-text-size="large"] main h1,
+:root[data-text-size="large"] main h2,
+:root[data-text-size="large"] main h3 {
+  font-size: 1.14em !important;
+}
+
+:root[data-text-size="extra-large"] main h1,
+:root[data-text-size="extra-large"] main h2,
+:root[data-text-size="extra-large"] main h3 {
+  font-size: 1.28em !important;
+}
+
+:root[data-text-size="large"] main p,
+:root[data-text-size="large"] main button:not(.no-scale):not(.dashboard-rail-trigger),
+:root[data-text-size="large"] main span:not(.brand-mark):not(.dashboard-rail-badge) {
+  font-size: 1.1em !important;
+}
+
+:root[data-text-size="extra-large"] main p,
+:root[data-text-size="extra-large"] main button:not(.no-scale):not(.dashboard-rail-trigger),
+:root[data-text-size="extra-large"] main span:not(.brand-mark):not(.dashboard-rail-badge) {
+  font-size: 1.24em !important;
+}
+
+:root[data-text-size="small"] main h1,
+:root[data-text-size="small"] main h2,
+:root[data-text-size="small"] main h3 {
+  font-size: 0.9em !important;
+}
+
+:root[data-text-size="small"] main p,
+:root[data-text-size="small"] main button:not(.no-scale):not(.dashboard-rail-trigger),
+:root[data-text-size="small"] main span:not(.brand-mark):not(.dashboard-rail-badge) {
+  font-size: 0.92em !important;
+}
+
+/* Prevent Assistive Drawer elements from distorting during scaling */
+.assistive-panel,
+.assistive-panel * {
+  font-size: 15px !important;
+}
+.assistive-panel h2 {
+  font-size: 24px !important;
+}
+.assistive-panel small,
+.assistive-panel p.text-xs {
+  font-size: 12px !important;
+}
+
+/* High Contrast Mode */
+:root.high-contrast {
+  --border: 0 0% 0%;
+}
+
+:root.high-contrast:not(.dark):not([data-theme="dark"]) {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+:root.high-contrast:not(.dark):not([data-theme="dark"]) body {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+:root.high-contrast:not(.dark):not([data-theme="dark"]) [class*="border"] {
+  border-color: #000000 !important;
+}
+
+:root.high-contrast:not(.dark):not([data-theme="dark"]) p,
+:root.high-contrast:not(.dark):not([data-theme="dark"]) span,
+:root.high-contrast:not(.dark):not([data-theme="dark"]) h1,
+:root.high-contrast:not(.dark):not([data-theme="dark"]) h2,
+:root.high-contrast:not(.dark):not([data-theme="dark"]) h3,
+:root.high-contrast:not(.dark):not([data-theme="dark"]) small {
+  color: #000000 !important;
+  font-weight: 500;
+}
+
+:root.high-contrast:not(.dark):not([data-theme="dark"]) [class*="bg-slate-"],
+:root.high-contrast:not(.dark):not([data-theme="dark"]) [class*="bg-gray-"],
+:root.high-contrast:not(.dark):not([data-theme="dark"]) [class*="bg-white"] {
+  border: 2px solid #000000 !important;
+}
+
+:root.high-contrast.dark,
+:root.high-contrast[data-theme="dark"] {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+:root.high-contrast.dark body,
+:root.high-contrast[data-theme="dark"] body {
+  background: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+:root.high-contrast.dark [class*="border"],
+:root.high-contrast[data-theme="dark"] [class*="border"] {
+  border-color: #FFFFFF !important;
+}
+
+:root.high-contrast.dark p,
+:root.high-contrast.dark span,
+:root.high-contrast.dark h1,
+:root.high-contrast.dark h2,
+:root.high-contrast.dark h3,
+:root.high-contrast.dark small,
+:root.high-contrast[data-theme="dark"] p,
+:root.high-contrast[data-theme="dark"] span,
+:root.high-contrast[data-theme="dark"] h1,
+:root.high-contrast[data-theme="dark"] h2,
+:root.high-contrast[data-theme="dark"] h3,
+:root.high-contrast[data-theme="dark"] small {
+  color: #FFFFFF !important;
+  font-weight: 500;
+}
+
+:root.high-contrast.dark [class*="bg-"],
+:root.high-contrast[data-theme="dark"] [class*="bg-"] {
+  border-color: #FFFFFF !important;
+}
+
+:root.high-contrast :focus-visible {
+  outline: 3px solid #F3E308 !important;
+  outline-offset: 3px !important;
+}
+
+/* Reduce Motion Mode */
+:root.reduce-motion *,
+:root.reduce-motion *::before,
+:root.reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
 @media print {
   body {
     background: #FFFFFF !important;

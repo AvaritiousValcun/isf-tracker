@@ -385,6 +385,17 @@ function AssistiveTools({
     value: boolean,
   ) => void;
 }) {
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [open, onClose]);
+
   if (!open) {
     return null;
   }
@@ -431,7 +442,7 @@ function AssistiveTools({
       <aside className="assistive-panel">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#2C4C5C]">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#2C4C5C] dark:text-[#5EEAD4]">
               {t(
                 language,
                 "settings.accessibility",
@@ -440,7 +451,7 @@ function AssistiveTools({
 
             <h2
               id="assistive-title"
-              className="mt-2 font-display text-2xl font-semibold text-[#172033]"
+              className="mt-2 font-display text-2xl font-semibold text-[#172033] dark:text-[#FFFFFF]"
             >
               {t(
                 language,
@@ -456,14 +467,14 @@ function AssistiveTools({
               "settings.close",
             )}
             onClick={onClose}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2E8F0] text-[#475569] hover:bg-[#F7FAFC]"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2E8F0] dark:border-[#243C47] text-[#475569] dark:text-[#E2E8F0] hover:bg-[#F7FAFC] dark:hover:bg-[#1C2F38] transition"
           >
             <X size={18} />
           </button>
         </div>
 
         <div className="mt-8">
-          <p className="text-sm font-semibold text-[#172033]">
+          <p className="text-sm font-semibold text-[#172033] dark:text-[#FFFFFF]">
             {t(
               language,
               "settings.textSize",
@@ -503,7 +514,7 @@ function AssistiveTools({
         </div>
 
         <div className="mt-7">
-          <p className="text-sm font-semibold text-[#172033]">
+          <p className="text-sm font-semibold text-[#172033] dark:text-[#FFFFFF]">
             {t(
               language,
               "settings.contrast",
@@ -574,14 +585,14 @@ function AssistiveTools({
           }`}
         >
           <span>
-            <span className="block text-sm font-semibold">
+            <span className="block text-sm font-semibold text-[#172033] dark:text-[#FFFFFF]">
               {t(
                 language,
                 "settings.reduceMotion",
               )}
             </span>
 
-            <span className="mt-1 block text-xs text-[#64748B]">
+            <span className="mt-1 block text-xs text-[#64748B] dark:text-[#94A3B8]">
               {t(
                 language,
                 "settings.reduceMotionDesc",
@@ -640,21 +651,37 @@ export default function Index({ onReturnToHome }: IndexProps = {}) {
     textSize,
     setTextSize,
   ] =
-    useState<TextSize>(
-      "medium",
-    );
+    useState<TextSize>(() => {
+      try {
+        const saved = localStorage.getItem("isf_text_size") as TextSize | null;
+        if (saved && ["small", "medium", "large", "extra-large"].includes(saved)) {
+          return saved;
+        }
+      } catch {}
+      return "medium";
+    });
 
   const [
     highContrast,
     setHighContrast,
   ] =
-    useState(false);
+    useState<boolean>(() => {
+      try {
+        return localStorage.getItem("isf_high_contrast") === "true";
+      } catch {}
+      return false;
+    });
 
   const [
     reduceMotion,
     setReduceMotion,
   ] =
-    useState(false);
+    useState<boolean>(() => {
+      try {
+        return localStorage.getItem("isf_reduce_motion") === "true";
+      } catch {}
+      return false;
+    });
 
   const [
     assistiveOpen,
@@ -750,6 +777,12 @@ export default function Index({ onReturnToHome }: IndexProps = {}) {
       localStorage,
       themeMode,
     );
+
+    try {
+      localStorage.setItem("isf_text_size", textSize);
+      localStorage.setItem("isf_high_contrast", String(highContrast));
+      localStorage.setItem("isf_reduce_motion", String(reduceMotion));
+    } catch {}
 
     root.dataset.textSize =
       textSize;

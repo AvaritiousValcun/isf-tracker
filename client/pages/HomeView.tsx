@@ -802,8 +802,8 @@ export default function HomeView({
           <div className="max-w-[650px]">
             {/* Top telemetry badges */}
             <div className="mb-3 flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-400/90 dark:border-teal-400/50 bg-teal-100/90 dark:bg-teal-950/60 px-3.5 py-1 text-[11px] font-bold text-teal-950 dark:text-teal-200 shadow-xs">
-                <Sparkles size={12} className="text-amber-500 dark:text-amber-300" />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-yellow-300/90 dark:border-[#F3E308]/40 bg-[#FFFBE6] dark:bg-[#F3E308]/20 px-3.5 py-1 text-[11px] font-bold text-[#7A6600] dark:text-[#F3E308] shadow-xs">
+                <Sparkles size={12} className="text-[#D4B106] dark:text-[#F3E308]" />
                 Micro-needle Telemetry Active
               </span>
               <span className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-[11px] font-bold transition ${
