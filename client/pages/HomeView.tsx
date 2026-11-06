@@ -802,8 +802,8 @@ export default function HomeView({
           <div className="max-w-[650px]">
             {/* Top telemetry badges */}
             <div className="mb-3 flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-yellow-300/90 dark:border-[#F3E308]/40 bg-[#FFFBE6] dark:bg-[#F3E308]/20 px-3.5 py-1 text-[11px] font-bold text-[#7A6600] dark:text-[#F3E308] shadow-xs">
-                <Sparkles size={12} className="text-[#D4B106] dark:text-[#F3E308]" />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-yellow-400 dark:border-[#F3E308]/70 bg-[#FEE868] dark:bg-[#F3E308]/30 px-3.5 py-1 text-[11px] font-bold text-[#523600] dark:text-[#F3E308] shadow-xs">
+                <Sparkles size={12} className="text-[#854D0E] dark:text-[#F3E308]" />
                 Micro-needle Telemetry Active
               </span>
               <span className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-[11px] font-bold transition ${
@@ -887,9 +887,9 @@ export default function HomeView({
               <button
                 type="button"
                 onClick={() => setReportModalOpen(true)}
-                className="flex items-center gap-2 rounded-full border border-[#E5D400] dark:border-[#F3E308]/40 bg-[#FFF566] dark:bg-[#F3E308]/15 hover:bg-[#FFED33] dark:hover:bg-[#F3E308]/25 px-5 py-3 text-[12px] font-extrabold text-[#473B00] dark:text-[#F3E308] transition hover:-translate-y-0.5 shadow-xs"
+                className="flex items-center gap-2 rounded-full border border-yellow-400 dark:border-[#F3E308]/70 bg-[#FEE868] hover:bg-[#FDD835] dark:bg-[#F3E308]/30 dark:hover:bg-[#F3E308]/40 px-5 py-3 text-[12px] font-extrabold text-[#523600] dark:text-[#F3E308] transition hover:-translate-y-0.5 shadow-xs cursor-pointer"
               >
-                <FileText size={15} className="text-[#473B00] dark:text-[#F3E308]" />
+                <FileText size={15} className="text-[#854D0E] dark:text-[#F3E308]" />
                 <span>Doctor Report (PDF)</span>
               </button>
 
@@ -1044,9 +1044,9 @@ export default function HomeView({
                 <button
                   type="button"
                   onClick={() => setReportModalOpen(true)}
-                  className="flex items-center gap-1.5 rounded-xl border border-[#F3E308]/40 dark:border-[#F3E308]/40 bg-[#F3E308]/15 dark:bg-[#F3E308]/15 hover:bg-[#F3E308]/25 px-3.5 py-1.5 text-xs font-bold text-[#7A6600] dark:text-[#F3E308] transition shadow-xs"
+                  className="flex items-center gap-1.5 rounded-xl border border-yellow-400 dark:border-[#F3E308]/70 bg-[#FEE868] hover:bg-[#FDD835] dark:bg-[#F3E308]/30 dark:hover:bg-[#F3E308]/40 px-3.5 py-1.5 text-xs font-bold text-[#523600] dark:text-[#F3E308] transition shadow-xs cursor-pointer"
                 >
-                  <FileText size={13} className="text-[#7A6600] dark:text-[#F3E308]" />
+                  <FileText size={13} className="text-[#854D0E] dark:text-[#F3E308]" />
                   <span>Doctor PDF</span>
                 </button>
               </div>

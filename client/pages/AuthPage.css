@@ -751,8 +751,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid rgba(243, 227, 8, 0.55);
-  background: rgba(243, 227, 8, 0.22);
+  border: 1px solid rgba(243, 227, 8, 0.75);
+  background: rgba(243, 227, 8, 0.32);
   color: #F3E308;
   border-radius: 999px;
   padding: 5px 12px;

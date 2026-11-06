@@ -214,9 +214,9 @@ export default function HormoneVelocityForecast({
           {onOpenReport && (
             <button
               onClick={onOpenReport}
-              className="hidden lg:flex items-center gap-1.5 rounded-xl border border-[#F3E308]/40 dark:border-[#F3E308]/40 bg-[#F3E308]/15 dark:bg-[#F3E308]/15 hover:bg-[#F3E308]/25 px-3.5 py-1.5 text-xs font-bold text-[#7A6600] dark:text-[#F3E308] transition shadow-xs"
+              className="hidden lg:flex items-center gap-1.5 rounded-xl border border-yellow-400 dark:border-[#F3E308]/70 bg-[#FEE868] hover:bg-[#FDD835] dark:bg-[#F3E308]/30 dark:hover:bg-[#F3E308]/40 px-3.5 py-1.5 text-xs font-bold text-[#523600] dark:text-[#F3E308] transition shadow-xs cursor-pointer"
             >
-              <FileText size={13} className="text-[#7A6600] dark:text-[#F3E308]" />
+              <FileText size={13} className="text-[#854D0E] dark:text-[#F3E308]" />
               Doctor Report PDF
             </button>
           )}
