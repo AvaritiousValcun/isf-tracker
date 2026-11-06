@@ -20,8 +20,8 @@
     --accent-foreground: 199 35% 27%;
     --destructive: 0 82% 71%;
     --destructive-foreground: 0 0% 100%;
-    --border: 193 15% 85%;
-    --input: 193 15% 85%;
+    --border: 195 12% 74%;
+    --input: 195 12% 74%;
     --ring: 58 90% 49%;
     --radius: 14px;
     --sidebar-background: 195 8% 74%;
@@ -274,14 +274,14 @@
   --text: #2C4C5C;
   --text-secondary: #5A6E78;
   --text-muted: #8B9AA2;
-  --border-light: #E4E7E8;
+  --border-light: #B8BFC1;
   --blue: #2C4C5C;
   --muted-blue: #6C8494;
   --gray: #B8BFC1;
   --yellow: #F3E308;
   --yellow-deep: #7A6600;
-  --shadow-soft: 0 12px 30px rgba(44, 76, 92, .07);
-  --shadow-float: 0 18px 44px rgba(44, 76, 92, .14);
+  --shadow-soft: 0 1px 3px 0 rgba(44, 76, 92, 0.10), 0 6px 18px -2px rgba(44, 76, 92, 0.12), 0 12px 28px -4px rgba(44, 76, 92, 0.08);
+  --shadow-float: 0 2px 6px -1px rgba(44, 76, 92, 0.12), 0 12px 28px -3px rgba(44, 76, 92, 0.16), 0 24px 48px -6px rgba(44, 76, 92, 0.18);
 }
 
 :root[data-theme="dark"],
@@ -339,6 +339,94 @@ body {
 .app-shell .rounded-full { border-radius: 999px !important; }
 .app-shell [class*="shadow-"] { box-shadow: var(--shadow-soft) !important; }
 
+/* Tiered shadow intensity for light mode - gives rich depth and crisp border definition */
+.app-shell [class*="shadow-2xs"],
+.app-shell [class*="shadow-xs"] {
+  box-shadow: 0 1px 3px 0 rgba(44, 76, 92, 0.10), 0 2px 6px -1px rgba(44, 76, 92, 0.08) !important;
+}
+
+.app-shell [class*="shadow-sm"] {
+  box-shadow: 0 1px 3px 0 rgba(44, 76, 92, 0.10), 0 4px 14px -1px rgba(44, 76, 92, 0.11) !important;
+}
+
+.app-shell [class*="shadow-md"] {
+  box-shadow: 0 2px 6px -1px rgba(44, 76, 92, 0.09), 0 8px 22px -2px rgba(44, 76, 92, 0.13) !important;
+}
+
+.app-shell [class*="shadow-lg"],
+.app-shell [class*="shadow-xl"],
+.app-shell [class*="shadow-2xl"],
+.app-shell [class*="shadow-\["] {
+  box-shadow: 0 4px 10px -2px rgba(44, 76, 92, 0.10), 0 16px 38px -4px rgba(44, 76, 92, 0.15) !important;
+}
+
+/* Tab containers and active tab buttons */
+.app-shell button[class*="bg-white"]:not(header button),
+.app-shell [class*="rounded-full"] > button[class*="bg-white"],
+.app-shell [class*="rounded-xl"] > button[class*="bg-white"] {
+  border: 1px solid var(--border-light) !important;
+  box-shadow: 0 1px 3px 0 rgba(44, 76, 92, 0.12), 0 3px 8px -1px rgba(44, 76, 92, 0.10) !important;
+}
+
+/* Care Team Consultant item tabs */
+#chat .space-y-1 > button {
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+#chat .space-y-1 > button:hover {
+  border-color: var(--border-light);
+  box-shadow: 0 1px 3px rgba(44, 76, 92, 0.08);
+}
+#chat .space-y-1 > button[class*="bg-[#2C4C5C]/[0.07]"] {
+  border: 1px solid rgba(44, 76, 92, 0.28) !important;
+  box-shadow: 0 2px 6px 0 rgba(44, 76, 92, 0.10), 0 1px 2px 0 rgba(44, 76, 92, 0.08) !important;
+}
+
+/* Dark mode overrides to maintain deep dark shadows */
+:root[data-theme="dark"] .app-shell [class*="shadow-2xs"],
+:root[data-theme="dark"] .app-shell [class*="shadow-xs"],
+:root.dark .app-shell [class*="shadow-2xs"],
+:root.dark .app-shell [class*="shadow-xs"] {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35) !important;
+}
+
+:root[data-theme="dark"] .app-shell [class*="shadow-sm"],
+:root.dark .app-shell [class*="shadow-sm"] {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+:root[data-theme="dark"] .app-shell [class*="shadow-md"],
+:root.dark .app-shell [class*="shadow-md"] {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
+}
+
+:root[data-theme="dark"] .app-shell [class*="shadow-lg"],
+:root[data-theme="dark"] .app-shell [class*="shadow-xl"],
+:root[data-theme="dark"] .app-shell [class*="shadow-2xl"],
+:root[data-theme="dark"] .app-shell [class*="shadow-\["],
+:root.dark .app-shell [class*="shadow-lg"],
+:root.dark .app-shell [class*="shadow-xl"],
+:root.dark .app-shell [class*="shadow-2xl"],
+:root.dark .app-shell [class*="shadow-\["] {
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.5) !important;
+}
+
+:root[data-theme="dark"] .app-shell button[class*="bg-white"]:not(header button),
+:root[data-theme="dark"] .app-shell [class*="rounded-full"] > button[class*="bg-white"],
+:root[data-theme="dark"] .app-shell [class*="rounded-xl"] > button[class*="bg-white"],
+:root.dark .app-shell button[class*="bg-white"]:not(header button),
+:root.dark .app-shell [class*="rounded-full"] > button[class*="bg-white"],
+:root.dark .app-shell [class*="rounded-xl"] > button[class*="bg-white"] {
+  border-color: var(--border-light) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
+}
+
+:root[data-theme="dark"] #chat .space-y-1 > button[class*="bg-[#2C4C5C]/[0.07]"],
+:root.dark #chat .space-y-1 > button[class*="bg-[#2C4C5C]/[0.07]"] {
+  border-color: var(--border-light) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
+}
+
 .app-shell [class*="text-[#2C4C5C]"],
 .app-shell [class*="text-slate-600"],
 .app-shell [class*="text-slate-700"] { color: var(--text) !important; }
@@ -351,11 +439,11 @@ body {
   border-bottom: 1px solid var(--border-light) !important;
   background: var(--surface) !important;
   color: var(--text) !important;
-  box-shadow: 0 4px 18px rgba(44, 76, 92, .04) !important;
+  box-shadow: 0 4px 20px -2px rgba(44, 76, 92, .08) !important;
 }
 .app-shell header p, .app-shell header h1, .app-shell header .font-display { color: var(--text) !important; }
-.app-shell header button { border-color: var(--border-light) !important; background: var(--surface-alt) !important; color: var(--text) !important; }
-.app-shell header button:hover { border-color: var(--yellow) !important; background: var(--surface-elevated) !important; color: var(--yellow-deep) !important; }
+.app-shell header button { border-color: var(--border-light) !important; background: var(--surface-alt) !important; color: var(--text) !important; box-shadow: 0 1px 3px 0 rgba(44, 76, 92, 0.08) !important; }
+.app-shell header button:hover { border-color: var(--yellow) !important; background: var(--surface-elevated) !important; color: var(--yellow-deep) !important; box-shadow: 0 2px 6px 0 rgba(44, 76, 92, 0.12) !important; }
 .app-shell header button > span { background: var(--yellow) !important; }
 .app-shell header .brand-mark { background: var(--yellow) !important; color: var(--blue) !important; }
 
@@ -375,6 +463,7 @@ body {
 #dashboard section,
 #dashboard .rounded-\[24px\],
 #dashboard .rounded-2xl,
+#hormone-metrics section,
 .settings-card {
   border: 1px solid var(--border-light) !important;
   background: var(--surface) !important;
@@ -385,8 +474,8 @@ body {
 #chat .chat-main-card,
 #chat > .page-enter > div:last-child {
   background: linear-gradient(145deg, rgba(243, 227, 8, .10), rgba(184, 191, 193, .82)) !important;
-  border: 1px solid rgba(184, 191, 193, .9) !important;
-  box-shadow: 0 14px 40px rgba(44, 76, 92, .055), 0 1px 0 rgba(184, 191, 193, .95) inset !important;
+  border: 1px solid rgba(184, 191, 193, .95) !important;
+  box-shadow: 0 2px 6px -1px rgba(44, 76, 92, 0.08), 0 14px 36px -4px rgba(44, 76, 92, 0.13), 0 1px 0 rgba(184, 191, 193, .95) inset !important;
 }
 
 #chat .consultants-grid {
