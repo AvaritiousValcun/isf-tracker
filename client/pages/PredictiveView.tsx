@@ -374,9 +374,9 @@ export default function PredictiveView() {
                 variant="outline"
                 size="sm"
                 onClick={() => setReportOpen(true)}
-                className="border-[#D8C907] dark:border-[#F3E308] bg-[#F3E308] hover:bg-[#E5D507] text-[#142229] font-extrabold shadow-2xs rounded-full px-4 cursor-pointer"
+                className="border-[#D8C907]/70 dark:border-[#F3E308]/60 bg-[#F3E308]/35 hover:bg-[#F3E308]/50 dark:bg-[#F3E308]/25 dark:hover:bg-[#F3E308]/40 text-[#142229] dark:text-[#F3E308] font-extrabold shadow-2xs rounded-full px-4 cursor-pointer"
               >
-                <FileText className="mr-1.5 h-3.5 w-3.5 text-[#142229]" />
+                <FileText className="mr-1.5 h-3.5 w-3.5 text-[#524000] dark:text-[#F3E308]" />
                 Doctor Report (PDF)
               </Button>
 
@@ -514,8 +514,8 @@ export default function PredictiveView() {
                       </div>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-1.5 rounded-full bg-amber-100/70 dark:bg-[#1C2F38] border border-amber-300/80 dark:border-white/10 px-3.5 py-1.5 text-xs text-amber-950 dark:text-slate-300 font-bold shadow-2xs">
-                      <Lock size={12} className="text-amber-600 dark:text-amber-400" />
+                    <div className="flex items-center gap-1.5 rounded-full bg-[#F3E308]/35 dark:bg-[#F3E308]/25 border border-[#D8C907]/70 dark:border-[#F3E308]/60 px-3.5 py-1.5 text-xs text-[#142229] dark:text-[#F3E308] font-bold shadow-2xs">
+                      <Lock size={12} className="text-[#524000] dark:text-[#F3E308]" />
                       <span>Exact % locked (Free)</span>
                     </div>
                   )}
@@ -523,7 +523,7 @@ export default function PredictiveView() {
                   <div
                     className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold capitalize ${
                       pmosRisk.risk_category === "monitoring"
-                        ? "bg-amber-100 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-800/50 text-amber-950 dark:text-amber-200"
+                        ? "bg-[#F3E308]/35 dark:bg-[#F3E308]/25 border border-[#D8C907]/70 dark:border-[#F3E308]/60 text-[#142229] dark:text-[#F3E308]"
                         : pmosRisk.risk_category === "elevated"
                         ? "bg-rose-100 dark:bg-rose-950/50 border border-rose-300 dark:border-rose-800/50 text-rose-900 dark:text-rose-200"
                         : "bg-emerald-100 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800/50 text-emerald-950 dark:text-emerald-200"
@@ -532,7 +532,7 @@ export default function PredictiveView() {
                     <span
                       className={`h-1.5 w-1.5 rounded-full ${
                         pmosRisk.risk_category === "monitoring"
-                          ? "bg-amber-600"
+                          ? "bg-[#B3A400] dark:bg-[#F3E308]"
                           : pmosRisk.risk_category === "elevated"
                           ? "bg-rose-600"
                           : "bg-emerald-600"
@@ -640,7 +640,7 @@ export default function PredictiveView() {
                             c.iconType === "diabetes"
                               ? "bg-teal-100 dark:bg-teal-950/50 text-teal-800 dark:text-teal-300 border border-teal-300 dark:border-teal-800/50"
                               : c.iconType === "insulin"
-                              ? "bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800/50"
+                              ? "bg-[#F3E308]/35 dark:bg-[#F3E308]/25 text-[#142229] dark:text-[#F3E308] border border-[#D8C907]/70 dark:border-[#F3E308]/60"
                               : "bg-violet-100 dark:bg-violet-950/50 text-violet-800 dark:text-violet-300 border border-violet-300 dark:border-violet-800/50"
                           }`}
                         >
@@ -667,7 +667,7 @@ export default function PredictiveView() {
                         <span
                           className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold capitalize ${
                             category === "moderate"
-                              ? "bg-amber-100 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-800/50 text-amber-950 dark:text-amber-200"
+                              ? "bg-[#F3E308]/35 dark:bg-[#F3E308]/25 border border-[#D8C907]/70 dark:border-[#F3E308]/60 text-[#142229] dark:text-[#F3E308]"
                               : category === "elevated"
                               ? "bg-rose-100 dark:bg-rose-950/50 border border-rose-300 dark:border-rose-800/50 text-rose-900 dark:text-rose-200"
                               : "bg-emerald-100 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800/50 text-emerald-950 dark:text-emerald-200"
@@ -676,7 +676,7 @@ export default function PredictiveView() {
                           <span
                             className={`h-1.5 w-1.5 rounded-full ${
                               category === "moderate"
-                                ? "bg-amber-600"
+                                ? "bg-[#B3A400] dark:bg-[#F3E308]"
                                 : category === "elevated"
                                 ? "bg-rose-600"
                                 : "bg-emerald-600"
