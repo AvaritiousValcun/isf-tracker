@@ -69,6 +69,7 @@ export default function ChatView({ language }: ChatViewProps) {
 
   const [activeConsultantIdx, setActiveConsultantIdx] = useState(0);
   const [hasSelectedConsultant, setHasSelectedConsultant] = useState(true);
+  const [showQuickQuestions, setShowQuickQuestions] = useState(true);
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [sending, setSending] = useState(false);
@@ -682,25 +683,61 @@ export default function ChatView({ language }: ChatViewProps) {
                 )}
               </div>
 
-              {/* Quick Prompts Bar */}
-              <div className="border-t border-slate-200/80 dark:border-[#243C47] bg-slate-50/70 dark:bg-[#111D23] px-4 py-2.5">
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-                  <span className="text-[11px] font-semibold text-slate-500 dark:text-[#A0B4BE] shrink-0 flex items-center gap-1 mr-1">
-                    <Sparkles size={12} className="text-[#0EA5A4]" />
-                    Quick ask:
-                  </span>
-                  {CLINICAL_FAQ_ITEMS.map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => handleSendMessage(item.question)}
-                      disabled={sending}
-                      className="shrink-0 rounded-full border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1C2F38] hover:border-[#0EA5A4] hover:bg-slate-50 dark:hover:bg-[#243C47] px-3 py-1 text-[11px] font-medium text-slate-700 dark:text-[#E8F2F6] transition shadow-2xs cursor-pointer disabled:opacity-50"
-                    >
-                      {item.question}
-                    </button>
-                  ))}
+              {/* Linear Commonly Asked Questions List */}
+              <div className="border-t border-slate-200/80 dark:border-[#243C47] bg-slate-50/70 dark:bg-[#111D23] px-4 py-3">
+                <div className="flex items-center justify-between mb-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowQuickQuestions((prev) => !prev)}
+                    className="text-[11px] font-bold text-[#2C4C5C] dark:text-[#E8F2F6] flex items-center gap-1.5 hover:text-[#0EA5A4] transition cursor-pointer"
+                  >
+                    <Sparkles size={13} className="text-[#0EA5A4]" />
+                    <span>Commonly Asked Questions</span>
+                    <span className="rounded-full bg-[#0EA5A4]/15 px-1.5 py-0.5 text-[9px] font-bold text-[#0EA5A4]">
+                      {CLINICAL_FAQ_ITEMS.length}
+                    </span>
+                    {showQuickQuestions ? (
+                      <ChevronUp size={13} className="text-slate-400" />
+                    ) : (
+                      <ChevronDown size={13} className="text-slate-400" />
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setFaqModalOpen(true)}
+                    className="text-[10px] font-semibold text-[#0EA5A4] hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <BookOpen size={11} /> Browse All ({CLINICAL_FAQ_ITEMS.length})
+                  </button>
                 </div>
+
+                {showQuickQuestions && (
+                  <div className="space-y-1.5">
+                    {CLINICAL_FAQ_ITEMS.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => handleSendMessage(item.question)}
+                        disabled={sending}
+                        className="group flex w-full items-center justify-between rounded-xl border border-slate-200/90 dark:border-white/10 bg-white dark:bg-[#1C2F38] px-3.5 py-2 text-left transition hover:border-[#0EA5A4] hover:bg-teal-50/30 dark:hover:bg-[#243C47] shadow-2xs cursor-pointer disabled:opacity-50"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#0EA5A4]/10 text-[#0EA5A4] group-hover:bg-[#0EA5A4] group-hover:text-white transition">
+                            <MessageCircle size={11} />
+                          </div>
+                          <span className="text-[12px] font-medium text-slate-800 dark:text-[#E8F2F6] group-hover:text-[#0EA5A4] transition-colors truncate">
+                            {item.question}
+                          </span>
+                        </div>
+                        <ChevronRight
+                          size={14}
+                          className="text-slate-400 group-hover:text-[#0EA5A4] group-hover:translate-x-0.5 transition-all shrink-0 ml-2"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Natural Chat Message Input */}
