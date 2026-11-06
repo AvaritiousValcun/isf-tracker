@@ -492,19 +492,14 @@ export default function ChatView({ language }: ChatViewProps) {
             ))}
           </div>
 
-          <div className="mt-4 rounded-xl border border-slate-200 dark:border-[#243C47] bg-[#B8BFC1]/[0.10] dark:bg-[#111D23] p-3">
-            <div className="flex items-center gap-2 text-slate-500 dark:text-[#A0B4BE]">
-              <ShieldCheck
-                size={14}
-                className="text-[#2C4C5C] dark:text-[#F3E308]"
-              />
-              <span className="text-[12px] font-semibold">
-                {t(language, "chat.dataChoice")}
-              </span>
-            </div>
-            <p className="mt-2 text-[10px] leading-relaxed text-slate-600 dark:text-[#A0B4BE]">
+          <div className="mt-2.5 flex items-center gap-1.5 rounded-lg border border-slate-200/60 dark:border-white/5 bg-slate-50/60 dark:bg-[#111D23]/60 px-2.5 py-1.5 text-[9.5px] text-slate-500 dark:text-[#8FA5B0]">
+            <ShieldCheck
+              size={11}
+              className="text-[#0EA5A4] shrink-0"
+            />
+            <span className="leading-tight">
               {t(language, "chat.dataChoiceDesc")}
-            </p>
+            </span>
           </div>
         </div>
 
