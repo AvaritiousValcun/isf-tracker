@@ -23,6 +23,7 @@ import {
   Activity,
   ChevronRight,
   ShieldCheck,
+  FileText,
 } from "lucide-react";
 import { Badge } from "./ui/badge";
 
@@ -156,7 +157,7 @@ export default function HormoneVelocityForecast({
     <div className={`rounded-[24px] border p-5 sm:p-6 transition-all duration-300 space-y-6 ${
       showPremium
         ? "border-amber-300/80 dark:border-amber-500/40 bg-gradient-to-br from-[#FFFDF9] via-[#FFFBF2] to-[#FFF6E5] dark:from-[#15232A] dark:via-[#1D211B] dark:to-[#171B16] shadow-[0_14px_42px_rgba(245,158,11,0.12)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.45)]"
-        : "border-slate-200 dark:border-[#243C47] bg-white dark:bg-[#15232A] shadow-sm"
+        : "border-slate-300 dark:border-[#243C47] bg-white dark:bg-[#15232A] shadow-xs"
     }`}>
       
       {/* Header and Plan Selector */}
@@ -171,7 +172,7 @@ export default function HormoneVelocityForecast({
                 <Crown size={11} className="text-yellow-200 fill-yellow-200" /> Premium Forecast
               </Badge>
             ) : (
-              <Badge variant="outline" className="text-slate-500 border-slate-300 dark:border-white/10 text-[10px]">
+              <Badge variant="outline" className="text-teal-950 dark:text-teal-200 border-teal-400/80 dark:border-teal-400/50 bg-teal-100/90 dark:bg-teal-950/60 font-bold text-[10px] shadow-xs">
                 Free 48h Preview
               </Badge>
             )}
@@ -186,13 +187,13 @@ export default function HormoneVelocityForecast({
 
         {/* Free vs Premium Toggle */}
         <div className="flex items-center gap-2 self-start sm:self-center">
-          <div className="flex items-center rounded-xl bg-slate-100 dark:bg-[#1C2F38] p-1 border border-slate-200 dark:border-white/5">
+          <div className="flex items-center rounded-xl bg-slate-100 dark:bg-[#1C2F38] p-1 border border-slate-300 dark:border-white/10">
             <button
               onClick={() => setTierOverride("free")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
                 !showPremium
-                  ? "bg-white dark:bg-[#15232A] text-slate-800 dark:text-slate-100 shadow-xs border border-slate-200 dark:border-white/10"
-                  : "text-slate-500 hover:text-slate-800 dark:text-[#A0B4BE]"
+                  ? "bg-slate-200/90 dark:bg-[#15232A] text-slate-950 dark:text-slate-100 shadow-xs border border-slate-300 dark:border-white/20"
+                  : "text-slate-600 hover:text-slate-950 dark:text-[#A0B4BE]"
               }`}
             >
               Free (48h)
@@ -213,8 +214,9 @@ export default function HormoneVelocityForecast({
           {onOpenReport && (
             <button
               onClick={onOpenReport}
-              className="hidden lg:flex items-center gap-1.5 rounded-xl border border-amber-400/30 bg-amber-500/10 hover:bg-amber-500/15 px-3 py-1.5 text-xs font-semibold text-amber-800 dark:text-amber-300 transition"
+              className="hidden lg:flex items-center gap-1.5 rounded-xl border border-amber-400/90 dark:border-amber-400/60 bg-gradient-to-r from-amber-500/25 via-orange-500/20 to-amber-500/25 hover:from-amber-500/35 hover:to-orange-500/30 px-3.5 py-1.5 text-xs font-bold text-amber-950 dark:text-amber-200 transition shadow-xs"
             >
+              <FileText size={13} className="text-amber-600 dark:text-amber-400" />
               Doctor Report PDF
             </button>
           )}
@@ -226,7 +228,7 @@ export default function HormoneVelocityForecast({
         <div className={`rounded-2xl border p-4 transition ${
           showPremium
             ? "border-amber-200/80 dark:border-amber-900/40 bg-gradient-to-b from-amber-50/50 to-white dark:from-amber-950/25 dark:to-[#111D23] shadow-xs"
-            : "border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23]"
+            : "border-slate-300 dark:border-[#243C47] bg-slate-50 dark:bg-[#111D23] shadow-xs"
         }`}>
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase text-slate-400">Progesterone Velocity</span>
@@ -244,7 +246,7 @@ export default function HormoneVelocityForecast({
         <div className={`rounded-2xl border p-4 transition ${
           showPremium
             ? "border-amber-200/70 dark:border-amber-900/40 bg-gradient-to-b from-amber-50/40 to-white dark:from-amber-950/25 dark:to-[#111D23] shadow-xs"
-            : "border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23]"
+            : "border-slate-300 dark:border-[#243C47] bg-slate-50 dark:bg-[#111D23] shadow-xs"
         }`}>
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase text-slate-400">Free Testosterone Velocity</span>
@@ -262,7 +264,7 @@ export default function HormoneVelocityForecast({
         <div className={`rounded-2xl border p-4 transition ${
           showPremium
             ? "border-amber-200/70 dark:border-amber-900/40 bg-gradient-to-b from-amber-50/40 to-white dark:from-amber-950/25 dark:to-[#111D23] shadow-xs"
-            : "border-slate-200 dark:border-[#243C47] bg-slate-50/80 dark:bg-[#111D23]"
+            : "border-slate-300 dark:border-[#243C47] bg-slate-50 dark:bg-[#111D23] shadow-xs"
         }`}>
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase text-slate-400">Luteal Adequacy</span>
@@ -413,7 +415,7 @@ export default function HormoneVelocityForecast({
       </div>
 
       {/* Explanatory Clinical Legend Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-[11px] text-slate-500 dark:text-[#A0B4BE] border-t border-slate-200 dark:border-[#243C47]">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-[11px] text-slate-500 dark:text-[#A0B4BE] border-t border-slate-300 dark:border-[#243C47]">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-[#0EA5A4]" /> Progesterone Velocity (&Delta;P4)

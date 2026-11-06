@@ -368,9 +368,9 @@ export default function PredictiveView() {
             variant="outline"
             size="sm"
             onClick={() => setReportOpen(true)}
-            className="border-[#0EA5A4]/40 bg-[#0EA5A4]/10 text-[#0EA5A4] hover:bg-[#0EA5A4]/20 font-semibold"
+            className="border-amber-400/90 dark:border-amber-400/60 bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-amber-500/20 dark:from-amber-500/25 dark:via-orange-500/20 dark:to-amber-500/25 hover:from-amber-500/30 text-amber-950 dark:text-amber-200 font-bold shadow-xs"
           >
-            <FileText className="mr-1.5 h-3.5 w-3.5" />
+            <FileText className="mr-1.5 h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
             Doctor Report (PDF)
           </Button>
 

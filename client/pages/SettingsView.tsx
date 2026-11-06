@@ -909,7 +909,7 @@ export default function SettingsView({
               <Badge className={
                 sub?.plan === "premium"
                   ? "bg-gradient-to-r from-emerald-600 to-[#0EA5A4] text-white border-0 shadow-xs"
-                  : "bg-slate-200 text-slate-700 dark:bg-[#1C2F38] dark:text-[#A0B4BE] border-0"
+                  : "bg-slate-200/90 text-slate-900 dark:bg-[#1C2F38] dark:text-[#E8F2F6] font-semibold border border-slate-300 dark:border-white/10 shadow-xs"
               }>
                 {sub?.status
                   ? sub.status

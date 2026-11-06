@@ -25,15 +25,18 @@ export default function ISFPatch3DHero({
     let animId: number;
     let time = 0;
 
-    // Ambient floating particles (hormone analytes)
+    // Ambient floating particles (hormone analytes matching chart colors)
+    // 0: Progesterone (Greenish-Blue / Teal #0EA5A4)
+    // 1: Free Testosterone (Orange / Gold #F59E0B)
+    // 2: Trend / ISF Kinetic (Purple #7C3AED)
     const particles = Array.from({ length: 36 }).map((_, i) => ({
       angle: (i / 36) * Math.PI * 2,
       dist: 110 + Math.random() * 80,
       yOffset: (Math.random() - 0.5) * 60,
       speed: 0.008 + Math.random() * 0.012,
       size: 2.5 + Math.random() * 3.5,
-      color: i % 3 === 0 ? "#0EA5A4" : i % 3 === 1 ? "#E06D53" : "#F3E308",
-      label: i % 3 === 0 ? "E2" : i % 3 === 1 ? "P4" : "ISF",
+      color: i % 3 === 0 ? "#0EA5A4" : i % 3 === 1 ? "#F59E0B" : "#7C3AED",
+      label: i % 3 === 0 ? "P4" : i % 3 === 1 ? "FT" : "ISF",
     }));
 
     const render = () => {
@@ -142,7 +145,7 @@ export default function ISFPatch3DHero({
         ctx.closePath();
 
         if (isTop) {
-          // Top Face: Premium Satin White / Slate Gradient
+          // Top Face: Premium Satin White / Clean Ceramic
           const topGrad = ctx.createLinearGradient(
             ringPoints[0].px,
             ringPoints[0].py,
@@ -150,24 +153,28 @@ export default function ISFPatch3DHero({
             ringPoints[segments / 2].py
           );
           topGrad.addColorStop(0, "#FFFFFF");
-          topGrad.addColorStop(0.4, "#F8FAFC");
-          topGrad.addColorStop(0.85, "#E2E8F0");
-          topGrad.addColorStop(1, "#CBD5E1");
+          topGrad.addColorStop(0.35, "#F8FAFC");
+          topGrad.addColorStop(0.8, "#EFF4F7");
+          topGrad.addColorStop(1, "#E2E8F0");
           ctx.fillStyle = topGrad;
           ctx.fill();
 
-          ctx.strokeStyle = "rgba(44, 76, 92, 0.25)";
+          ctx.strokeStyle = "rgba(203, 213, 225, 0.9)";
           ctx.lineWidth = 1.5;
           ctx.stroke();
         } else {
-          // Disc Sides / Rim
-          ctx.fillStyle = `rgba(${35 + l * 4}, ${55 + l * 4}, ${68 + l * 4}, 0.85)`;
+          // Disc Sides / Rim: Whitish / Satin Pearl Rim
+          const shade = Math.floor(212 + (l / layers) * 33);
+          ctx.fillStyle = `rgba(${shade}, ${shade + 2}, ${shade + 5}, 0.95)`;
           ctx.fill();
+          ctx.strokeStyle = "rgba(180, 195, 205, 0.4)";
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
         }
         ctx.restore();
       }
 
-      // 4. Glowing Annular LED Ring on Top of the Patch
+      // 4. Glowing Annular LED Ring on Top of the Patch (Chart Greenish-Blue / Teal)
       const ledPoints = [];
       const ledRadius = 72;
       for (let s = 0; s < 36; s++) {
@@ -182,14 +189,14 @@ export default function ISFPatch3DHero({
         ctx.lineTo(ledPoints[s].px, ledPoints[s].py);
       }
       ctx.closePath();
-      ctx.strokeStyle = "rgba(14, 165, 164, 0.85)"; // Teal glowing status ring
-      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = "rgba(14, 165, 164, 0.9)"; // Greenish-blue / Teal
+      ctx.lineWidth = 3.2;
       ctx.shadowColor = "#0EA5A4";
-      ctx.shadowBlur = 14;
+      ctx.shadowBlur = 12;
       ctx.stroke();
       ctx.restore();
 
-      // 5. Central Sensing Micro-needle Module (Inner Ring & Core)
+      // 5. Central Sensing Micro-needle Module (Whitish Core with Chart Gold & Purple Accents)
       const coreCenter = project(0, -thickness / 2 - 1, 0);
       const innerRadius = 38;
       const innerPoints = [];
@@ -213,40 +220,42 @@ export default function ISFPatch3DHero({
         coreCenter.py,
         innerRadius * coreCenter.scale
       );
-      coreGrad.addColorStop(0, "#2C4C5C");
-      coreGrad.addColorStop(0.7, "#1E343F");
-      coreGrad.addColorStop(1, "#122027");
+      coreGrad.addColorStop(0, "#FFFFFF");
+      coreGrad.addColorStop(0.65, "#F1F5F9");
+      coreGrad.addColorStop(1, "#E2E8F0");
       ctx.fillStyle = coreGrad;
       ctx.fill();
-      ctx.strokeStyle = "rgba(243, 227, 8, 0.6)"; // Subtle gold accent
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = "rgba(245, 158, 11, 0.85)"; // Orange/Gold chart accent ring
+      ctx.lineWidth = 2;
+      ctx.shadowColor = "#F59E0B";
+      ctx.shadowBlur = 8;
       ctx.stroke();
 
-      // Pulsing Center Biosensor Dot
+      // Pulsing Center Biosensor Dot (Orange/Gold)
       const pulse = Math.sin(time * 3) * 0.4 + 0.6;
       ctx.beginPath();
-      ctx.arc(coreCenter.px, coreCenter.py, 7 * coreCenter.scale * pulse, 0, Math.PI * 2);
-      ctx.fillStyle = "#F3E308";
-      ctx.shadowColor = "#F3E308";
-      ctx.shadowBlur = 16;
+      ctx.arc(coreCenter.px, coreCenter.py, 6.5 * coreCenter.scale * pulse, 0, Math.PI * 2);
+      ctx.fillStyle = "#F59E0B";
+      ctx.shadowColor = "#F59E0B";
+      ctx.shadowBlur = 14;
       ctx.fill();
       ctx.restore();
 
-      // Micro-needle array indicators on the patch surface (5 gold pinpoints)
+      // Micro-needle array indicators on the patch surface (Matching Chart Trio)
       const pinpoints = [
-        { x: -16, z: -16 },
-        { x: 16, z: -16 },
-        { x: -16, z: 16 },
-        { x: 16, z: 16 },
+        { x: -16, z: -16, color: "#0EA5A4" }, // Greenish-blue / Teal
+        { x: 16, z: -16, color: "#F59E0B" },  // Orange / Gold
+        { x: -16, z: 16, color: "#7C3AED" },  // Purple
+        { x: 16, z: 16, color: "#F59E0B" },   // Orange / Gold
       ];
       pinpoints.forEach((pin) => {
         const p = project(pin.x, -thickness / 2 - 1.2, pin.z);
         ctx.save();
         ctx.beginPath();
-        ctx.arc(p.px, p.py, 2.5 * p.scale, 0, Math.PI * 2);
-        ctx.fillStyle = "#38BDF8";
-        ctx.shadowColor = "#38BDF8";
-        ctx.shadowBlur = 6;
+        ctx.arc(p.px, p.py, 2.8 * p.scale, 0, Math.PI * 2);
+        ctx.fillStyle = pin.color;
+        ctx.shadowColor = pin.color;
+        ctx.shadowBlur = 8;
         ctx.fill();
         ctx.restore();
       });
@@ -268,10 +277,12 @@ export default function ISFPatch3DHero({
           ctx.shadowBlur = 12;
           ctx.fill();
 
-          // Particle tag
+          // Particle tag matching hormone analyte color
           if (proj.scale > 0.85) {
-            ctx.font = "bold 9px sans-serif";
-            ctx.fillStyle = "rgba(44, 76, 92, 0.9)";
+            ctx.font = "bold 9.5px sans-serif";
+            ctx.fillStyle = p.color;
+            ctx.shadowColor = "rgba(0, 0, 0, 0.75)";
+            ctx.shadowBlur = 4;
             ctx.fillText(p.label, proj.px + 5, proj.py + 3);
           }
           ctx.restore();
